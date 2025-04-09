@@ -940,7 +940,7 @@
                                                                                 class="variants product-action wishItem" data-cart-form
                                                                                 data-id="product-actions-{{ $product->id }}" enctype="multipart/form-data">
                                                                                 @csrf
-                                                                                <div class="product-thumbnail sale">
+                                                                                <div class="product-thumbnail">
                                                                                     <a class="image_thumb" href="{{ route('productDetail', $product->id) }}"
                                                                                         title="{{ $product->name }}">
                                                                                         <div class="product-image">

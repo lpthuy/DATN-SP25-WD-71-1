@@ -1,6 +1,6 @@
 @extends('client.layouts.main')
 
-@section('title', 'Sản phẩm áo')
+@section('title', ($category->name ?? 'Tất cả sản phẩm'))
 
 @section('content')
     <div class="layout-collection">
@@ -14,10 +14,9 @@
                         </a>
                     </li>
                     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                        <strong>
-                            <span itemprop="name">Tất cả sản phẩm</span>
-                            <meta itemprop="position" content="2" />
-                        </strong>
+                        <span itemprop="name">
+                            {{ optional($category)->name ?? 'Tất cả sản phẩm' }}
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -453,7 +452,7 @@
 
                     <div class="sortPagiBar d-flex">
                         <div class="collection-title">
-                            <h1>Tất cả sản phẩm</h1>
+                            
                         </div>
                         <div class="sort-cate clearfix">
                             <div id="sort-by">
@@ -495,7 +494,7 @@
                                                 <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}" data-id="{{ $product->id }}">
                                                     <form action="{{ route('cart.add', $product->id) }}" method="post" class="variants product-action wishItem" data-cart-form enctype="multipart/form-data">
                                                         @csrf
-                                                        <div class="product-thumbnail sale">
+                                                        <div class="product-thumbnail">
                                                             <a class="image_thumb" href="{{ route('productDetail', $product->id) }}" title="{{ $product->name }}">
                                                                 <div class="product-image">
                                                                     @php

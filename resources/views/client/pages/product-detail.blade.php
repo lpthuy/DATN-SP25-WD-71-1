@@ -13,31 +13,31 @@
 @endif
 
 @section('content')
-    <section class="bread-crumb">
-        <div class="container">
-            <ul class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
-                <li class="home" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <a itemprop="item" href="index.html" title="Trang chủ">
-                        <span itemprop="name">Trang chủ</span>
-                        <meta itemprop="position" content="1" />
-                    </a>
-                </li>
-                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <a itemprop="item" href="ao-phong.html" title="Áo phông">
-                        <span itemprop="name">Áo phông</span>
-                        <meta itemprop="position" content="2" />
-
-                    </a>
-                </li>
-                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <strong>
-                        <span itemprop="name">&#193;o Ph&#244;ng, Thun Nữ Form Rộng</span>
-                        <meta itemprop="position" content="3" />
-                    </strong>
-                </li>
-            </ul>
-        </div>
-    </section>
+<section class="bread-crumb">
+    <div class="container">
+        <ul class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="home" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="{{ route('home') }}" title="Trang chủ">
+                    <span itemprop="name">Trang chủ</span>
+                    <meta itemprop="position" content="1" />
+                </a>
+            </li>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="{{ route('productbycategory', $category->id) }}" title="{{ $category->name }}">
+                    <span itemprop="name">{{ $category->name }}</span>
+                    <meta itemprop="position" content="2" />
+                </a>
+            </li>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <strong>
+                    <span itemprop="name">{{ $product->name }}</span>
+                    <meta itemprop="position" content="3" />
+                </strong>
+            </li>
+        </ul>
+        
+    </div>
+</section>
     <section class="product layout-product" itemscope itemtype="https://schema.org/Product">
         <meta itemprop="url" content="//lofi-style.mysapo.net/ao-phong-thun-nu-form-rong">
         <meta itemprop="name" content="Áo Phông, Thun Nữ Form Rộng">
