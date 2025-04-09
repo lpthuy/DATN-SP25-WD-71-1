@@ -43,16 +43,23 @@ class OrdersController extends Controller
     }
 
     public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|string|max:50'
-        ]);
+{
+    $request->validate([
+        'status' => 'required|string|max:50'
+    ]);
 
-        $order = Order::findOrFail($id);
-        $order->status = $request->status;
-        $order->save();
+    $order = Order::findOrFail($id);
+    $order->status = $request->status;
 
-        return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+    // ✅ Nếu admin chọn trạng thái là completed thì thêm delivered_at
+    if ($request->status === 'completed' && !$order->delivered_at) {
+        $order->delivered_at = now();
     }
+
+    $order->save();
+
+    return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+}
+
     
 }

@@ -118,6 +118,8 @@
                                                                                                                                 Đang giao hàng
                                                                                                                             @elseif ($order->status === 'completed')
                                                                                                                                 Đã giao hàng
+                                                                                                                            @elseif ($order->status === 'received') {{-- 👈 Thêm dòng này để dịch trạng thái received --}}
+                                                                                                                                Đã nhận hàng
                                                                                                                             @elseif ($order->status === 'cancelled')
                                                                                                                                 Đã huỷ
                                                                                                                             @elseif ($order->status === 'returning')
@@ -126,6 +128,8 @@
                                                                                                                                 {{ ucfirst($order->status) }}
                                                                                                                             @endif
                                                                                                                         </td>
+                                                                                                                        
+                                                                                                                        
                                                                                                                         
                                                                                                                         
 
@@ -274,6 +278,25 @@
                             </button>
                         `;
                     } else if (status.includes("giao thành công") || status.includes("đã giao") || status.includes("hoàn tất")) {
+                        // Nếu đơn đã giao → kiểm tra xem đã qua 1 phút chưa
+                        const deliveredAt = document.getElementById(`delivered-at-${orderId}`);
+                        const isReceived = badge.innerText.trim().toLowerCase().includes('nhận hàng');
+
+                        if (deliveredAt && !isReceived) {
+                            const deliveredTime = new Date(deliveredAt.innerText.trim());
+                            const now = new Date();
+                            const diffInMinutes = (now - deliveredTime) / 60000;
+
+                            if (diffInMinutes >= 1) {
+                                // ✅ Quá 1 phút rồi → chuyển UI thành Đã nhận
+                                badge.innerText = 'Đã nhận hàng';
+                                badge.classList.add('badge-success');
+                                actionCell.innerHTML = `<span class="badge badge-success">Đã nhận</span>`;
+                                return;
+                            }
+                        }
+
+                        // Nếu chưa quá 1 phút thì vẫn hiển thị 2 nút
                         actionCell.innerHTML = `
                             <form action="/don-hang/${orderId}/da-nhan" method="POST" style="display:inline-block;">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -281,11 +304,12 @@
                                     <i class="fas fa-check-circle"></i> Đã nhận hàng
                                 </button>
                             </form>
-    
+
                             <button class="btn btn-sm btn-outline-danger" style="margin-left: 5px;" onclick="showReturnModal(${orderId})">
                                 <i class="fas fa-undo-alt"></i> Hoàn hàng
                             </button>
                         `;
+
                     } else if (status.includes("hủy") || status.includes("đã huỷ")) {
                         actionCell.innerHTML = `<span class="badge badge-danger">Đã huỷ</span>`;
                     } else {
