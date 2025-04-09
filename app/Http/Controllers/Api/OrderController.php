@@ -69,17 +69,31 @@ public function index(Request $request)
 
     // ✅ Cập nhật đơn hàng
     $order = Order::findOrFail($id);
-    $order->update([
-        'status' => $request->status,
-    ]);
+    $order->status = $request->status;
 
-    // ✅ Truy vấn lại trạng thái sau khi lưu
+    // ✅ Nếu chuyển sang 'completed' thì cập nhật thời gian và lưu vào completed_orders
+    if ($request->status === 'completed') {
+        $order->delivered_at = now();
+        \Log::info('📦 Ghi nhận thời điểm giao hàng: ' . $order->delivered_at);
+
+        // ✅ Lưu vào bảng completed_orders nếu chưa tồn tại
+        \App\Models\CompletedOrder::firstOrCreate(
+            [
+                'order_id' => $order->id,
+                'shipper_id' => auth()->id(),
+            ],
+            [
+                'completed_at' => now(),
+            ]
+        );
+
+        \Log::info('✅ Đã lưu vào bảng completed_orders');
+    }
+
+    $order->save();
+
+    // ✅ Truy vấn lại để trả kết quả chính xác
     $refreshedOrder = Order::find($order->id);
-
-    \Log::info('✅ Trạng thái đã được cập nhật trong CSDL', [
-        'order_id' => $order->id,
-        'saved_status' => $refreshedOrder->status,
-    ]);
 
     return response()->json([
         'status' => 'success',
@@ -87,6 +101,8 @@ public function index(Request $request)
         'order' => $refreshedOrder,
     ]);
 }
+
+
 
     
 
