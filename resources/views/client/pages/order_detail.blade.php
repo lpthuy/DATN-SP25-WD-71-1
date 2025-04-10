@@ -51,30 +51,36 @@
         <div class="section-title">
             <p><strong>Giá gốc:</strong> {{ number_format($total, 0, ',', '.') }}₫</p>
     
-            {{-- Nếu có mã giảm giá đã dùng --}}
-            @if($order->promotion_code)
-                @php
+            @php
+                $promotion = null;
+                $discountAmount = 0;
+                $shippingFee = $total >= 300000 ? 0 : 20000; // Miễn phí nếu >= 300k
+    
+                if ($order->promotion_code) {
                     $promotion = \App\Models\Promotion::where('code', $order->promotion_code)->first();
-                    $discountAmount = 0;
                     if ($promotion) {
-                        if ($promotion->discount_type === 'fixed') {
-                            $discountAmount = $promotion->discount_value;
-                        } elseif ($promotion->discount_type === 'percentage') {
-                            $discountAmount = $total * ($promotion->discount_value / 100);
-                        }
+                        $discountAmount = $promotion->discount_type === 'fixed'
+                            ? $promotion->discount_value
+                            : $total * ($promotion->discount_value / 100);
                     }
-                    $finalTotal = $total - $discountAmount;
-                @endphp
-        
-                {{-- <p><strong>Mã giảm giá đã dùng:</strong> {{ $order->promotion_code }}</p> --}}
-                <p><strong>Đã giảm:</strong> {{ number_format($discountAmount, 0, ',', '.') }}₫</p>
-                <h4 ><strong>Tổng cộng:</strong> {{ number_format($finalTotal, 0, ',', '.') }}₫</h4>
-            @else
-                <h4 ><strong>Tổng cộng:</strong> {{ number_format($total, 0, ',', '.') }}₫</h4>
-            @endif
+                }
+    
+                $finalTotal = max(0, $total - $discountAmount + $shippingFee);
+            @endphp
+    
+    @if ($promotion)
+    <p><strong>Mã giảm giá:</strong> {{ $order->promotion_code }} 
+        ({{ $promotion->discount_type === 'percentage' ? $promotion->discount_value . '%' : number_format($promotion->discount_value, 0, ',', '.') . ' VNĐ' }})
+    </p>
+    <p><strong>Đã giảm:</strong> {{ number_format($discountAmount, 0, ',', '.') }} VNĐ</p>
+@endif
+    
+            <p><strong>Phí vận chuyển:</strong> {{ $shippingFee == 0 ? 'Miễn phí' : number_format($shippingFee, 0, ',', '.') . '₫' }}</p>
+    
+            <h4><strong>Tổng cộng:</strong> {{ number_format($finalTotal, 0, ',', '.') }}₫</h4>
         </div>
-        
     </div>
+    
     
 
     <a href="{{ route('order') }}" class="btn btn-secondary mt-3">⬅ Quay lại danh sách đơn hàng</a>

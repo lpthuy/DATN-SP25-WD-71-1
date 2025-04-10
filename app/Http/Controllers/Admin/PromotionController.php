@@ -11,48 +11,62 @@ class PromotionController extends Controller
 {
    
 
-public function apply(Request $request)
-{
-    $code = $request->input('code');
-    $total = $request->input('total');
-
-    $promotion = Promotion::where('code', $code)
-        ->where('is_active', 1)
-        ->where('start_date', '<=', Carbon::now())
-        ->where('end_date', '>=', Carbon::now())
-        ->first();
-
-    if (!$promotion) {
-        return response()->json(['success' => false, 'message' => 'Mã không hợp lệ hoặc đã hết hạn!']);
+    public function apply(Request $request)
+    {
+        $code = $request->input('code');
+        $total = $request->input('total');
+    
+        $promotion = Promotion::where('code', $code)
+            ->where('is_active', 1)
+            ->where('start_date', '<=', Carbon::now())
+            ->where('end_date', '>=', Carbon::now())
+            ->first();
+    
+        if (!$promotion) {
+            return response()->json(['success' => false, 'message' => 'Mã không hợp lệ hoặc đã hết hạn!']);
+        }
+    
+        // Check usage limit
+        if ($promotion->usage_limit !== null && $promotion->usage_limit <= 0) {
+            return response()->json(['success' => false, 'message' => 'Mã đã hết lượt sử dụng!']);
+        }
+    
+        if ($total < $promotion->min_purchase_amount) {
+            return response()->json(['success' => false, 'message' => 'Đơn hàng chưa đạt giá trị tối thiểu!']);
+        }
+    
+        // Tính giảm giá
+        $discount = 0;
+        if ($promotion->discount_type === 'fixed') {
+            $discount = $promotion->discount_value;
+        } elseif ($promotion->discount_type === 'percentage') {
+            $discount = ($promotion->discount_value / 100) * $total;
+        }
+    
+        // ✅ Trừ lượt sử dụng
+        if ($promotion->usage_limit !== null) {
+            $promotion->decrement('usage_limit');
+        }
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Áp dụng mã thành công!',
+            'discount' => round($discount),
+            'code' => $code
+        ]);
     }
+    
 
-    if ($total < $promotion->min_purchase_amount) {
-        return response()->json(['success' => false, 'message' => 'Đơn hàng chưa đạt giá trị tối thiểu!']);
+    public function saveCode(Request $request)
+    {
+        session([
+            'promo_code' => $request->code,
+            'promo_discount' => $request->discount,
+        ]);
+    
+        return response()->json(['success' => true]);
     }
-
-    // Tính giảm giá
-    $discount = 0;
-    if ($promotion->discount_type === 'fixed') {
-        $discount = $promotion->discount_value;
-    } elseif ($promotion->discount_type === 'percentage') {
-        $discount = ($promotion->discount_value / 100) * $total;
-    }
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Áp dụng mã thành công!',
-        'discount' => round($discount),
-        'code' => $code
-    ]);
-}
-
-public function saveCode(Request $request)
-{
-    $code = $request->input('code');
-    session(['applied_promo_code' => $code]);
-
-    return response()->json(['success' => true]);
-}
+    
 
 
     // Hiển thị danh sách khuyến mãi

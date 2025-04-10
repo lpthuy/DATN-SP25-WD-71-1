@@ -198,6 +198,19 @@
         color: #666;
     }
 
+    /* Ẩn nút lên/xuống trong input number trên Chrome, Safari */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Ẩn nút tăng/giảm trên Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
     /* Responsive */
     @media (max-width: 768px) {
 
@@ -220,6 +233,8 @@
         .btn-checkout {
             width: 100%;
         }
+
+        
     }
 </style>
 
@@ -306,10 +321,27 @@
                                             <td>
                                                 <div class="quantity-container">
                                                     <button class="btn-quantity btn-decrease" data-id="{{ $cartKey }}">-</button>
-                                                    <input type="number" value="{{ $item['quantity'] }}" min="1" class="quantity-input" data-id="{{ $cartKey }}">
+                                                    @php
+                                                        $variant = \App\Models\ProductVariant::find($item['variant_id']);
+                                                        $maxQty = $variant ? $variant->stock_quantity : 1;
+                                                    @endphp
+
+                                                    <input type="number"
+                                                        value="{{ $item['quantity'] }}"
+                                                        min="1"
+                                                        max="{{ $maxQty }}"
+                                                        class="quantity-input"
+                                                        data-id="{{ $cartKey }}"
+                                                        data-max="{{ $maxQty }}">
+
+
                                                     <button class="btn-quantity btn-increase" data-id="{{ $cartKey }}">+</button>
+
                                                 </div>
+                                                    <span class="text-danger error-qty" style="color: #c82333" id="error-qty-{{ $cartKey }}" style="display:none; font-size: 0.85rem;"></span>
+
                                             </td>
+
                                             <td class="cart-total">{{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}₫</td>
                                             <td>
                                                 <button class="btn btn-danger remove-cart-item" data-id="{{ $cartKey }}">Xóa</button>
@@ -345,40 +377,33 @@
 </section>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         let checkboxes = document.querySelectorAll(".cart-checkbox");
+        let selectAllCheckbox = document.getElementById("select-all");
+        let totalPriceElement = document.getElementById("total-price");
         let checkoutForm = document.getElementById("checkout-form");
         let selectedProductsInput = document.getElementById("selected-products");
-
-        checkoutForm.addEventListener("submit", function(event) {
+    
+        // Gửi form thanh toán
+        checkoutForm.addEventListener("submit", function (event) {
             let selectedProducts = [];
             checkboxes.forEach(checkbox => {
                 if (checkbox.checked) {
                     let cartKey = checkbox.getAttribute("data-id");
                     let quantity = document.querySelector(`.quantity-input[data-id='${cartKey}']`).value;
-                    selectedProducts.push({
-                        cartKey,
-                        quantity
-                    });
+                    selectedProducts.push({ cartKey, quantity });
                 }
             });
-
+    
             if (selectedProducts.length === 0) {
                 alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
                 event.preventDefault();
                 return;
             }
-
+    
             selectedProductsInput.value = JSON.stringify(selectedProducts);
         });
-    });
-
-    // Xử lý xóa và cập nhật số lượng
-    document.addEventListener("DOMContentLoaded", function() {
-        let checkboxes = document.querySelectorAll(".cart-checkbox");
-        let selectAllCheckbox = document.getElementById("select-all");
-        let totalPriceElement = document.getElementById("total-price");
-
+    
         function restoreCheckedItems() {
             let checkedItems = JSON.parse(localStorage.getItem("checkedItems")) || {};
             checkboxes.forEach(checkbox => {
@@ -389,14 +414,15 @@
             });
             updateTotalPrice();
         }
-
+    
         function updateTotalPrice() {
             let total = 0;
             let checkedItems = {};
             checkboxes.forEach(checkbox => {
                 let cartKey = checkbox.getAttribute("data-id");
                 if (checkbox.checked) {
-                    let itemTotal = parseFloat(document.querySelector(`#cart-item-${cartKey} .cart-total`).innerText.replace(/\D/g, ''));
+                    let itemTotalText = document.querySelector(`#cart-item-${cartKey} .cart-total`).innerText.replace(/\D/g, '');
+                    let itemTotal = parseInt(itemTotalText) || 0;
                     total += itemTotal;
                     checkedItems[cartKey] = true;
                 } else {
@@ -406,90 +432,114 @@
             localStorage.setItem("checkedItems", JSON.stringify(checkedItems));
             totalPriceElement.innerText = new Intl.NumberFormat('vi-VN').format(total) + "₫";
         }
-
-        selectAllCheckbox.addEventListener("change", function() {
+    
+        // Chọn tất cả
+        selectAllCheckbox.addEventListener("change", function () {
             let isChecked = this.checked;
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = isChecked;
-            });
+            checkboxes.forEach(checkbox => checkbox.checked = isChecked);
             updateTotalPrice();
         });
-
+    
+        // Từng checkbox thay đổi
         checkboxes.forEach(checkbox => {
-            checkbox.addEventListener("change", function() {
+            checkbox.addEventListener("change", function () {
                 updateTotalPrice();
-                if (!this.checked) {
-                    selectAllCheckbox.checked = false;
-                }
+                if (!this.checked) selectAllCheckbox.checked = false;
             });
         });
-
+    
+        // Xoá sản phẩm
         document.querySelectorAll(".remove-cart-item").forEach(button => {
-            button.addEventListener("click", function() {
+            button.addEventListener("click", function () {
                 let cartKey = this.getAttribute("data-id");
                 fetch("/gio-hang/xoa", {
-                        method: "POST",
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest",
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                        },
-                        body: JSON.stringify({
-                            cartKey: cartKey
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.querySelector(`#cart-item-${cartKey}`).remove();
-                            updateTotalPrice();
-                        }
-                    })
-                    .catch(error => console.error("Lỗi:", error));
+                    method: "POST",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                    },
+                    body: JSON.stringify({ cartKey })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`#cart-item-${cartKey}`).remove();
+                        updateTotalPrice();
+                    }
+                });
             });
         });
-
+    
+        // Bấm + hoặc -
         document.querySelectorAll(".btn-quantity").forEach(button => {
-            button.addEventListener("click", function() {
+            button.addEventListener("click", function () {
                 let cartKey = this.getAttribute("data-id");
                 let quantityInput = document.querySelector(`.quantity-input[data-id='${cartKey}']`);
-                let newQuantity = parseInt(quantityInput.value);
-
-                if (this.classList.contains("btn-increase")) {
-                    newQuantity++;
-                } else if (this.classList.contains("btn-decrease") && newQuantity > 1) {
-                    newQuantity--;
-                }
-
+                let newQuantity = parseInt(quantityInput.value) || 1;
+    
+                if (this.classList.contains("btn-increase")) newQuantity++;
+                if (this.classList.contains("btn-decrease") && newQuantity > 1) newQuantity--;
+    
                 quantityInput.value = newQuantity;
-
-                fetch("/gio-hang/cap-nhat", {
-                        method: "POST",
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest",
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                        },
-                        body: JSON.stringify({
-                            cartKey: cartKey,
-                            quantity: newQuantity
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.querySelector(`#cart-item-${cartKey} .cart-total`).innerText = data.item_total + "₫";
-                            updateTotalPrice();
-                        }
-                    })
-                    .catch(error => console.error("Lỗi:", error));
+                updateQuantityOnServer(cartKey, newQuantity);
             });
         });
+    
+        // 🔧 Khi người dùng nhập tay số lượng
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("change", function () {
+                let cartKey = this.getAttribute("data-id");
+                let newQuantity = parseInt(this.value);
+                if (isNaN(newQuantity) || newQuantity < 1) {
+                    newQuantity = 1;
+                    this.value = 1;
+                }
+                updateQuantityOnServer(cartKey, newQuantity);
+            });
+        });
+    
+        function updateQuantityOnServer(cartKey, quantity) {
+    fetch("/gio-hang/cap-nhat", {
+        method: "POST",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        body: JSON.stringify({ cartKey, quantity })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const errorSpan = document.getElementById(`error-qty-${cartKey}`);
+        const input = document.querySelector(`.quantity-input[data-id='${cartKey}']`);
 
+        if (data.success) {
+            // ✅ Cập nhật thành tiền và ẩn lỗi
+            document.querySelector(`#cart-item-${cartKey} .cart-total`).innerText = data.item_total + "₫";
+            updateTotalPrice();
+            if (errorSpan) {
+                errorSpan.innerText = "";
+                errorSpan.style.display = "none";
+            }
+        } else {
+            // ❌ Có lỗi: hiển thị lỗi và reset lại input cũ
+            if (errorSpan) {
+                errorSpan.innerText = data.message || "Có lỗi xảy ra";
+                errorSpan.style.display = "inline";
+            }
+            // 👇 Reset lại giá trị cũ nếu có
+            if (data.current_quantity && input) {
+                input.value = data.current_quantity;
+            }
+        }
+    })
+    .catch(error => console.error("Lỗi:", error));
+}
+
+    
         restoreCheckedItems();
     });
-
-    // Kiểm tra giỏ hàng định kỳ
+    </script>
     
-</script>
 @endsection

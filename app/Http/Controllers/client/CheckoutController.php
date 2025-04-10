@@ -16,7 +16,6 @@ class CheckoutController extends Controller
 {
     $user = Auth::user();
 
-    // 👉 Kiểm tra nếu chưa có địa chỉ
     if (empty($user->address)) {
         return redirect()->route('profile')->with('error', 'Vui lòng cập nhật địa chỉ trước khi đặt hàng.');
     }
@@ -46,11 +45,71 @@ class CheckoutController extends Controller
         }
     }
 
-    // Lưu vào session để dùng sau khi thanh toán
+    // 👉 Thiết lập phí ship: mặc định 20k, miễn phí nếu đơn >= 300k
+    $shippingFee = $total >= 300000 ? 0 : 20000;
+
+    // Lưu vào session để sử dụng sau
     session(['checkout_items' => $checkoutItems]);
 
-    return view('client.pages.checkout-confirm', compact('checkoutItems', 'total', 'user'));
+    return view('client.pages.checkout-confirm', compact(
+        'checkoutItems', 'total', 'user', 'shippingFee'
+    ));
 }
+
+
+public function updateQty(Request $request)
+{
+    $index = $request->input('index');
+    $quantity = (int) $request->input('quantity');
+
+    $checkoutItems = session('checkout_items', []);
+
+    if (!isset($checkoutItems[$index])) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Sản phẩm không tồn tại.'
+        ]);
+    }
+
+    $item = $checkoutItems[$index];
+
+    // Lấy biến thể để kiểm tra tồn kho
+    $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
+        ->whereHas('color', fn($q) => $q->where('color_name', $item['color']))
+        ->whereHas('size', fn($q) => $q->where('size_name', $item['size']))
+        ->first();
+
+    if (!$variant) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Không tìm thấy biến thể sản phẩm.',
+            'current_qty' => $item['quantity']
+        ]);
+    }
+
+    if ($quantity > $variant->stock_quantity) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Sản phẩm còn ' . $variant->stock_quantity . ' sản phẩm.',
+            'current_qty' => $item['quantity']
+        ]);
+    }
+
+    // Cập nhật lại số lượng và tổng tiền item
+    $checkoutItems[$index]['quantity'] = $quantity;
+    $checkoutItems[$index]['total_price'] = $quantity * $item['price'];
+
+    session(['checkout_items' => $checkoutItems]);
+
+    $total = array_sum(array_column($checkoutItems, 'total_price'));
+
+    return response()->json([
+        'success' => true,
+        'item_total' => number_format($checkoutItems[$index]['total_price'], 0, ',', '.'),
+        'total' => number_format($total, 0, ',', '.')
+    ]);
+}
+
 
 
     public function process(Request $request)

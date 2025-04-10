@@ -15,9 +15,63 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
-    
-    public function store(Request $request)
 
+    // OrderController.php
+    public function markAsReturned(Request $request, $id)
+{
+    $order = Order::findOrFail($id);
+
+    // Validate
+    $request->validate([
+        'return_reason' => 'required|string',
+        'return_media' => 'required|file|mimes:jpeg,png,jpg,mp4,mov,avi|max:10240'
+    ]);
+
+    // Upload file
+    $filePath = null;
+    if ($request->hasFile('return_media')) {
+        $file = $request->file('return_media');
+        $fileName = time().'_'.$file->getClientOriginalName();
+        $filePath = $file->storeAs('returns', $fileName, 'public');
+    }
+
+    // ✅ Cập nhật lý do hoàn hàng và media
+    $order->return_reason = $request->input('return_reason');
+    $order->return_media = $filePath;
+    $order->status = 'returning'; // dùng status tiếng Anh để đồng nhất
+    $order->save();
+
+    // ✅ Trả lại số lượng về kho dựa trên product_id + size + color
+    $orderItems = OrderItem::where('order_id', $order->id)->get();
+    foreach ($orderItems as $item) {
+        $sizeId = Size::where('size_name', trim(strtolower($item->size)))->value('id');
+        $colorId = Color::where('color_name', trim(ucfirst(strtolower($item->color))))->value('id');
+
+        if (!$sizeId || !$colorId) {
+            \Log::warning("Không tìm thấy size hoặc color cho OrderItem #{$item->id} - size: {$item->size}, color: {$item->color}");
+            continue;
+        }
+
+        $variant = ProductVariant::where('product_id', $item->product_id)
+            ->where('size_id', $sizeId)
+            ->where('color_id', $colorId)
+            ->first();
+
+        if ($variant) {
+            $variant->stock_quantity += $item->quantity;
+            $variant->save();
+        } else {
+            \Log::warning("Không tìm thấy biến thể cho OrderItem #{$item->id} (product_id={$item->product_id}, size_id={$sizeId}, color_id={$colorId})");
+        }
+    }
+
+    return redirect()->route('order')->with('success', '📦 Đã gửi yêu cầu hoàn hàng và trả số lượng về kho.');
+}
+
+
+    
+    
+public function store(Request $request)
 {
     $user = Auth::user();
     $checkoutItems = session('checkout_items', []);
@@ -27,13 +81,29 @@ class OrderController extends Controller
         return response()->json(['status' => 'error', 'message' => 'Không tìm thấy giỏ hàng hoặc chưa đăng nhập!']);
     }
 
+    // Lấy mã giảm giá và phí ship từ session (nếu có)
+    $promotionCode = session('promo_code');
+    $discount = session('promo_discount', 0); // số tiền giảm (int)
+    $shippingFee = session('shipping_fee', 0); // phí vận chuyển (int)
+
+    // Tính tổng tạm tính của sản phẩm
+    $subtotal = collect($checkoutItems)->sum(fn($item) => $item['quantity'] * $item['price']);
+
+    // Tổng tiền phải thanh toán
+    $finalTotal = $subtotal + $shippingFee - $discount;
+
+    // ✅ Tạo đơn hàng
     $order = Order::create([
         'order_code' => $orderCode,
         'user_id' => $user->id,
         'payment_method' => 'cod',
         'status' => 'processing',
+        'promotion_code' => $promotionCode,
+        'discount' => $discount,
+        'shipping_fee' => $shippingFee,
     ]);
 
+    // ✅ Tạo từng sản phẩm trong đơn hàng và trừ kho
     foreach ($checkoutItems as $item) {
         OrderItem::create([
             'order_id' => $order->id,
@@ -44,17 +114,46 @@ class OrderController extends Controller
             'quantity' => $item['quantity'] ?? 1,
             'price' => $item['price'] ?? 0,
         ]);
+
+        // 🔻 Trừ tồn kho
+        $sizeId = \App\Models\Size::where('size_name', trim(strtolower($item['size'])))->value('id');
+        $colorId = \App\Models\Color::where('color_name', trim(ucfirst(strtolower($item['color']))))->value('id');
+
+        if ($sizeId && $colorId) {
+            $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
+                ->where('size_id', $sizeId)
+                ->where('color_id', $colorId)
+                ->first();
+
+            if ($variant) {
+                $variant->stock_quantity = max(0, $variant->stock_quantity - $item['quantity']);
+                $variant->save();
+            } else {
+                \Log::warning("❌ Không tìm thấy biến thể khi trừ kho: product_id={$item['product_id']}, size_id=$sizeId, color_id=$colorId");
+            }
+        } else {
+            \Log::warning("❌ Không tìm thấy size/color khi trừ kho: size={$item['size']}, color={$item['color']}");
+        }
     }
 
-    session()->forget(['checkout_items']);
+    // ✅ Xoá session sau khi đặt hàng
+    session()->forget([
+        'checkout_items',
+        'promo_code',
+        'promo_discount',
+        'shipping_fee'
+    ]);
 
     return response()->json([
         'status' => 'success',
         'message' => 'Đặt hàng thành công!',
         'order_code' => $orderCode,
-        'redirect' => route('order') // hoặc route('order.show', $order->id) nếu có route riêng
+        'redirect' => route('order')
     ]);
 }
+
+
+
 
 
     

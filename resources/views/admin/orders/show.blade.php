@@ -349,6 +349,28 @@ const statusLabels = {
     }
 @endphp
 
+@php
+    $total = 0;
+    foreach ($items as $item) {
+        $total += $item->price * $item->quantity;
+    }
+
+    $promotion = null;
+    $discountAmount = 0;
+
+    if ($order->promotion_code) {
+        $promotion = \App\Models\Promotion::where('code', $order->promotion_code)->first();
+        if ($promotion) {
+            $discountAmount = $promotion->discount_type === 'fixed'
+                ? $promotion->discount_value
+                : $total * ($promotion->discount_value / 100);
+        }
+    }
+
+    $shippingFee = $total >= 300000 ? 0 : 20000; // Miễn phí ship nếu > 300k
+    $finalTotal = max(0, $total - $discountAmount + $shippingFee);
+@endphp
+
 <div class="mt-4 border-top pt-3">
     <h4><strong>Thông tin thanh toán</strong></h4>
     <p><strong>Giá gốc:</strong> {{ number_format($total, 0, ',', '.') }} VNĐ</p>
@@ -360,7 +382,12 @@ const statusLabels = {
         <p><strong>Đã giảm:</strong> {{ number_format($discountAmount, 0, ',', '.') }} VNĐ</p>
     @endif
 
-    <h4 style="color:#e3342f"><strong>Tổng thanh toán:</strong> {{ number_format($finalTotal, 0, ',', '.') }} VNĐ</h4>
+    <p><strong>Phí vận chuyển:</strong> {{ $shippingFee == 0 ? 'Miễn phí' : number_format($shippingFee, 0, ',', '.') . ' VNĐ' }}</p>
+
+    <h4 style="color:#e3342f">
+        <strong>Tổng thanh toán:</strong> {{ number_format($finalTotal, 0, ',', '.') }} VNĐ
+    </h4>
 </div>
+
 
 @endsection

@@ -83,23 +83,39 @@ public function removeItem(Request $request)
 
     public function updateCart(Request $request)
 {
+    $cartKey = $request->input('cartKey');
+    $quantity = (int) $request->input('quantity');
     $cart = session()->get('cart', []);
 
-    if (isset($cart[$request->cartKey])) {
-        $cart[$request->cartKey]['quantity'] = $request->quantity;
-        session()->put('cart', $cart);
+    if (!isset($cart[$cartKey])) {
+        return response()->json(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng.']);
     }
 
-    // Tính tổng tiền
+    $variantId = $cart[$cartKey]['variant_id'] ?? null;
+    $variant = \App\Models\ProductVariant::find($variantId);
+
+    if ($variant && $quantity > $variant->stock_quantity) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Sản phẩm còn ' . $variant->stock_quantity . ' sản phẩm.',
+            'current_quantity' => $cart[$cartKey]['quantity'] // để reset lại input nếu cần
+        ]);
+    }
+
+    // ✅ Cập nhật số lượng
+    $cart[$cartKey]['quantity'] = $quantity;
+    session()->put('cart', $cart);
+
+    $itemTotal = number_format($cart[$cartKey]['price'] * $quantity, 0, ',', '.');
     $totalPrice = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
-    $itemTotal = number_format($cart[$request->cartKey]['price'] * $cart[$request->cartKey]['quantity'], 0, ',', '.');
 
     return response()->json([
         'success' => true,
-        'total_price' => number_format($totalPrice, 0, ',', '.'),
-        'item_total' => $itemTotal
+        'item_total' => $itemTotal,
+        'total_price' => number_format($totalPrice, 0, ',', '.')
     ]);
 }
+
 public function countCart()
 {
     $cartItems = session()->get('cart', []);
@@ -137,40 +153,54 @@ public function index()
     }
 
 
-    // CartController.php
     public function recheckCart(Request $request)
-    {
-        $orderId = $request->input('order_id');
-        $order = Order::with('items')->findOrFail($orderId);
-    
-        // Map lại các item về dạng mà view checkout-confirm sử dụng
-        $checkoutItems = $order->items->map(function ($item) {
-            $totalPrice = $item->price * $item->quantity;
-            return [
-                'product_id' => $item->product_id,
-                'name' => $item->product_name,
-                'color' => $item->color,
-                'size' => $item->size,
-                'quantity' => $item->quantity,
-                'price' => $item->price,
-                'total_price' => $totalPrice,
-            ];
-        })->toArray();
-    
-        $total = array_sum(array_column($checkoutItems, 'total_price'));
-    
-        // Lưu vào session
-        session([
-            'checkout_items' => $checkoutItems,
-            'order_code' => $order->order_code,
-        ]);
-    
-        return view('client.pages.checkout-confirm', [
-            'checkoutItems' => $checkoutItems,
-            'total' => $total,
-            'user' => Auth::user(),
-        ]);
-    }
+{
+    $orderId = $request->input('order_id');
+    $order = Order::with('items')->findOrFail($orderId);
+
+    $user = Auth::user();
+
+    // Map lại các item trong đơn hàng
+    $checkoutItems = $order->items->map(function ($item) {
+        $totalPrice = $item->price * $item->quantity;
+
+        $product = \App\Models\Product::find($item->product_id);
+        $image = $product ? $product->image : 'default.png';
+
+        return [
+            'product_id' => $item->product_id,
+            'name' => $item->product_name,
+            'image' => $image,
+            'color' => $item->color,
+            'size' => $item->size,
+            'quantity' => $item->quantity,
+            'price' => $item->price,
+            'total_price' => $totalPrice,
+        ];
+    })->toArray();
+
+    $total = array_sum(array_column($checkoutItems, 'total_price'));
+
+    // 👉 Thiết lập phí vận chuyển mặc định
+    $shippingFee = $total >= 300000 ? 0 : 20000;
+
+    // Lưu session
+    session([
+        'checkout_items' => $checkoutItems,
+        'order_code' => $order->order_code,
+    ]);
+
+    return view('client.pages.checkout-confirm', [
+        'checkoutItems' => $checkoutItems,
+        'total' => $total,
+        'shippingFee' => $shippingFee,
+        'user' => $user,
+    ]);
+}
+
+
+
+
     
 
 }

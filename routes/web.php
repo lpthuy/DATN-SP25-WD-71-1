@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\PostController;
 
 Auth::routes();
 
@@ -100,6 +101,10 @@ Route::get('/lien-he', [HomeController::class, 'contact'])->name('contact');
 Route::get('/tim-kiem', [HomeController::class, 'search'])->name('search');
 Route::get('/yeu-thich', [HomeController::class, 'wishlist'])->name('wishlist');
 Route::get('/gio-hang', [HomeController::class, 'cart'])->name('cart');
+Route::post('/gio-hang/cap-nhat', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('/checkout/update-qty', [CheckoutController::class, 'updateQty'])->name('checkout.updateQty');
+
+
 Route::get('/kiem-tra-don-hang', [HomeController::class, 'checkOrder'])->name('checkOrder');
 Route::get('/chinh-sach-giao-hang', [HomeController::class, 'chinhSachGiaoHang'])->name('chinhSachGiaoHang');
 
