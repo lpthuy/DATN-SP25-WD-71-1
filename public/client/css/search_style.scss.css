@@ -1,0 +1,62 @@
+.margin-bottom-20 {
+    margin-bottom: 20px
+}
+
+.title_search {
+    font-size: 24px !important;
+    margin: 15px 0
+}
+
+.search-main .item-border .item_product_main {
+    border: 0
+}
+
+.serachpc_searchpage form {
+    width: 260px;
+    margin: 6px 0 0 0;
+    padding: 0;
+    position: relative
+}
+
+.serachpc_searchpage form input {
+    min-width: 260px;
+    height: 40px !important;
+    min-height: unset;
+    line-height: 40px;
+    border: solid 1px #ebebeb;
+    border-radius: 3px !important;
+    padding: 0 40px 0 15px;
+    background: #fff;
+    color: #959595;
+    font-size: 13px
+}
+
+.serachpc_searchpage form button {
+    width: 40px;
+    height: 100%;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    outline: none
+}
+
+.serachpc_searchpage form button svg {
+    width: 17px;
+    height: 17px
+}
+
+.category-products .item_product_main {
+    margin-bottom: 40px
+}
+
+.category-products .row {
+    padding-bottom: 1px
+}
+
+.search-main .products-view-grid {
+    float: initial
+}
