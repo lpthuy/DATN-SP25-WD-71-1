@@ -9,45 +9,48 @@ use Illuminate\Http\Request;
 
 class PromotionController extends Controller
 {
-   
+    public function toggleStatus(Request $request, $id)
+    {
+        $promotion = Promotion::findOrFail($id);
+        $promotion->is_active = !$promotion->is_active;
+        $promotion->save();
+
+        return redirect()->route('promotions.index')
+            ->with('success', 'Trạng thái khuyến mãi đã được cập nhật.');
+    }
 
     public function apply(Request $request)
     {
         $code = $request->input('code');
         $total = $request->input('total');
-    
-        $promotion = Promotion::where('code', $code)
-            ->where('is_active', 1)
-            ->where('start_date', '<=', Carbon::now())
-            ->where('end_date', '>=', Carbon::now())
-            ->first();
-    
+
+        $promotion = Promotion::active()->where('code', $code)->first();
+
         if (!$promotion) {
             return response()->json(['success' => false, 'message' => 'Mã không hợp lệ hoặc đã hết hạn!']);
         }
-    
-        // Check usage limit
-        if ($promotion->usage_limit !== null && $promotion->usage_limit <= 0) {
-            return response()->json(['success' => false, 'message' => 'Mã đã hết lượt sử dụng!']);
-        }
-    
+
         if ($total < $promotion->min_purchase_amount) {
             return response()->json(['success' => false, 'message' => 'Đơn hàng chưa đạt giá trị tối thiểu!']);
         }
-    
-        // Tính giảm giá
+
         $discount = 0;
         if ($promotion->discount_type === 'fixed') {
             $discount = $promotion->discount_value;
         } elseif ($promotion->discount_type === 'percentage') {
             $discount = ($promotion->discount_value / 100) * $total;
         }
-    
-        // ✅ Trừ lượt sử dụng
+
         if ($promotion->usage_limit !== null) {
             $promotion->decrement('usage_limit');
+
+            // Kiểm tra và cập nhật trạng thái nếu hết mã
+            if ($promotion->usage_limit <= 0) {
+                $promotion->is_active = 0;
+                $promotion->save();
+            }
         }
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Áp dụng mã thành công!',
@@ -55,7 +58,6 @@ class PromotionController extends Controller
             'code' => $code
         ]);
     }
-    
 
     public function saveCode(Request $request)
     {
@@ -63,35 +65,30 @@ class PromotionController extends Controller
             'promo_code' => $request->code,
             'promo_discount' => $request->discount,
         ]);
-    
+
         return response()->json(['success' => true]);
     }
-    
 
-
-    // Hiển thị danh sách khuyến mãi
     public function index()
     {
         $promotions = Promotion::all();
         return view('admin.promotions.index', compact('promotions'));
     }
 
-    // Hiển thị form tạo khuyến mãi mới
     public function create()
     {
         return view('admin.promotions.create');
     }
 
-    // Lưu khuyến mãi mới vào cơ sở dữ liệu
     public function store(Request $request)
     {
         $request->validate([
-            'code'             => 'required|string|max:50|unique:promotion,code',
-            'discount_type'    => 'required|in:fixed,percentage',
-            'discount_value'   => 'required|numeric|min:0',
-            'usage_limit'      => 'nullable|integer|min:0',
-            'start_date'       => 'required|date',
-            'end_date'         => 'required|date|after:start_date',
+            'code' => 'required|string|max:50|unique:promotion,code',
+            'discount_type' => 'required|in:fixed,percentage',
+            'discount_value' => 'required|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:0',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
             'min_purchase_amount' => 'nullable|numeric|min:0',
         ]);
 
@@ -101,25 +98,23 @@ class PromotionController extends Controller
             ->with('success', 'Khuyến mãi đã được tạo thành công.');
     }
 
-    // Hiển thị chi tiết khuyến mãi hoặc form chỉnh sửa
     public function edit($id)
     {
         $promotion = Promotion::findOrFail($id);
         return view('admin.promotions.edit', compact('promotion'));
     }
 
-    // Cập nhật khuyến mãi
     public function update(Request $request, $id)
     {
         $promotion = Promotion::findOrFail($id);
 
         $request->validate([
-            'code'             => 'required|string|max:50|unique:promotion,code,' . $promotion->promotion_id . ',promotion_id',
-            'discount_type'    => 'required|in:fixed,percentage',
-            'discount_value'   => 'required|numeric|min:0',
-            'usage_limit'      => 'nullable|integer|min:0',
-            'start_date'       => 'required|date',
-            'end_date'         => 'required|date|after:start_date',
+            'code' => 'required|string|max:50|unique:promotion,code,' . $promotion->promotion_id . ',promotion_id',
+            'discount_type' => 'required|in:fixed,percentage',
+            'discount_value' => 'required|numeric|min:0',
+            'usage_limit' => 'nullable|integer|min:0',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
             'min_purchase_amount' => 'nullable|numeric|min:0',
         ]);
 
@@ -129,7 +124,6 @@ class PromotionController extends Controller
             ->with('success', 'Khuyến mãi đã được cập nhật thành công.');
     }
 
-    // Xóa khuyến mãi
     public function destroy($id)
     {
         $promotion = Promotion::findOrFail($id);

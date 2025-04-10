@@ -71,6 +71,7 @@ Route::delete('/admin/orders/{id}', [OrdersController::class, 'destroy'])->name(
 
 // quản lý khuyến mãi
 Route::resource('promotions', PromotionController::class);
+Route::post('/promotions/{id}/toggle', [PromotionController::class, 'toggleStatus'])->name('promotions.toggle');
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -251,7 +252,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     //battat bai vietviet
     Route::post('posts/{post}/toggle-status', [PostController::class, 'toggleStatus'])->name('posts.toggleStatus');
     //show bai viet clientclient
-  
+
 
 
 
