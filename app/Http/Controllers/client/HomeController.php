@@ -46,8 +46,11 @@ class HomeController extends Controller
     //   lấy toàn bộ sản phẩm in 
     public function allProducts()
     {
-        $promotions = Promotion::where('is_active', 1)->get(); // Lấy các mã khuyến mãi
-        $products = Product::paginate(9);
+        $promotions = Promotion::where('is_active', 1)
+        ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
+        ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
+        ->get(); 
+        $products = Product::where('is_active', 1)->paginate(9);
     
         $category = null; // Hoặc tạo đối tượng giả nếu cần
     
@@ -72,7 +75,10 @@ class HomeController extends Controller
 
     public function productByCategory(Request $request)
     {
-        $promotions = Promotion::where('is_active', 1)->get(); // Lấy các mã khuyến mãi
+        $promotions = Promotion::where('is_active', 1)
+        ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
+        ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
+        ->get(); 
         $id = $request->query('id'); // Lấy ID danh mục từ query string (?id=1)
     
         if (!$id) {

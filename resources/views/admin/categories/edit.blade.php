@@ -1,9 +1,5 @@
 @extends('adminlte::page')
 
-<<<<<<< HEAD
-
-=======
->>>>>>> e0d369a (Lưu lại thay đổi)
 @section('title', 'Chỉnh sửa danh mục')
 
 @section('content_header')
@@ -11,7 +7,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('categories.update', $category->id) }}" method="POST">
+    <form action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -21,17 +17,14 @@
         </div>
 
         <div class="form-group">
-            <label for="parent_id">Danh mục cha</label>
-            <select name="parent_id" class="form-control">
-                <option value="">Không có</option>
-                @foreach($categories as $parentCategory)
-                    <option value="{{ $parentCategory->id }}" @if($parentCategory->id == $category->parent_id) selected @endif>
-                        {{ $parentCategory->name }}
-                    </option>
-                @endforeach
-            </select>
+            <label for="image">Ảnh danh mục</label>
+            <input type="file" name="image" class="form-control-file">
+            @if ($category->image_url)
+                <div class="mt-2">
+                    <img src="{{ asset('storage/' . $category->image_url) }}" alt="Ảnh danh mục" width="150">
+                </div>
+            @endif
         </div>
-
         <button type="submit" class="btn btn-success">Cập nhật</button>
         <a href="{{ route('categories.index') }}" class="btn btn-secondary">Hủy</a>
     </form>

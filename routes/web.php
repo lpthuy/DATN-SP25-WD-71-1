@@ -229,6 +229,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('payment_methods', PaymentMethodController::class);
     Route::resource('banners', BannerController::class)->names('admin.banners');
     Route::resource('categories', CategoryController::class);
+    Route::get('categories/toggle/{category}', [CategoryController::class, 'toggle'])->name('categories.toggle');
+
 
     // Quản lý danh mục sản phẩm
 
