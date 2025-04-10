@@ -38,7 +38,7 @@ class OrderController extends Controller
     // ✅ Cập nhật lý do hoàn hàng và media
     $order->return_reason = $request->input('return_reason');
     $order->return_media = $filePath;
-    $order->status = 'returning'; // dùng status tiếng Anh để đồng nhất
+    $order->status = 'Đã hoàn hàng'; // dùng status tiếng Anh để đồng nhất
     $order->save();
 
     // ✅ Trả lại số lượng về kho dựa trên product_id + size + color
