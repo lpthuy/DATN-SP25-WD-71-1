@@ -448,7 +448,7 @@
   @php
     $user = auth()->user();
     $userCanReview = $user && \App\Models\Order::where('user_id', $user->id)
-        ->where('status', 'Đã giao thành công')
+        ->where('status', 'đã nhận hàng')
         ->whereHas('items', fn($query) => $query->where('product_id', $product->id))
         ->exists();
 

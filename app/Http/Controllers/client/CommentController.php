@@ -34,7 +34,7 @@ class CommentController extends Controller
         // Check if the user has purchased this product and the order status is 'Đã giao thành công'
         $userId = Auth::id();
         $order = Order::where('user_id', $userId)
-                      ->where('status', 'Đã giao thành công')  // Kiểm tra trạng thái 'Đã giao thành công'
+                      ->where('status', 'đã nhận hàng')  // Kiểm tra trạng thái 'Đã giao thành công'
                       ->whereHas('items', function($query) use ($productId) {
                           $query->where('product_id', $productId);  // Kiểm tra sản phẩm trong đơn hàng
                       })

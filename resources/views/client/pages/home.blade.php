@@ -185,7 +185,7 @@
     </section>
 
     <section class="awe-section-3">
-        <!-- <section class="section_category">
+        <section class="section_category">
             <div class="container">
                 <div class="heading-home">
                     <div class="site-animation">
@@ -216,10 +216,26 @@
                     </div>
                 </div>
             </div>
-        </section> -->
-
-
+        </section>
     </section>
+    
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 5, // Hiển thị tối đa 5 danh mục
+            centeredSlides: true, // Hiển thị danh mục ở giữa
+            spaceBetween: 30, // Khoảng cách giữa các danh mục
+            loop: true, // Lặp lại swiper
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            }
+            
+            
+        });
+
+    </script>
 
 
      <section class="awe-section-4">

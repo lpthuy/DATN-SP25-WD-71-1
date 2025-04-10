@@ -19,6 +19,7 @@
                 <th>ID</th>
                 <th>Tên danh mục</th>
                 <th>Danh mục cha</th>
+                <th>Ảnh</th> <!-- Cột ảnh -->
                 <th>Thao tác</th>
             </tr>
         </thead>
@@ -29,12 +30,20 @@
                 <td>{{ $category->name }}</td>
                 <td>{{ $category->parent ? $category->parent->name : 'Không có' }}</td>
                 <td>
+                    <!-- Kiểm tra xem danh mục có ảnh không, nếu có thì hiển thị -->
+                    @if($category->image_url)
+                        <img src="{{ asset('storage/' . $category->image_url) }}" alt="{{ $category->name }}" width="50" height="50">
+                    @else
+                        <span>Không có ảnh</span>
+                    @endif
+                </td>
+                <td>
                     <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Sửa</a>
-                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
-                    </form>
+                    <a href="{{ route('categories.toggle', $category->id) }}" 
+                        class="btn btn-sm {{ $category->is_active ? 'btn-secondary' : 'btn-success' }}">
+                         <i class="fas {{ $category->is_active ? 'fa-eye-slash' : 'fa-eye' }}"></i>
+                         {{ $category->is_active ? 'Ẩn' : 'Hiện' }}
+                     </a>
                 </td>
             </tr>
             @endforeach
