@@ -236,6 +236,27 @@
         });
 
     </script>
+    <style>
+        .cate-img {
+            width: 130px;
+            height: 130px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+    
+        .cate-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    
+        .cate-info {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
 
 
      <section class="awe-section-4">
@@ -992,7 +1013,7 @@
                                                                                 </div>
                                                                                 <div class="product-info">
                                                                                     <div class="lofi-product">
-                                                                                        <div class="product-type">Phụ kiện</div>
+                                                                                        <div class="product-type"></div>
                                                                                     </div>
                                                                                     <h3 class="product-name">
                                                                                         <a href="{{ route('productDetail', $product->id) }}"
