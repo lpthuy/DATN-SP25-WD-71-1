@@ -50,6 +50,7 @@
                         'confirming' => 'Đang xác nhận',
                         'shipping' => 'Đang giao hàng',
                         'completed' => 'Đã giao thành công',
+                        'received' => 'Đã nhận hàng', 
                         'cancelled' => 'Đã hủy',
                         'returning' => 'Đang chờ hoàn hàng',
                         'returned' => 'Đã hoàn hàng',
