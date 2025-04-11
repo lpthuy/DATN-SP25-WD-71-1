@@ -14,7 +14,7 @@ class Order extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['user_id', 'order_code', 'payment_method', 'promotion_code', 'status', 'is_paid', 'delivered_at','shipping_fee'];
+    protected $fillable = ['user_id', 'order_code', 'payment_method', 'promotion_code', 'status', 'is_paid'];
 
 
 
@@ -48,6 +48,7 @@ public function items()
 {
     return $this->hasMany(OrderItem::class);
 }
+
 
 }
 
