@@ -53,4 +53,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    // app/Models/User.php
+
+public function orders()
+{
+    return $this->hasMany(\App\Models\Order::class);
+}
+
 }

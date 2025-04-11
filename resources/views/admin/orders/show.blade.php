@@ -237,6 +237,7 @@
         <option value="đang xác nhận" {{ $order->status == 'đang xác nhận' ? 'selected' : '' }}>Đang xác nhận</option>
         <option value="đang giao hàng" {{ $order->status == 'đang giao hàng' ? 'selected' : '' }}>đang giao hàng</option>
         <option value="đã giao thành công" {{ $order->status == 'đã giao thành công' ? 'selected' : '' }}>Đã giao thành công</option>
+        <option value="Đã nhận hàng" {{ $order->status == 'Đã nhận hàng' ? 'selected' : '' }}>Đã nhận hàng</option>
         <option value="returning" {{ $order->status == 'returning' ? 'selected' : '' }}>Đã hoàn hàng</option>
         <option value="đã hủy" {{ $order->status == 'đã hủy' ? 'selected' : '' }}>Đã hủy</option>
     </select>
@@ -251,6 +252,7 @@
     "confirming": ["shipping"],
     "shipping": ["completed"],
     "completed": [],       // ✅ KHÔNG cho admin chọn "returned"
+    "received": [],       // ✅ KHÔNG cho admin chọn "returned"
     "cancelled": [],
     "returning": []        // ✅ Cho hiển thị, không được chuyển sang
 };
@@ -261,6 +263,7 @@ const statusLabels = {
     "confirming": "Đang xác nhận",
     "shipping": "Đang giao hàng",
     "completed": "Đã giao thành công",
+    "received": "Đã nhận hàng",
     "cancelled": "Đã hủy",
     "returning": "Đã hoàn hàng"
 };
