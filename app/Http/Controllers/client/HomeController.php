@@ -99,37 +99,47 @@ class HomeController extends Controller
     public function productDetail($id)
     {
         $product = Product::find($id);
-
+    
         if ($product) {
-            // Lấy danh sách hình ảnh sản phẩm (nếu lưu dạng chuỗi có dấu phẩy)
+
             $images = explode(',', $product->image);
 
-            // Lấy danh mục của sản phẩm
-            $category = Category::find($product->category_id);
 
-            // Lấy danh sách màu sắc có sẵn của sản phẩm từ bảng `product_variants`
+            $category = Category::find($product->category_id);
+    
             $colors = DB::table('product_variants')
                 ->join('colors', 'product_variants.color_id', '=', 'colors.id')
                 ->where('product_variants.product_id', $id)
                 ->select('colors.id', 'colors.color_name', 'colors.color_code')
                 ->distinct()
                 ->get();
-
-            // Lấy danh sách kích thước có sẵn của sản phẩm từ bảng `product_variants`
+    
             $sizes = DB::table('product_variants')
                 ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
                 ->where('product_variants.product_id', $id)
                 ->select('sizes.id', 'sizes.size_name')
                 ->distinct()
                 ->get();
-
+    
             $comments = $product->comments()->get();
+    
+            // ✅ Thêm sản phẩm liên quan (cùng danh mục, loại trừ chính nó)
+           $relatedProducts = Product::with('category')
+    ->where('category_id', $product->category_id)
+    ->where('id', '!=', $product->id)
+    ->where('is_active', true) // Lọc sản phẩm đang bật
+    ->take(8)
+    ->get();
 
-            return view('client.pages.product-detail', compact('product', 'images', 'category', 'colors', 'sizes', 'comments'));
+    
+            return view('client.pages.product-detail', compact(
+                'product', 'images', 'category', 'colors', 'sizes', 'comments', 'relatedProducts'
+            ));
         }
-
+    
         return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
     }
+    
 
     public function checkAvailability(Request $request)
     {

@@ -91,6 +91,8 @@ Route::get('/products', [HomeController::class, 'allProducts'])->name('products.
 
 Route::post('/admin/products/{id}/toggle-active', [ProductController::class, 'toggleActive'])->name('products.toggleActive');
 
+// sp lien quan 
+Route::get('/category/{categoryId}/products', [HomeController::class, 'categoryProducts']);
 
 Route::post('/comment/{id}', [CommentController::class, 'store'])->name('comment.store');
 
