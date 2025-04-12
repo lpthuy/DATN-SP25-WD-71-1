@@ -17,7 +17,7 @@ use App\Http\Controllers\client\HomeController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\RevenueStatisticsController;
 
-
+use App\Http\Controllers\Admin\OrdersController; // ✅ phải dùng đúng controller
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -33,11 +33,11 @@ use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
-use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\PostController;
 
 Auth::routes();
 
+Route::post('/cart/check-stock', [CartController::class, 'checkStock'])->name('cart.checkStock');
 
 Route::get('/api/order-status/{id}', function ($id) {
     $order = Order::find($id);
@@ -212,6 +212,7 @@ Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('
 
 
 Route::get('/admin/orders/{id}/pdf', [OrderController::class, 'exportPDF'])->name('orders.exportPDF');
+
 
 
 // web.php
