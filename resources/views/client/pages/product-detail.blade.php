@@ -478,7 +478,7 @@
                 <div class="product-rating-summary mb-4">
                     <div class="average-rating">
                         {!! $productRating['html'] !!}
-                        <span class="rating-value">{{ $productRating['average'] }}/5</span>
+                        <span class="rating-value">{{ $productRating['average'] }}/5⭐</span>
                     </div>
                     <div class="rating-count">
                         Dựa trên {{ $productRating['count'] }} đánh giá
@@ -542,7 +542,7 @@
                         </div>
                     </div>
                 @elseif($hasReviewed)
-                    <p class="alert alert-success">Bạn đã đánh giá sản phẩm này rồi.</p>
+                    <p class="alert alert-success">cảm ơn bạn đã đánh giá trải nghiệm sản phẩm của.</p>
                 @elseif(auth()->check())
                     <p class="alert alert-warning">Bạn cần mua sản phẩm này và nhận hàng thành công để có thể đánh giá.</p>
                 @endif

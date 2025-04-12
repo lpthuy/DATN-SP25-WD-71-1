@@ -1463,10 +1463,10 @@
             });
         </script>
 
-        <a target="_blank" class="livechat-mes" href="https://m.me/sapo.vn">
+        {{-- <a target="_blank" class="livechat-mes" href="https://m.me/sapo.vn">
             <img src="http://bizweb.dktcdn.net/100/456/491/themes/864044/assets/messenger.svg?1708522613834"
                 alt="Messenger">
-        </a>
+        </a> --}}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 </body>
