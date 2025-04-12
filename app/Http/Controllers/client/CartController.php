@@ -201,6 +201,36 @@ public function index()
 
 
 
-    
+public function checkStock(Request $request)
+{
+    $selected = $request->input('selected_products', []);
+    $cart = session('cart', []);
+    $outOfStock = [];
+
+    foreach ($selected as $item) {
+        $cartKey = $item['cartKey'];
+        $quantity = (int) $item['quantity'];
+
+        if (!isset($cart[$cartKey])) continue;
+
+        $variantId = $cart[$cartKey]['variant_id'];
+        $variant = \App\Models\ProductVariant::find($variantId);
+
+        if (!$variant || $variant->stock_quantity < $quantity) {
+            $outOfStock[] = $cart[$cartKey]['name'] . " (" . $cart[$cartKey]['color'] . " - " . $cart[$cartKey]['size'] . ")";
+        }
+    }
+
+    if (count($outOfStock) > 0) {
+        return response()->json([
+            'success' => false,
+            'out_of_stock' => $outOfStock
+        ]);
+    }
+
+    return response()->json(['success' => true]);
+}
+
+
 
 }

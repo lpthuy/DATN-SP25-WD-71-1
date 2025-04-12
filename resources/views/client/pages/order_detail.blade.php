@@ -55,7 +55,8 @@
             @php
                 $promotion = null;
                 $discountAmount = 0;
-                $shippingFee = $total >= 300000 ? 0 : 35000;
+                $shippingFee = 20000; // ✅ Phí ship cố định 20.000₫
+
 
                 if ($order->promotion_code) {
                     $promotion = \App\Models\Promotion::where('code', $order->promotion_code)->first();

@@ -6,9 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 
 class OrdersController extends Controller
 {
+    
+    public function exportPDF($id)
+    {
+        $order = Order::with('user')->findOrFail($id);
+        $items = OrderItem::where('order_id', $id)->get();
+    
+        $pdf = Pdf::loadView('client.orders.pdf', [
+            'order' => $order,
+            'items' => $items
+        ]);
+    
+        return $pdf->download("order_{$order->order_code}.pdf");
+    }
+
     public function destroy($id)
 {
     $order = Order::findOrFail($id);
