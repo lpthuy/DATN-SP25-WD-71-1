@@ -197,7 +197,7 @@
                         <div class="swiper-wrapper">
                             @foreach($categories as $category)
                                 <div class="item swiper-slide">
-                                    <a href="{{ url('danh-muc/' . Str::slug($category->name)) }}" title="{{ $category->name }}">
+                                    <a href="{{ route('productbycategory', ['id' => $category->id]) }}">
                                         <div class="cate-img">
                                             <img width="130" height="130" class="lazy img-responsive"
                                                  src="{{ asset('storage/' . ($category->image_url ?? 'default.png')) }}"
@@ -1088,57 +1088,50 @@
                 <div class="block-content">
                     <div class="swiper-container testimonial-carousel">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide single-testimonial">
-                                <div class="testimonials-wrapper">
-                                    <div class="desc">Mình đã mua ở rất nhiều nơi rồi, Rainbow - store có thể là điểm
-                                        đến cuối cùng của mình, bán toàn đồ chất lượng.</div>
-                                    <div class="testimonials-img">
-                                        <img width="90" height="90" class="lazy img-responsive"
-                                            src="{{ asset('client/images/feedback_1.png') }}"
-                                            data-src="{{ asset('client/images/feedback_1.png') }}" alt="Lofi Style">
-                                    </div>
-                                    <div class="testimonials-person-info">
-                                        <h3>Thanh Tâm</h3>
-                                        <p>Nhân viên văn phòng</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide single-testimonial">
-                                <div class="testimonials-wrapper">
-                                    <div class="desc">Mình đã mua ở rất nhiều nơi rồi, Rainbow - store có thể là điểm
-                                        đến cuối cùng của mình, bán toàn đồ chất lượng.</div>
-                                    <div class="testimonials-img">
-                                        <img width="90" height="90" class="lazy img-responsive"
-                                            src="{{ asset('client/images/feedback_1.png') }}"
-                                            data-src="{{ asset('client/images/feedback_1.png') }}" alt="Lofi Style">
-                                    </div>
-                                    <div class="testimonials-person-info">
-                                        <h3>Thanh Tâm</h3>
-                                        <p>Nhân viên văn phòng</p>
+                            @forelse ($featuredComments as $comment)
+                                <div class="swiper-slide single-testimonial">
+                                    <div class="testimonials-wrapper">
+                                        <div class="desc">
+                                            <strong>Nội Dung:</strong> {{ $comment->content }}<br>
+                                            <strong>Đánh giá:</strong> {!! str_repeat('⭐', $comment->rating) !!}
+                                        </div>
+                                        {{-- <div class="testimonials-img">
+                                            <img width="90" height="90" class="lazy img-responsive"
+                                                src="{{ asset('client/images/feedback_1.png') }}"
+                                                data-src="{{ asset('client/images/feedback_1.png') }}" alt="User">
+                                        </div> --}}
+                                        <div class="testimonials-person-info">
+                                            <h3>tên khách hàng: {{ $comment->user->name ?? $comment->name }}</h3>
+                                            {{-- <p>{{ $comment->user->email ?? $comment->email }}</p> --}}
+                        
+                                            @if ($comment->product)
+                                                <p>
+                                                    <strong>Xem sản phẩm được đánh giá: 
+                                                        <a href="{{ route('product.detail', ['id' => $comment->product->id]) }}">
+                                                            {{ $comment->product->name }}
+                                                        </a>
+                                                    </strong>
+                                                </p>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="swiper-slide single-testimonial">
-                                <div class="testimonials-wrapper">
-                                    <div class="desc">Mình đã mua ở rất nhiều nơi rồi, Rainbow - store có thể là điểm
-                                        đến cuối cùng của mình, bán toàn đồ chất lượng.</div>
-                                    <div class="testimonials-img">
-                                        <img width="90" height="90" class="lazy img-responsive"
-                                            src="{{ asset('client/images/feedback_1.png') }}"
-                                            data-src="{{ asset('client/images/feedback_1.png') }}" alt="Lofi Style">
-                                    </div>
-                                    <div class="testimonials-person-info">
-                                        <h3>Thanh Tâm</h3>
-                                        <p>Nhân viên văn phòng</p>
+                            @empty
+                                <div class="swiper-slide single-testimonial">
+                                    <div class="testimonials-wrapper">
+                                        <div class="desc text-center">
+                                            💬 Hiện tại chưa có đánh giá nào cả. <br>
+                                            Chúc bạn một ngày tràn đầy năng lượng và niềm vui! 🌈✨
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforelse
                         </div>
+                        
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
+                
             </div>
         </section>
 

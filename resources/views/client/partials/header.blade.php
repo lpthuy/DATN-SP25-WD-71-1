@@ -12,14 +12,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 col-6 contact-header">
-                        <span>
+                        {{-- <span>
                             Hotline:
                             <a class="fone" href="tel:19006750" title="1900 6750">1900 6750</a>
                         </span>
                         <span class="d-md-inline-block d-none">
                             Email:
                             <a href="mailto:support@sapo.vn" title="support@sapo.vn">support@sapo.vn</a>
-                        </span>
+                        </span> --}}
                     </div>
                     <div class="col-md-6 col-12">
                         <div class="account-header">

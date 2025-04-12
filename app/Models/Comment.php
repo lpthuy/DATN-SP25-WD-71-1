@@ -150,4 +150,8 @@ class Comment extends Model
     {
         return $query->orderBy('created_at', 'desc');
     }
+    public function scopeFiveStar($query)
+{
+    return $query->where('rating', 5);
+}
 }

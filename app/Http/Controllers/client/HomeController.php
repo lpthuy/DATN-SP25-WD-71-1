@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Color;
 use App\Models\Banner;
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Promotion;
@@ -36,12 +37,19 @@ class HomeController extends Controller
     public function index()
     {
         $posts = Post::where('is_active', true)->paginate(4); // Thêm biến $posts
-        $promotions = Promotion::where('is_active', 1)->get(); // Lấy các mã đã bật
+        $promotions = Promotion::where('is_active', 1)
+        ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
+        ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
+        ->get(); 
         $products = Product::all(); // Lấy tất cả sản phẩm
         $products = Product::where('is_active', true)->latest()->take(8)->get();
         $banners = Banner::where('status', 1)->orderBy('position', 'asc')->get(); // Lấy banner theo thứ tự position
-
-        return view('client.pages.home', compact('products', 'banners','promotions','posts'));
+        $featuredComments = Comment::where('rating', 5)
+        ->where('is_visible', true)
+        ->latest()
+        ->take(5)
+        ->get();
+        return view('client.pages.home', compact('products', 'banners','promotions','posts','featuredComments'));
     }
     //   lấy toàn bộ sản phẩm in 
     public function allProducts()
