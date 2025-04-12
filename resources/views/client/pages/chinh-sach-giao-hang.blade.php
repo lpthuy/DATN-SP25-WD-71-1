@@ -30,7 +30,7 @@
                         <div class="content-page rte">
 
 
-                            <p>LOFI&nbsp;Style&nbsp;có dịch vụ giao hàng tận nơi trên toàn quốc, áp dụng cho khách mua hàng trên website, fanpage và gọi điện thoại, không áp dụng cho khách mua trực tiếp tại cửa hàng.</p>
+                            <p>RAINBOW STORE&nbsp;&nbsp;có dịch vụ giao hàng tận nơi trên toàn quốc, áp dụng cho khách mua hàng trên website, fanpage và gọi điện thoại, không áp dụng cho khách mua trực tiếp tại cửa hàng.</p>
     <p>Đơn hàng sẽ được chuyển phát đến tận địa chỉ khách hàng cung cấp thông qua công ty vận chuyển trung gian.</p>
     <p><br>
     1.&nbsp;<strong>Thời gian giao hàng</strong>:</p>
@@ -50,7 +50,7 @@
     <p>Khi hàng được giao đến quý khách, vui lòng ký xác nhận với nhân viên giao hàng và kiểm tra lại số lượng cũng như loại hàng hóa được giao có chính xác không. Xin quý khách vui lòng giữ lại biên lại vận chuyển và hóa đơn mua hàng để đối chiếu kiểm tra.</p>
     <p>2.&nbsp;<strong>Phí giao hàng</strong>:</p>
     <ul>
-    <li>Phí ship cố định là 30,000đ áp dụng cho mọi khu vực</li></ul>
+    <li>Phí ship cố định là 20,000đ áp dụng cho mọi khu vực</li></ul>
 
                         </div>
                     </div>
@@ -68,98 +68,6 @@
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="/gioi-thieu" title="Giới thiệu">Giới thiệu</a>
-                    </li>
-                    <li class="has-submenu level0 ">
-                        <a class="nav-link" href="/collections/all" title="Sản phẩm">
-                            Sản phẩm
-                            <span class="icon-plus-submenu plus-nClick1"></span>
-                        </a>
-                        <ul class="submenu-links" style="display: none;">
-                            <li class="has-submenu level1">
-                                <a href="/san-pham-ao" title="Sản phẩm áo">
-                                    Sản phẩm áo
-                                    <span class="icon-plus-submenu plus-nClick2"></span>
-                                </a>
-                                <ul class="submenu-links" style="display: none;">
-                                    <li>
-                                        <a href="/ao-phong" title="Áo phông">Áo phông</a>
-                                    </li>
-                                    <li>
-                                        <a href="/ao-so-mi" title="Áo sơ mi">Áo sơ mi</a>
-                                    </li>
-                                    <li>
-                                        <a href="/ao-kieu" title="Áo kiểu">Áo kiểu</a>
-                                    </li>
-                                    <li>
-                                        <a href="/ao-len" title="Áo len">Áo len</a>
-                                    </li>
-                                    <li>
-                                        <a href="/ao-khoac" title="Áo khoác">Áo khoác</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="has-submenu level1">
-                                <a href="/san-pham-quan" title="Sản phẩm quần">
-                                    Sản phẩm quần
-                                    <span class="icon-plus-submenu plus-nClick2"></span>
-                                </a>
-                                <ul class="submenu-links" style="display: none;">
-                                    <li>
-                                        <a href="/quan-jeans" title="Quần jeans">Quần jeans</a>
-                                    </li>
-                                    <li>
-                                        <a href="/quan-kaki" title="Quần kaki">Quần kaki</a>
-                                    </li>
-                                    <li>
-                                        <a href="/quan-short" title="Quần short">Quần short</a>
-                                    </li>
-                                    <li>
-                                        <a href="/quan-lung" title="Quần lửng">Quần lửng</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="has-submenu level1">
-                                <a href="/san-pham-vay" title="Sản phẩm váy">
-                                    Sản phẩm váy
-                                    <span class="icon-plus-submenu plus-nClick2"></span>
-                                </a>
-                                <ul class="submenu-links" style="display: none;">
-                                    <li>
-                                        <a href="/vay-bo" title="Váy bó">Váy bó</a>
-                                    </li>
-                                    <li>
-                                        <a href="/vay-xuong" title="Váy xuông">Váy xuông</a>
-                                    </li>
-                                    <li>
-                                        <a href="/vay-chu-a" title="Váy chữ A">Váy chữ A</a>
-                                    </li>
-                                    <li>
-                                        <a href="/dam-om" title="Đầm ôm">Đầm ôm</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="has-submenu level1">
-                                <a href="/tui-phu-kien" title="Túi xách">
-                                    Túi xách
-                                    <span class="icon-plus-submenu plus-nClick2"></span>
-                                </a>
-                                <ul class="submenu-links" style="display: none;">
-                                    <li>
-                                        <a href="/vi" title="Ví">Ví</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="has-submenu level1">
-                                <a href="/giay-dep" title="Giày dép">
-                                    Giày dép
-                                </a>
-                            </li>
-                            <li class="has-submenu level1">
-                                <a href="/phu-kien-1" title="Phụ kiện">
-                                    Phụ kiện
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="/tin-tuc" title="Tin tức">Tin tức</a>

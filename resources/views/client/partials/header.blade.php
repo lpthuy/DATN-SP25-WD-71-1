@@ -102,7 +102,7 @@
                                                 thiệu</a>
                                         </li>
                                         <li class="nav-item has-submenu">
-                                            <a class="nav-link caret-down" href="{{ route('products.all') }}"
+                                            <a class="nav-link caret-down" href="{{ route('allProducts') }}"
                                                 title="Sản phẩm">Sản phẩm</a>
                                             <i class="fa ic-caret-down"></i>
                                             <ul class="menuList-submain level-1">

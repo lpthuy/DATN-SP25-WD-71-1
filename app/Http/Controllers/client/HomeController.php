@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Color;
+use App\Models\ProductVariant;
+use App\Models\Size;
 use App\Models\Banner;
 use App\Models\Comment;
 use App\Models\Product;
@@ -38,32 +40,103 @@ class HomeController extends Controller
     {
         $posts = Post::where('is_active', true)->paginate(4); // Thêm biến $posts
         $promotions = Promotion::where('is_active', 1)
-        ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
-        ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
-        ->get(); 
+            ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
+            ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
+            ->get();
         $products = Product::all(); // Lấy tất cả sản phẩm
         $products = Product::where('is_active', true)->latest()->take(8)->get();
         $banners = Banner::where('status', 1)->orderBy('position', 'asc')->get(); // Lấy banner theo thứ tự position
         $featuredComments = Comment::where('rating', 5)
-        ->where('is_visible', true)
-        ->latest()
-        ->take(5)
-        ->get();
-        return view('client.pages.home', compact('products', 'banners','promotions','posts','featuredComments'));
+            ->where('is_visible', true)
+            ->latest()
+            ->take(5)
+            ->get();
+        return view('client.pages.home', compact('products', 'banners', 'promotions', 'posts', 'featuredComments'));
     }
     //   lấy toàn bộ sản phẩm in 
-    public function allProducts()
+    public function filterProducts(Request $request)
     {
+        // Lấy danh sách khuyến mãi
         $promotions = Promotion::where('is_active', 1)
-        ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
-        ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
-        ->get(); 
-        $products = Product::where('is_active', 1)->paginate(9);
-    
-        $category = null; // Hoặc tạo đối tượng giả nếu cần
-    
-        return view('client.pages.product-by-category', compact('products', 'promotions','category'));
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->get();
+
+        // Lấy danh sách danh mục để hiển thị trong sidebar
+        $categories = Category::where('is_active', 1)->get();
+
+        // Query cơ bản cho sản phẩm
+        $query = Product::where('is_active', 1);
+
+        // Lọc theo danh mục
+        if ($request->filled('category_id') && is_numeric($request->category_id)) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Lọc theo màu sắc (dựa trên product_variants)
+        if ($request->has('colors') && is_array($request->colors) && !empty($request->colors)) {
+            $colors = array_filter($request->colors, 'is_numeric');
+            if (!empty($colors)) {
+                $query->whereHas('variants', function ($q) use ($colors) {
+                    $q->whereIn('product_variants.color_id', $colors);
+                });
+            }
+        }
+
+        // Lọc theo kích thước (dựa trên product_variants)
+        if ($request->has('sizes') && is_array($request->sizes) && !empty($request->sizes)) {
+            $sizes = array_filter($request->sizes, 'is_numeric');
+            if (!empty($sizes)) {
+                $query->whereHas('variants', function ($q) use ($sizes) {
+                    $q->whereIn('product_variants.size_id', $sizes);
+                });
+            }
+        }
+
+        // Lọc theo khoảng giá (dựa trên product_variants)
+        if ($request->filled('price_range')) {
+            $query->whereHas('variants', function ($q) use ($request) {
+                $q->where(function ($subQuery) use ($request) {
+                    // Ưu tiên discount_price nếu có, nếu không thì dùng price
+                    switch ($request->price_range) {
+                        case 'under_200k':
+                            $subQuery->whereNotNull('discount_price')
+                                     ->where('discount_price', '<', 200000)
+                                     ->orWhereNull('discount_price')
+                                     ->where('price', '<', 200000);
+                            break;
+                        case '200k_to_300k':
+                            $subQuery->whereNotNull('discount_price')
+                                     ->whereBetween('discount_price', [200000, 300000])
+                                     ->orWhereNull('discount_price')
+                                     ->whereBetween('price', [200000, 300000]);
+                            break;
+                        case '300k_to_400k':
+                            $subQuery->whereNotNull('discount_price')
+                                     ->whereBetween('discount_price', [300000, 400000])
+                                     ->orWhereNull('discount_price')
+                                     ->whereBetween('price', [300000, 400000]);
+                            break;
+                        case 'above_500k':
+                            $subQuery->whereNotNull('discount_price')
+                                     ->where('discount_price', '>', 500000)
+                                     ->orWhereNull('discount_price')
+                                     ->where('price', '>', 500000);
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Phân trang
+        $products = $query->with('variants')->paginate(9);
+
+        // Truyền biến category để tương thích với view
+        $category = null;
+
+        return view('client.pages.product-by-category', compact('products', 'promotions', 'categories', 'category'));
     }
+
 
 
 
@@ -84,70 +157,76 @@ class HomeController extends Controller
     public function productByCategory(Request $request)
     {
         $promotions = Promotion::where('is_active', 1)
-        ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
-        ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
-        ->get(); 
+            ->where('start_date', '<=', now()) // Ngày bắt đầu <= ngày hiện tại
+            ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
+            ->get();
         $id = $request->query('id'); // Lấy ID danh mục từ query string (?id=1)
-    
+
         if (!$id) {
             return redirect()->route('home')->with('error', 'Danh mục không hợp lệ.');
         }
-    
+
         $category = Category::findOrFail($id);
-    
+
         // Phân trang sản phẩm trong danh mục
         $products = Product::where('category_id', $id)->paginate(9); // Thêm phân trang ở đây
-    
+
         return view('client.pages.product-by-category', compact('category', 'products', 'promotions'));
     }
-    
-    
+
+
 
 
     public function productDetail($id)
     {
         $product = Product::find($id);
-    
+
         if ($product) {
 
             $images = explode(',', $product->image);
 
 
             $category = Category::find($product->category_id);
-    
+
             $colors = DB::table('product_variants')
                 ->join('colors', 'product_variants.color_id', '=', 'colors.id')
                 ->where('product_variants.product_id', $id)
                 ->select('colors.id', 'colors.color_name', 'colors.color_code')
                 ->distinct()
                 ->get();
-    
+
             $sizes = DB::table('product_variants')
                 ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
                 ->where('product_variants.product_id', $id)
                 ->select('sizes.id', 'sizes.size_name')
                 ->distinct()
                 ->get();
-    
-            $comments = $product->comments()->get();
-    
-            // ✅ Thêm sản phẩm liên quan (cùng danh mục, loại trừ chính nó)
-           $relatedProducts = Product::with('category')
-    ->where('category_id', $product->category_id)
-    ->where('id', '!=', $product->id)
-    ->where('is_active', true) // Lọc sản phẩm đang bật
-    ->take(8)
-    ->get();
 
-    
+            $comments = $product->comments()->get();
+
+            // ✅ Thêm sản phẩm liên quan (cùng danh mục, loại trừ chính nó)
+            $relatedProducts = Product::with('category')
+                ->where('category_id', $product->category_id)
+                ->where('id', '!=', $product->id)
+                ->where('is_active', true) // Lọc sản phẩm đang bật
+                ->take(8)
+                ->get();
+
+
             return view('client.pages.product-detail', compact(
-                'product', 'images', 'category', 'colors', 'sizes', 'comments', 'relatedProducts'
+                'product',
+                'images',
+                'category',
+                'colors',
+                'sizes',
+                'comments',
+                'relatedProducts'
             ));
         }
-    
+
         return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
     }
-    
+
 
     public function checkAvailability(Request $request)
     {
@@ -195,14 +274,14 @@ class HomeController extends Controller
     {
         $posts = Post::where('is_active', true)->paginate(4); // Phân trang và chỉ lấy bài viết có trạng thái 'bật'
 
-        return view('client.pages.post',compact('posts'));
+        return view('client.pages.post', compact('posts'));
     }
 
     public function postShow(Post $post)
-{
-    $posts = Post::where('is_active', true)->paginate(4); // Thêm biến $posts
-    return view('client.pages.post-detail', compact('post', 'posts'));
-}
+    {
+        $posts = Post::where('is_active', true)->paginate(4); // Thêm biến $posts
+        return view('client.pages.post-detail', compact('post', 'posts'));
+    }
     public function contact()
     {
         return view('client.pages.contact');
@@ -345,24 +424,24 @@ class HomeController extends Controller
     }
 
     public function updateProfile(Request $request)
-{
-    $request->validate([
-        'name' => 'required|min:3',
-        'email' => 'required|email|unique:users,email,' . Auth::id(),
-        'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:15',
-        'address' => 'required|string|max:255', // validate địa chỉ
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|min:3',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:15',
+            'address' => 'required|string|max:255', // validate địa chỉ
+        ]);
 
-    $user = Auth::user();
-    $user->update([
-        'name' => $request->name,
-        'email' => $request->email,
-        'phone' => $request->phone,
-        'address' => $request->address, // thêm dòng này
-    ]);
+        $user = Auth::user();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address, // thêm dòng này
+        ]);
 
-    return redirect()->route('profile')->with('success', 'Cập nhật thông tin thành công!');
-}
+        return redirect()->route('profile')->with('success', 'Cập nhật thông tin thành công!');
+    }
 
 
 

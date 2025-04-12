@@ -87,7 +87,7 @@ Route::get('/san-pham/{id}', [HomeController::class, 'productDetail'])
 Route::get('/danh-muc', [HomeController::class, 'productByCategory'])
     ->name('productbycategory');
 //in ra toan bo spsp
-Route::get('/products', [HomeController::class, 'allProducts'])->name('products.all');
+Route::get('/products', [HomeController::class, 'filterProducts'])->name('allProducts');
 
 Route::post('/admin/products/{id}/toggle-active', [ProductController::class, 'toggleActive'])->name('products.toggleActive');
 
