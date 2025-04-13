@@ -100,8 +100,10 @@ Route::get('/tin-tuc', [HomeController::class, 'post'])->name('post');
 Route::get('post-detail/{post}', [HomeController::class, 'postShow'])->name('showpost');
 
 Route::get('/lien-he', [HomeController::class, 'contact'])->name('contact');
-Route::get('/tim-kiem', [HomeController::class, 'search'])->name('search');
+
+// trang yêu thích
 Route::get('/yeu-thich', [HomeController::class, 'wishlist'])->name('wishlist');
+
 Route::get('/gio-hang', [HomeController::class, 'cart'])->name('cart');
 Route::post('/gio-hang/cap-nhat', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/checkout/update-qty', [CheckoutController::class, 'updateQty'])->name('checkout.updateQty');
