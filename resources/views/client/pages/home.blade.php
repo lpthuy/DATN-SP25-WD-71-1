@@ -219,7 +219,6 @@
         </section>
     </section>
     
-    
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
@@ -998,12 +997,6 @@
                                                                                         </div>
                                                                                     </a>
                                                                                     <div class="action-cart">
-                                                                                        <a href="javascript:void(0)"
-                                                                                            class="action btn-compare js-btn-wishlist setWishlist btn-views"
-                                                                                            data-wish="{{ $product->id }}" tabindex="0"
-                                                                                            title="Thêm vào yêu thích">
-                                                                                            ❤️
-                                                                                        </a>
 
                                                                                         <a title="Xem nhanh"
                                                                                             href="{{ route('productDetail', $product->id) }}"
@@ -1166,7 +1159,7 @@
             </div>
             <div class="time-post">
                 <svg><!-- user icon SVG --></svg>
-                <span>{{ $post->author ?? ''}}</span>
+                <span>{{ $post->author ?? 'Team Lofi' }}</span>
             </div>
             <h3>
                 <a href="{{ route('showpost', $post) }}" title="{{ $post->title }}">{{ $post->title }}</a>

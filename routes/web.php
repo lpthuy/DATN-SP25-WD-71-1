@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Client\WishlistController;
 
 Auth::routes();
 
@@ -102,7 +103,11 @@ Route::get('post-detail/{post}', [HomeController::class, 'postShow'])->name('sho
 Route::get('/lien-he', [HomeController::class, 'contact'])->name('contact');
 
 // trang yêu thích
-Route::get('/yeu-thich', [HomeController::class, 'wishlist'])->name('wishlist');
+Route::get('/yeu-thich', [WishlistController::class, 'wishlist'])->name('wishlist');
+
+// (Tùy chọn) Route cho thêm/xóa sản phẩm yêu thích
+Route::post('/yeu-thich/add/{productId}', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
+Route::delete('/yeu-thich/remove/{productId}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
 
 Route::get('/gio-hang', [HomeController::class, 'cart'])->name('cart');
 Route::post('/gio-hang/cap-nhat', [CartController::class, 'updateCart'])->name('cart.update');
@@ -138,6 +143,7 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 
 Route::get('/don-hang', [HomeController::class, 'order'])->name('order');
 Route::get('/dia-chi', [HomeController::class, 'address'])->name('address');
+
 // xử lý đổi mật khẩu
 Route::get('/tai-khoan/doi-mat-khau', [HomeController::class, 'changePassword'])->name('change.password');
 Route::post('/tai-khoan/doi-mat-khau', [HomeController::class, 'doChangePassword'])->name('do.change.password');

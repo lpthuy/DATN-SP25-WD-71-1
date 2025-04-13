@@ -171,7 +171,7 @@
                                                 </div>
                                             </a>
                                             <div class="action-cart">
-                                                <a href="javascript:void(0)" class="action btn-compare js-btn-wishlist setWishlist btn-views" data-wish="{{ $product->id }}" title="Thêm vào yêu thích">❤️</a>
+                                                
                                                 <a title="Xem nhanh" href="{{ route('productDetail', $product->id) }}" class="quick-view btn-views">🔍</a>
                                             </div>
                                         </div>
