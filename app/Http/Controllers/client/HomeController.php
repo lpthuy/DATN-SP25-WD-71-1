@@ -129,7 +129,7 @@ class HomeController extends Controller
         }
 
         // Phân trang
-        $products = $query->with('variants')->paginate(9);
+        $products = $query->with('variants')->latest()->paginate(9);
 
         // Truyền biến category để tương thích với view
         $category = null;
@@ -169,8 +169,9 @@ class HomeController extends Controller
         $category = Category::findOrFail($id);
 
         // Phân trang sản phẩm trong danh mục
-        $products = Product::where('category_id', $id)->paginate(9); // Thêm phân trang ở đây
-
+        $products = Product::where('category_id', $id)
+                   ->latest()
+                   ->paginate(9);
         return view('client.pages.product-by-category', compact('category', 'products', 'promotions'));
     }
 

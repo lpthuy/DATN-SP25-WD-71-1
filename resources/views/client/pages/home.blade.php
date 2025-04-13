@@ -1166,7 +1166,7 @@
             </div>
             <div class="time-post">
                 <svg><!-- user icon SVG --></svg>
-                <span>{{ $post->author ?? 'Team Lofi' }}</span>
+                <span>{{ $post->author ?? ''}}</span>
             </div>
             <h3>
                 <a href="{{ route('showpost', $post) }}" title="{{ $post->title }}">{{ $post->title }}</a>
