@@ -7,7 +7,25 @@
 @stop
 
 @section('content')
-    <a href="{{ route('posts.create') }}" class="btn btn-primary mb-3">Thêm bài viết mới</a>
+    <!-- Thêm ô tìm kiếm -->
+    <div class="d-flex justify-content-between align-items-center mb-3 w-100">
+        <!-- Nút Thêm bài viết mới -->
+        <a href="{{ route('posts.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Thêm bài viết mới
+        </a>
+    
+        <!-- Form tìm kiếm bài viết -->
+        <div class="search-container">
+            <form action="{{ route('posts.index') }}" method="GET" class="d-flex align-items-center">
+                <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm bài viết..." value="{{ request('keyword') }}" style="width: 250px;">
+                <button type="submit" class="btn btn-primary ml-2">
+                    <i class="fas fa-search"></i> Tìm kiếm
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Bảng danh sách bài viết -->
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -68,4 +86,9 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Phân trang -->
+    <div class="d-flex justify-content-center">
+        {{ $posts->appends(['keyword' => request('keyword')])->links() }}
+    </div>
 @stop

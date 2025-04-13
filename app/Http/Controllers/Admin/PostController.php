@@ -11,11 +11,22 @@ use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
     // Hiển thị danh sách bài viết
-    public function index()
-    {
-        $posts = Post::all();
-        return view('admin.posts.index', compact('posts'));
-    }
+    public function index(Request $request)
+{
+    // Lấy từ request giá trị tìm kiếm
+    $keyword = $request->input('keyword');
+    
+    // Lọc bài viết theo tiêu đề và nội dung (hoặc các cột khác nếu cần)
+    $posts = Post::when($keyword, function ($query, $keyword) {
+            $query->where('title', 'like', "%$keyword%")
+                  ->orWhere('content', 'like', "%$keyword%"); // Tìm kiếm theo tiêu đề và nội dung
+        })
+        ->latest() // Lấy bài viết mới nhất trước
+        ->paginate(10); // Phân trang với 10 bài viết mỗi trang
+
+    return view('admin.posts.index', compact('posts'));
+}
+
 
     // Hiển thị form tạo bài viết mới
     public function create()
