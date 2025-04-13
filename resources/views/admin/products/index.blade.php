@@ -7,7 +7,43 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('products.create') }}" class="btn btn-success mb-3"><i class="fas fa-plus-circle"></i> Thêm sản phẩm</a>
+<div class="d-flex justify-content-between align-items-center mb-3 w-100">
+    <a href="{{ route('products.create') }}" class="btn btn-success">
+        <i class="fas fa-plus-circle"></i> Thêm sản phẩm
+    </a>
+
+    <div class="search-container">
+        <form action="{{ route('products.index') }}" method="GET" class="d-flex align-items-center">
+            <input type="text" name="keyword" class="form-control" placeholder="Tìm tên hoặc danh muc..." value="{{ request('keyword') }}">
+            <button type="submit" class="btn btn-primary ml-2">
+                <i class="fas fa-search"></i> Tìm kiếm
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .search-container {
+        border: 1px solid #ccc;
+        padding: 5px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+    }
+
+    .search-container input {
+        width: 250px;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .search-container button {
+        border-radius: 5px;
+    }
+</style>
+
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -128,5 +164,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
 </script>
 @endsection

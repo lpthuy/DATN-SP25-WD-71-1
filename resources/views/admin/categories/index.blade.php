@@ -7,8 +7,43 @@
 @endsection
 
 @section('content')
-    <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Thêm danh mục</a>
-
+   
+    <div class="d-flex justify-content-between align-items-center mb-3 w-100">
+        <a href="{{ route('categories.create') }}" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> thêm danh mục
+        </a>
+    
+        <div class="search-container">
+            <form action="{{ route('categories.index') }}" method="GET" class="d-flex align-items-center">
+                <input type="text" name="keyword" class="form-control" placeholder="tìm kiếm tên danh mục" value="{{ request('keyword') }}">
+                <button type="submit" class="btn btn-primary ml-2">
+                    <i class="fas fa-search"></i> Tìm kiếm
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <style>
+        .search-container {
+            border: 1px solid #ccc;
+            padding: 5px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    
+        .search-container input {
+            width: 250px;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    
+        .search-container button {
+            border-radius: 5px;
+        }
+    </style>
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -18,7 +53,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tên danh mục</th>
-                <th>Danh mục cha</th>
+                {{-- <th>Danh mục cha</th> --}}
                 <th>Ảnh</th> <!-- Cột ảnh -->
                 <th>Thao tác</th>
             </tr>
@@ -28,7 +63,7 @@
             <tr>
                 <td>{{ $category->id }}</td>
                 <td>{{ $category->name }}</td>
-                <td>{{ $category->parent ? $category->parent->name : 'Không có' }}</td>
+                {{-- <td>{{ $category->parent ? $category->parent->name : 'Không có' }}</td> --}}
                 <td>
                     <!-- Kiểm tra xem danh mục có ảnh không, nếu có thì hiển thị -->
                     @if($category->image_url)
@@ -48,7 +83,10 @@
             </tr>
             @endforeach
         </tbody>
+        
     </table>
-
+<!-- Phân trang -->
+<div class="d-flex justify-content-center">
     {{ $categories->links() }}
+</div>
 @endsection
