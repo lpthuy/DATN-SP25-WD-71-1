@@ -29,18 +29,16 @@
                         <h1 class="title-page">Giới thiệu</h1>
                         <div class="content-page rte">
 
-
-                            <p><b>LOFI STYLE&nbsp;</b>- Thương hiệu thời trang của người trẻ hiện đại! Ra đời
-                                vào năm 2016, LOFISTYLE&nbsp;luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang
-                                mang đến sự tin tưởng&nbsp;và năng lượng tích cực cho khách hàng.&nbsp;<b>LOFI
-                                    STYLE&nbsp;</b>mang hơi thở của thời trang&nbsp;<strong><em>HIỆN ĐẠI, TRẺ
-                                        TRUNG, PHÓNG KHOÁNG</em></strong>&nbsp;với những mẫu thiết kế bắt nhịp
-                                xu hướng thịnh hành và có tính ứng dụng cao trong mọi hoàn cảnh.</p>
-                            <p>&nbsp;</p>
-                            <p><em><strong>HÃY ĐẾN&nbsp;</strong><b>LOFI STYLE</b><strong>&nbsp;ĐỂ TRẢI NGHIỆM
-                                        SỰ KHÁC BIỆT!</strong></em></p>
-
+                            <p><strong>🌈 RAINBOW SHOP – Phong cách thời trang của thế hệ trẻ hiện đại!</strong></p>
+                        
+                            <p>Được thành lập từ năm 2025, Rainbow Shop không chỉ là một cửa hàng thời trang – chúng mình là nơi lan tỏa cảm hứng sống tích cực, cá tính và thời thượng đến từng bạn trẻ Việt Nam. Với thông điệp <em><strong>“Sắc màu riêng, chất riêng”</strong></em>, Rainbow Shop luôn nỗ lực mỗi ngày để mang đến những bộ sưu tập mới mẻ, hiện đại và gần gũi, giúp bạn tự tin thể hiện bản thân ở bất cứ đâu.</p>
+                        
+                            <p>Từ phong cách basic hiện đại, năng động đường phố, đến những thiết kế trẻ trung, phá cách, mỗi sản phẩm tại Rainbow đều mang đậm cá tính, bắt kịp xu hướng và cực kỳ dễ mix-match trong cuộc sống hằng ngày – đi học, đi chơi hay hẹn hò đều ổn áp!</p>
+                        
+                            <p><strong>💖 Chúng mình không chỉ bán thời trang, mà còn gửi gắm vào đó sự chỉn chu, tận tâm và yêu thương.</strong> Hãy để Rainbow Shop đồng hành cùng bạn trên hành trình tìm kiếm phiên bản rực rỡ nhất của chính mình trong năm 2025 nhé!</p>
+                        
                         </div>
+                        
                     </div>
                 </div>
                 <div class="col-lg-3 col-12 order-lg-3">
