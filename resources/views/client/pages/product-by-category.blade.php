@@ -27,7 +27,7 @@
             <aside class="left-sidebar sidebar dqdt-sidebar col-lg-3 col-12">
                 <div class="sidebar">
                     <!-- Form lọc -->
-                    <form method="GET" action="{{ route('allProducts') }}" id="filter-form">
+                    <form method="GET" action="{{ route('products.all') }}" id="filter-form">
                         <!-- Lọc danh mục -->
                         <div class="group-menu">
                             <div class="collection_title title_block">
@@ -140,7 +140,7 @@
 
                         <!-- Nút reset -->
                         <div class="group-menu">
-                            <a href="{{ route('allProducts') }}" class="btn btn-secondary">Xóa bộ lọc</a>
+                            <a href="{{ route('products.all') }}" class="btn btn-secondary">Xóa bộ lọc</a>
                         </div>
                     </form>
                 </div>
