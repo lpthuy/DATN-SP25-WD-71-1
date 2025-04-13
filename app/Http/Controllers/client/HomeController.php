@@ -101,27 +101,27 @@ class HomeController extends Controller
                     switch ($request->price_range) {
                         case 'under_200k':
                             $subQuery->whereNotNull('discount_price')
-                                     ->where('discount_price', '<', 200000)
-                                     ->orWhereNull('discount_price')
-                                     ->where('price', '<', 200000);
+                                ->where('discount_price', '<', 200000)
+                                ->orWhereNull('discount_price')
+                                ->where('price', '<', 200000);
                             break;
                         case '200k_to_300k':
                             $subQuery->whereNotNull('discount_price')
-                                     ->whereBetween('discount_price', [200000, 300000])
-                                     ->orWhereNull('discount_price')
-                                     ->whereBetween('price', [200000, 300000]);
+                                ->whereBetween('discount_price', [200000, 300000])
+                                ->orWhereNull('discount_price')
+                                ->whereBetween('price', [200000, 300000]);
                             break;
                         case '300k_to_400k':
                             $subQuery->whereNotNull('discount_price')
-                                     ->whereBetween('discount_price', [300000, 400000])
-                                     ->orWhereNull('discount_price')
-                                     ->whereBetween('price', [300000, 400000]);
+                                ->whereBetween('discount_price', [300000, 400000])
+                                ->orWhereNull('discount_price')
+                                ->whereBetween('price', [300000, 400000]);
                             break;
                         case 'above_500k':
                             $subQuery->whereNotNull('discount_price')
-                                     ->where('discount_price', '>', 500000)
-                                     ->orWhereNull('discount_price')
-                                     ->where('price', '>', 500000);
+                                ->where('discount_price', '>', 500000)
+                                ->orWhereNull('discount_price')
+                                ->where('price', '>', 500000);
                             break;
                     }
                 });
@@ -263,12 +263,23 @@ class HomeController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
 
+        // Kiểm tra nếu có từ khóa tìm kiếm
+        if (!$query) {
+            return redirect()->route('home')->with('error', 'Vui lòng nhập từ khóa tìm kiếm.');
+        }
 
+        // Tìm kiếm sản phẩm
+        $products = Product::where('name', 'LIKE', "%{$query}%")
+                          ->orWhere('description', 'LIKE', "%{$query}%")
+                          ->paginate(10); // Phân trang, mỗi trang 10 sản phẩm
 
-
-
-
+        // Truyền dữ liệu sang View
+        return view('client.pages.search', compact('products', 'query'));
+    }
 
     public function post()
     {
@@ -285,11 +296,6 @@ class HomeController extends Controller
     public function contact()
     {
         return view('client.pages.contact');
-    }
-
-    public function search()
-    {
-        return view('client.pages.search');
     }
 
     public function wishlist()
@@ -384,22 +390,36 @@ class HomeController extends Controller
      */
     public function doChangePassword(Request $request)
     {
+        // Validate dữ liệu
         $request->validate([
-            'old_password' => 'required|min:6',
-            'new_password' => 'required|min:6|confirmed',
+            'old_password' => 'required|min:8', // Tăng tối thiểu lên 8 ký tự để phù hợp với thông báo trong view
+            'new_password' => 'required|min:8|confirmed', // Xác nhận mật khẩu mới
+            'new_password_confirmation' => 'required|min:8', // Đảm bảo trường xác nhận cũng được validate
+        ], [
+            'old_password.required' => 'Mật khẩu cũ là bắt buộc.',
+            'old_password.min' => 'Mật khẩu cũ phải có ít nhất 8 ký tự.',
+            'new_password.required' => 'Mật khẩu mới là bắt buộc.',
+            'new_password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
+            'new_password.confirmed' => 'Xác nhận mật khẩu mới không khớp.',
+            'new_password_confirmation.required' => 'Xác nhận mật khẩu là bắt buộc.',
+            'new_password_confirmation.min' => 'Xác nhận mật khẩu phải có ít nhất 8 ký tự.',
         ]);
 
         $user = Auth::user();
 
+        // Kiểm tra mật khẩu cũ
         if (!Hash::check($request->old_password, $user->password)) {
             return redirect()->back()->with('error', 'Mật khẩu cũ không chính xác.');
         }
 
+        // Cập nhật mật khẩu mới
         $user->update([
             'password' => Hash::make($request->new_password)
         ]);
 
-        return redirect()->route('profile')->with('success', 'Mật khẩu đã được thay đổi.');
+        // Thêm thông báo thành công và logout để đảm bảo an toàn
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Mật khẩu đã được thay đổi. Vui lòng đăng nhập lại.');
     }
 
     /**
@@ -417,32 +437,44 @@ class HomeController extends Controller
         return view('auth.client.profile', compact('user'));
     }
 
+    public function updateProfile(Request $request)
+    {
+        // Validate dữ liệu
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'phone' => 'nullable|string|max:10',
+            'address' => 'required|string|max:500',
+        ], [
+            'name.required' => 'Họ và tên là bắt buộc.',
+            'name.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+            'email.required' => 'Email là bắt buộc.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email đã được sử dụng.',
+            'email.max' => 'Email không được vượt quá 255 ký tự.',
+            'phone.max' => 'Số điện thoại không được vượt quá 10 ký tự.',
+            'address.required' => 'Địa chỉ là bắt buộc.',
+            'address.max' => 'Địa chỉ không được vượt quá 500 ký tự.',
+        ]);
+
+        $user = Auth::user();
+
+        // Cập nhật thông tin
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
+
+        return redirect()->route('profile')->with('success', 'Thông tin đã được cập nhật thành công.');
+    }
+
 
     public function editProfile()
     {
         return view('auth.client.edit-profile', ['user' => Auth::user()]);
     }
-
-    public function updateProfile(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email,' . Auth::id(),
-            'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:15',
-            'address' => 'required|string|max:255', // validate địa chỉ
-        ]);
-
-        $user = Auth::user();
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address, // thêm dòng này
-        ]);
-
-        return redirect()->route('profile')->with('success', 'Cập nhật thông tin thành công!');
-    }
-
 
 
     public function changePassword()

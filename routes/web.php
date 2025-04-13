@@ -127,11 +127,18 @@ Route::post('/logout', function (Request $request) {
     return redirect()->route('home'); // Chuyển về trang chủ hoặc tuỳ bạn
 })->name('logout');
 
-
+// xử lý sửa thông tin
 Route::get('/tai-khoan', [HomeController::class, 'profile'])->name('profile');
+Route::post('/tai-khoan/cap-nhat', [HomeController::class, 'updateProfile'])->name('updateProfile');
+
+// xử lý tìm search
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+
 Route::get('/don-hang', [HomeController::class, 'order'])->name('order');
 Route::get('/dia-chi', [HomeController::class, 'address'])->name('address');
-
+// xử lý đổi mật khẩu
+Route::get('/tai-khoan/doi-mat-khau', [HomeController::class, 'changePassword'])->name('change.password');
+Route::post('/tai-khoan/doi-mat-khau', [HomeController::class, 'doChangePassword'])->name('do.change.password');
 
 
 

@@ -46,9 +46,6 @@
                             <li>
                                 <a class="title-info" href="{{ route('changePassword') }}">Đổi mật khẩu</a>
                             </li>
-                            <li>
-                                <a class="title-info" href="{{ route('address') }}">Sổ địa chỉ ({{ optional(Auth::user()->addresses)->count() ?? 0 }})</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
