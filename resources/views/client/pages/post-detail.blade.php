@@ -72,7 +72,7 @@
                                     </li>
                                 
                                     <li class="has-submenu level0">
-                                        <a class="nav-link" href="{{ route('allProducts') }}" title="Sản phẩm">
+                                        <a class="nav-link" href="{{ route('products.all') }}" title="Sản phẩm">
                                             Sản phẩm
                                             <span class="icon-plus-submenu plus-nClick1"></span> <!-- Nút "+" -->
                                         </a>
