@@ -24,40 +24,37 @@ class PaymentController extends Controller
     $vnp_HashSecret = "FXNGJH0W969WQELS747QRGBUIAUFRLRN";
 
     $checkoutItems = session('checkout_items', []);
-    $promoCode = session('promo_code'); // nếu có áp mã
-    $promoDiscount = session('promo_discount', 0); // số tiền giảm
+    $promoCode = session('promo_code'); 
+    $promoDiscount = session('promo_discount', 0); 
 
-    // 👉 Tính tổng tiền sản phẩm
     $totalProduct = 0;
     foreach ($checkoutItems as $item) {
         $totalProduct += $item['price'] * $item['quantity'];
     }
 
-    // 👉 Tính phí ship
     $shippingFee = $totalProduct >= 300000 ? 0 : 20000;
 
-    // 👉 Áp dụng giảm giá (đã được tính sẵn trong session)
     $totalAmount = max(0, $totalProduct - $promoDiscount + $shippingFee);
 
-    // 👉 Tạo mã giao dịch
-    $vnp_TxnRef = time();
+    // Luôn luôn tạo mới mã giao dịch khi gọi VNPay
+    $vnp_TxnRef = time() . Str::random(4); // đảm bảo mã là duy nhất
     $vnp_OrderInfo = "Thanh toán đơn hàng - " . $vnp_TxnRef;
     $vnp_Amount = $totalAmount * 100;
     $vnp_Locale = "VN";
     $vnp_BankCode = $request->input('bank_code', "NCB");
     $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 
-    // 👉 Ghi lại dữ liệu cho vnpayReturn
     session([
         'order_code' => $vnp_TxnRef,
         'checkout_items' => $checkoutItems,
         'shipping_fee' => $shippingFee,
         'promo_discount' => $promoDiscount,
         'promo_code' => $promoCode,
-        'total_amount' => $totalAmount
+        'total_amount' => $totalAmount,
+        'retry_payment' => session('retry_payment', false),
+        'retry_order_id' => session('retry_order_id'),
     ]);
 
-    // 👉 Tạo URL thanh toán
     $inputData = [
         "vnp_Version" => "2.1.0",
         "vnp_TmnCode" => $vnp_TmnCode,
@@ -98,11 +95,11 @@ class PaymentController extends Controller
 }
 
 
+
 public function vnpayReturn(Request $request)
 {
-    $vnp_TxnRef = $request->input('vnp_TxnRef');
     $vnp_ResponseCode = $request->input('vnp_ResponseCode');
-    $vnp_Amount = $request->input('vnp_Amount') / 100;
+    $isPaid = ($vnp_ResponseCode == "00") ? 1 : 0;
 
     Log::info("VNPay Callback - Session Data: ", session()->all());
 
@@ -112,11 +109,29 @@ public function vnpayReturn(Request $request)
     $shippingFee = session('shipping_fee', 0);
     $promoCode = session('promo_code', null);
     $promoDiscount = session('promo_discount', 0);
-    $totalAmount = session('total_amount', $vnp_Amount); // fallback nếu không có session
+    $totalAmount = session('total_amount');
 
-    if ($checkoutItems && $userId) {
-        $isPaid = ($vnp_ResponseCode == "00") ? 1 : 0;
+    if (!$checkoutItems || !$userId) {
+        return redirect()->route('order')->with('error', "Dữ liệu không hợp lệ hoặc hết hạn.");
+    }
 
+    if (session('retry_payment')) {
+        $order = Order::find(session('retry_order_id'));
+
+        if (!$order) {
+            return redirect()->route('order')->with('error', "Không tìm thấy đơn hàng cũ.");
+        }
+
+        $order->update([
+            'payment_method' => 'VNPAY',
+            'is_paid' => $isPaid,
+            'total_price' => $totalAmount,
+            'shipping_fee' => $shippingFee,
+            'promotion_code' => $promoCode,
+            'discount' => $promoDiscount,
+            'status' => $isPaid ? 'processing' : $order->status,
+        ]);
+    } else {
         $order = Order::create([
             'order_code' => $orderCode,
             'user_id' => $userId,
@@ -139,47 +154,26 @@ public function vnpayReturn(Request $request)
                 'quantity' => $item['quantity'] ?? 1,
                 'price' => $item['price'] ?? 0,
             ]);
-
-            if ($isPaid) {
-                $sizeId = Size::where('size_name', trim(strtolower($item['size'])))->value('id');
-                $colorId = Color::where('color_name', trim(ucfirst(strtolower($item['color']))))->value('id');
-
-                if ($sizeId && $colorId) {
-                    $variant = ProductVariant::where('product_id', $item['product_id'])
-                        ->where('size_id', $sizeId)
-                        ->where('color_id', $colorId)
-                        ->first();
-
-                    if ($variant) {
-                        $variant->stock_quantity = max(0, $variant->stock_quantity - $item['quantity']);
-                        $variant->save();
-                    } else {
-                        Log::warning("❌ Không tìm thấy biến thể để trừ kho: product_id={$item['product_id']}, size_id={$sizeId}, color_id={$colorId}");
-                    }
-                } else {
-                    Log::warning("❌ Không tìm thấy size/color khi trừ kho (VNPay): size={$item['size']}, color={$item['color']}");
-                }
-            }
         }
+    }
 
-        // 👉 Xoá session
-        session()->forget([
-            'checkout_items',
-            'order_code',
-            'shipping_fee',
-            'promo_code',
-            'promo_discount',
-            'total_amount'
-        ]);
+    session()->forget([
+        'checkout_items',
+        'order_code',
+        'shipping_fee',
+        'promo_code',
+        'promo_discount',
+        'total_amount',
+        'retry_payment',
+        'retry_order_id'
+    ]);
 
-        if ($isPaid) {
-            return redirect()->route('order')->with('success', "Thanh toán thành công! Mã đơn hàng: $order->order_code");
-        } else {
-            return redirect()->route('order')->with('error', "Thanh toán thất bại hoặc bị huỷ từ VNPay.");
-        }
+    if ($isPaid) {
+        return redirect()->route('order')->with('success', "Thanh toán thành công! Mã đơn hàng: $order->order_code");
     } else {
-        return redirect()->route('order')->with('error', "Dữ liệu không hợp lệ hoặc hết hạn.");
+        return redirect()->route('order')->with('error', "Thanh toán thất bại hoặc bị huỷ từ VNPay.");
     }
 }
+
 
 }

@@ -182,7 +182,7 @@ public function index()
     $total = array_sum(array_column($checkoutItems, 'total_price'));
 
     // 👉 Thiết lập phí vận chuyển mặc định
-    $shippingFee = $total >= 300000 ? 0 : 20000;
+    $shippingFee = 20000;
 
     // Lưu session
     session([

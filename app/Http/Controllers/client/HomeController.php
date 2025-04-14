@@ -105,49 +105,63 @@ class HomeController extends Controller
 
 
     public function productDetail($id)
-    {
-        $product = Product::find($id);
-    
-        if ($product) {
 
-            $images = explode(',', $product->image);
+{
+    $product = Product::find($id);
+
+    if ($product) {
+
+        $images = explode(',', $product->image);
+
+        $category = Category::find($product->category_id);
 
 
-            $category = Category::find($product->category_id);
-    
-            $colors = DB::table('product_variants')
-                ->join('colors', 'product_variants.color_id', '=', 'colors.id')
-                ->where('product_variants.product_id', $id)
-                ->select('colors.id', 'colors.color_name', 'colors.color_code')
-                ->distinct()
-                ->get();
-    
-            $sizes = DB::table('product_variants')
-                ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
-                ->where('product_variants.product_id', $id)
-                ->select('sizes.id', 'sizes.size_name')
-                ->distinct()
-                ->get();
-    
-            $comments = $product->comments()->get();
-    
-            // ✅ Thêm sản phẩm liên quan (cùng danh mục, loại trừ chính nó)
-           $relatedProducts = Product::with('category')
-    ->where('category_id', $product->category_id)
-    ->where('id', '!=', $product->id)
-    ->where('is_active', true) // Lọc sản phẩm đang bật
-    ->take(8)
-    ->get();
+        $colors = DB::table('product_variants')
+            ->join('colors', 'product_variants.color_id', '=', 'colors.id')
+            ->where('product_variants.product_id', $id)
+            ->select('colors.id', 'colors.color_name', 'colors.color_code')
+            ->distinct()
+            ->get();
 
-    
-            return view('client.pages.product-detail', compact(
-                'product', 'images', 'category', 'colors', 'sizes', 'comments', 'relatedProducts'
-            ));
-        }
-    
-        return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
+        $sizes = DB::table('product_variants')
+            ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
+            ->where('product_variants.product_id', $id)
+            ->select('sizes.id', 'sizes.size_name')
+            ->distinct()
+            ->get();
+
+        $comments = $product->comments()->get();
+
+        // ✅ Thêm sản phẩm liên quan (cùng danh mục, loại trừ chính nó)
+        $relatedProducts = Product::with('category')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', true)
+            ->take(8)
+            ->get();
+
+        // ✅ Lấy biến thể đầu tiên (ưu tiên còn hàng) để hiện trạng thái
+        $defaultVariant = DB::table('product_variants')
+            ->where('product_id', $product->id)
+            ->orderByDesc('stock_quantity') // Ưu tiên biến thể còn hàng
+            ->first();
+
+        return view('client.pages.product-detail', compact(
+            'product',
+            'images',
+            'category',
+            'colors',
+            'sizes',
+            'comments',
+            'relatedProducts',
+            'defaultVariant' // ✅ truyền sang view
+        ));
     }
-    
+
+    return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
+}
+
+
 
     public function checkAvailability(Request $request)
     {
