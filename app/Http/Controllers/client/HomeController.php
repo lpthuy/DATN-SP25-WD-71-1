@@ -113,8 +113,8 @@ class HomeController extends Controller
 
         $images = explode(',', $product->image);
 
-        $category = Category::find($product->category_id);
 
+        $category = Category::find($product->category_id);
 
         $colors = DB::table('product_variants')
             ->join('colors', 'product_variants.color_id', '=', 'colors.id')

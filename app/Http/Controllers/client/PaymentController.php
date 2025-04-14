@@ -96,6 +96,8 @@ class PaymentController extends Controller
 
 
 
+
+
 public function vnpayReturn(Request $request)
 {
     $vnp_ResponseCode = $request->input('vnp_ResponseCode');
