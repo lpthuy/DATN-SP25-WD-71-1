@@ -76,52 +76,76 @@ class OrderController extends Controller
 
 
     public function store(Request $request)
-    {
+{
+    try {
         $user = Auth::user();
         $checkoutItems = session('checkout_items', []);
-        $orderCode = 'OD' . strtoupper(Str::random(8));
+        $retryOrderId = session('retry_order_id');
+        $isRetry = session('retry_payment', false);
 
         if (!$checkoutItems || !$user) {
-            return response()->json(['status' => 'error', 'message' => 'Không tìm thấy giỏ hàng hoặc chưa đăng nhập!']);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Không tìm thấy giỏ hàng hoặc chưa đăng nhập!'
+            ], 400);
         }
 
-        // Lấy mã giảm giá và phí ship từ session (nếu có)
         $promotionCode = session('promo_code');
-        $discount = session('promo_discount', 0); // số tiền giảm (int)
-        $shippingFee = session('shipping_fee', 0); // phí vận chuyển (int)
-
-        // Tính tổng tạm tính của sản phẩm
+        $discount = session('promo_discount', 0);
+        $shippingFee = session('shipping_fee', 0);
         $subtotal = collect($checkoutItems)->sum(fn($item) => $item['quantity'] * $item['price']);
-
-        // Tổng tiền phải thanh toán
         $finalTotal = $subtotal + $shippingFee - $discount;
 
-        // ✅ Tạo đơn hàng
-        $order = Order::create([
-            'order_code' => $orderCode,
-            'user_id' => $user->id,
-            'payment_method' => 'cod',
-            'status' => 'processing',
-            'promotion_code' => $promotionCode,
-            'discount' => $discount,
-            'shipping_fee' => $shippingFee,
-        ]);
+        if ($isRetry && $retryOrderId) {
+            // 👉 Nếu là thanh toán lại
+            $order = Order::where('id', $retryOrderId)
+                ->where('user_id', $user->id)
+                ->first();
 
-        // ✅ Tạo từng sản phẩm trong đơn hàng và trừ kho
+            if (!$order) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Không tìm thấy đơn hàng để thanh toán lại.'
+                ], 404);
+            }
+
+            $order->update([
+                'payment_method' => 'cod',
+                'status' => 'processing',
+                'promotion_code' => $promotionCode,
+                'discount' => $discount,
+                'shipping_fee' => $shippingFee,
+            ]);
+
+            $order->items()->delete();
+        } else {
+            // 👉 Tạo đơn hàng mới nếu không phải thanh toán lại
+            $orderCode = 'OD' . strtoupper(Str::random(8));
+            $order = Order::create([
+                'order_code' => $orderCode,
+                'user_id' => $user->id,
+                'payment_method' => 'cod',
+                'status' => 'processing',
+                'promotion_code' => $promotionCode,
+                'discount' => $discount,
+                'shipping_fee' => $shippingFee,
+            ]);
+        }
+
+        // ✅ Tạo sản phẩm và trừ kho
         foreach ($checkoutItems as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
-                'product_id' => $item['product_id'] ?? null,
-                'product_name' => $item['name'] ?? '',
-                'color' => $item['color'] ?? 'Không có',
-                'size' => $item['size'] ?? 'Không có',
-                'quantity' => $item['quantity'] ?? 1,
-                'price' => $item['price'] ?? 0,
+                'product_id' => $item['product_id'],
+                'product_name' => $item['name'],
+                'color' => $item['color'],
+                'size' => $item['size'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
             ]);
 
-            // 🔻 Trừ tồn kho
-            $sizeId = \App\Models\Size::where('size_name', trim(strtolower($item['size'])))->value('id');
-            $colorId = \App\Models\Color::where('color_name', trim(ucfirst(strtolower($item['color']))))->value('id');
+            $sizeId = \App\Models\Size::where('size_name', strtolower(trim($item['size'])))->value('id');
+            $colorId = \App\Models\Color::where('color_name', ucfirst(strtolower(trim($item['color']))))->value('id');
 
             if ($sizeId && $colorId) {
                 $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
@@ -132,37 +156,42 @@ class OrderController extends Controller
                 if ($variant) {
                     $variant->stock_quantity = max(0, $variant->stock_quantity - $item['quantity']);
                     $variant->save();
-                } else {
-                    \Log::warning("❌ Không tìm thấy biến thể khi trừ kho: product_id={$item['product_id']}, size_id=$sizeId, color_id=$colorId");
                 }
-            } else {
-                \Log::warning("❌ Không tìm thấy size/color khi trừ kho: size={$item['size']}, color={$item['color']}");
             }
         }
-        // Gửi email xác nhận đơn hàng
+
         try {
-            $order->load('items'); // load quan hệ để sử dụng trong email
+            $order->load('items');
             Mail::to($user->email)->send(new OrderSuccessMail($order));
         } catch (\Exception $e) {
-            Log::error('❌ Không gửi được email xác nhận đơn hàng: ' . $e->getMessage());
+            Log::error('❌ Không gửi được email xác nhận: ' . $e->getMessage());
         }
 
-
-        // ✅ Xoá session sau khi đặt hàng
+        // ✅ Xoá session
         session()->forget([
             'checkout_items',
             'promo_code',
             'promo_discount',
-            'shipping_fee'
+            'shipping_fee',
+            'retry_payment',
+            'retry_order_id',
         ]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Đặt hàng thành công!',
-            'order_code' => $orderCode,
+            'order_code' => $order->order_code,
             'redirect' => route('order')
-        ]);
+        ], 200);
+
+    } catch (\Throwable $e) {
+        Log::error("❌ Lỗi trong quá trình xử lý COD: " . $e->getMessage());
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.'
+        ], 500);
     }
+}
 
 
 
