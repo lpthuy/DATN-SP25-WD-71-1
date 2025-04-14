@@ -93,7 +93,6 @@ Route::get('/products', [HomeController::class, 'filterProducts'])->name('produc
 Route::post('/admin/products/{id}/toggle-active', [ProductController::class, 'toggleActive'])->name('products.toggleActive');
 
 
-
 Route::post('/comment/{id}', [CommentController::class, 'store'])->name('comment.store');
 
 

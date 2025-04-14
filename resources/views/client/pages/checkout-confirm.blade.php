@@ -275,6 +275,9 @@
                                             <div class="product-price" id="price-{{ $index }}">
                                                 {{ number_format($item['total_price'], 0, ',', '.') }}₫
                                             </div>
+                                            <!-- Nút xoá sản phẩm -->
+
+
                                         </div>
                     @endforeach
 
@@ -494,6 +497,8 @@
             });
         });
     </script>
+
+   
 
 
 @endsection
