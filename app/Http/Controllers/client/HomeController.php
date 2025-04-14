@@ -240,7 +240,7 @@ class HomeController extends Controller
     return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
 }
 
-
+    }
 
 
     public function checkAvailability(Request $request)
@@ -277,6 +277,7 @@ class HomeController extends Controller
             'stock_quantity' => $stockQuantity, // Trả về số lượng tồn kho
         ]);
     }
+    
 
     public function search(Request $request)
     {
