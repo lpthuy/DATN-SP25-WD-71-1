@@ -13,6 +13,10 @@ use App\Models\Size;
 use App\Models\Color;
 use App\Models\ProductVariant;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderSuccessMail;
+
+
 
 class PaymentController extends Controller
 {
@@ -157,6 +161,16 @@ public function vnpayReturn(Request $request)
         }
     }
 
+    // ✅ Gửi email nếu thanh toán thành công
+    if ($isPaid) {
+        try {
+            $order->load('user', 'items'); // load các quan hệ để gửi vào mail
+            Mail::to($order->user->email)->send(new \App\Mail\OrderSuccessMail($order));
+        } catch (\Exception $e) {
+            Log::error("Lỗi gửi email đơn hàng: " . $e->getMessage());
+        }
+    }
+
     session()->forget([
         'checkout_items',
         'order_code',
@@ -174,6 +188,7 @@ public function vnpayReturn(Request $request)
         return redirect()->route('order')->with('error', "Thanh toán thất bại hoặc bị huỷ từ VNPay.");
     }
 }
+
 
 
 
