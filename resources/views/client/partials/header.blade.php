@@ -172,20 +172,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="wrap-wishlist header-action">
-                                    <a href="{{ route('wishlist') }}" class="wishlist_header box-icon"
-                                        title="Sản phẩm yêu thích">
-                                        <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 18 17" fill="none">
-                                            <path
-                                                d="M1.34821 8.7354C0.330209 5.77575 1.60274 2.00897 4.40225 1.2018C5.92926 0.663681 7.96523 1.20177 8.98323 2.81612C10.0012 1.20177 12.0372 0.663681 13.5642 1.2018C16.6182 2.27803 17.6363 5.77575 16.6183 8.7354C15.3458 13.3094 10.2557 16 8.98323 16C7.71073 15.7309 2.87522 13.5784 1.34821 8.7354Z"
-                                                stroke="#000000" stroke-width="1.5px" stroke-linecap="round"
-                                                stroke-linejoin="round" fill="none"></path>
-                                        </svg>
-                                        <span class="headerWishlistCount count">0</span>
-                                    </a>
+                                    
                                 </div>
                                 <div class="wrap-cart header-action block-cart">
                                     <a href="{{ route('cart.show') }}" class="header-action-toggle header-cart"

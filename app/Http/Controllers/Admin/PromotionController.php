@@ -69,11 +69,28 @@ class PromotionController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $promotions = Promotion::all();
+        // Lấy từ request giá trị tìm kiếm
+        $keyword = $request->input('keyword');
+        
+        $promotions = Promotion::query()
+            ->when($keyword, function ($query, $keyword) {
+                $query->where('promotion_id', 'like', "%$keyword%")
+                    ->orWhere('code', 'like', "%$keyword%")
+                    ->orWhere('discount_type', 'like', "%$keyword%")
+                    ->orWhere('discount_value', 'like', "%$keyword%")
+                    ->orWhere('usage_limit', 'like', "%$keyword%")
+                    ->orWhere('start_date', 'like', "%$keyword%")
+                    ->orWhere('end_date', 'like', "%$keyword%")
+                    ->orWhere('is_active', 'like', "%$keyword%")
+                    ->orWhere('min_purchase_amount', 'like', "%$keyword%");
+            })
+            ->get();
+    
         return view('admin.promotions.index', compact('promotions'));
     }
+
 
     public function create()
     {

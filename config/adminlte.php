@@ -363,19 +363,8 @@ return [
     
 
 
-        // Quản lý Thanh toán
+
        
-        [
-            'text'    => 'Quản lý Thanh toán',
-            'icon'    => 'fas fa-money-check-alt',
-            'submenu' => [
-                [
-                    'text' => 'Danh sách Phương thức',
-                    'url'  => 'admin/payment_methods',
-                    'icon' => 'fas fa-credit-card',
-                ],
-            ],
-        ],
         //quản lý khuyễn mãi
        
         [
@@ -389,6 +378,8 @@ return [
                 ],
             ],
         ],
+
+
 
         [
             'text'    => 'Quản lý Bài Viết',

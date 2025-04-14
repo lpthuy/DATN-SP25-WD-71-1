@@ -14,10 +14,16 @@ class CategoryController extends Controller
      * Hiển thị danh sách danh mục
      */
     public function index()
-    {
-        $categories = Category::with('parent')->paginate(10);
-        return view('admin.categories.index', compact('categories'));
-    }
+{
+    $keyword = request('keyword');
+    
+    // Kiểm tra nếu có từ khóa tìm kiếm
+    $categories = Category::when($keyword, function ($query) use ($keyword) {
+        return $query->where('name', 'like', "%$keyword%");
+    })->latest()->paginate(10);
+
+    return view('admin.categories.index', compact('categories'));
+}
 
     /**
      * Hiển thị form thêm danh mục

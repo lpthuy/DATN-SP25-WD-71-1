@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>@yield('title')</title>
     <meta name="description"
-        content="LOFI STYLE - Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm 2016, LOFISTYLE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng tích cực cho khách hàng.">
+        content="RAINBOW STORE - Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm 2024, RAINBOW STORE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng tích cực cho khách hàng.">
     <meta name="keywords" content="Cập nhật sau" />
     <link rel="canonical" href="index.html" />
     <link rel="dns-prefetch" href="index.html">
@@ -23,19 +23,19 @@
     <meta name="robots" content="noodp,index,follow" />
     <meta name="theme-color" content="#f02b2b" />
     <meta name="description"
-        content="LOFI STYLE - Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm 2016, LOFISTYLE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng tích cực cho khách hàng.">
-    <title>Lofi Style </title>
+        content="RAINBOW STORE - Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm 2024, RAINBOW STORE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng tích cực cho khách hàng.">
+    <title>RAINBOW STORE </title>
     <meta name="keywords" content="Cập nhật sau" />
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Lofi Style">
+    <meta property="og:title" content="RAINBOW STORE">
     <meta property="og:image"
         content="{{ asset('client/images/logo4d9c.png') }}">
     <meta property="og:image:secure_url"
         content="{{ asset('client/images/logo4d9c.png') }}">
     <meta property="og:description"
-        content="LOFI STYLE - Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm 2016, LOFISTYLE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng tích cực cho khách hàng.">
+        content="RAINBOW STORE - Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm 2024, RAINBOW STORE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng tích cực cho khách hàng.">
     <meta property="og:url" content="index.html">
-    <meta property="og:site_name" content="Lofi Style">
+    <meta property="og:site_name" content="RAINBOW STORE">
     <link rel="icon" href="{{ asset('client/images/favicon4d9c.png') }}"
         type="image/x-icon" />
     <link rel="preload" as="script"
@@ -175,7 +175,7 @@
         var Bizweb = Bizweb || {};
         Bizweb.store = 'lofi-style.mysapo.net';
         Bizweb.id = 456491;
-        Bizweb.theme = { "id": 864044, "name": "Lofi Style", "role": "main" };
+        Bizweb.theme = { "id": 864044, "name": "RAINBOW STORE", "role": "main" };
         Bizweb.template = 'index';
         if (!Bizweb.fbEventId) Bizweb.fbEventId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -1409,8 +1409,7 @@
                                     Khuyến mại - ưu đãi
                                 </h3>
                                 <ul class="promotion-box">
-                                    <li>Đồng giá Ship toàn quốc 25.000đ</li>
-                                    <li>Hỗ trợ 10.000 phí Ship cho đơn hàng từ 200.000đ</li>
+                                    <li>Đồng giá Ship toàn quốc 20.000đ</li>
                                     <li>Miễn phí Ship cho đơn hàng từ 300.000đ</li>
                                     <li>Đổi trả trong 30 ngày nếu sản phẩm lỗi bất kì</li>
                                 </ul>

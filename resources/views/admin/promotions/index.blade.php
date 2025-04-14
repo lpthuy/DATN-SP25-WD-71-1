@@ -1,28 +1,33 @@
 @extends('adminlte::page')
-
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">danh sách mã khuyến mãi</h1>
+@endsection
 @section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Danh Sách Khuyến Mãi</h3>
-                    <div class="card-tools">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <!-- Bên trái: Thêm khuyến mãi -->
                         <a href="{{ route('promotions.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Tạo Khuyến Mãi Mới
+                            <i class="fas fa-plus"></i> Thêm Khuyến Mãi Mới
                         </a>
+                
+                        <!-- Bên phải: Tìm kiếm -->
+                        <div class="search-container">
+                            <form action="{{ route('promotions.index') }}" method="GET" class="d-flex align-items-center">
+                                <input type="text" name="keyword" class="form-control" placeholder="Tìm mã khuyến mãi..." value="{{ request('keyword') }}">
+                                <button type="submit" class="btn btn-primary ml-2">
+                                    <i class="fas fa-search"></i> Tìm kiếm
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    @endif
+                
+                
+                
 
                     <div class="table-responsive">
                         <table class="table table-hover table-striped">
@@ -95,6 +100,28 @@
 
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .search-container {
+        border: 1px solid #ccc;
+        padding: 5px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+    }
+
+    .search-container input {
+        width: 250px;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .search-container button {
+        border-radius: 5px;
+    }
+</style>
+
 <style>
     .table-responsive {
         overflow-x: auto;

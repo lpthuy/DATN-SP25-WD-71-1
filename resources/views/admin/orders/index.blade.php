@@ -4,16 +4,38 @@
 <h2>Danh sách đơn hàng</h2>
 
     
-<form method="GET" action="{{ route('orders.index') }}" class="mb-3" style="max-width: 400px;">
-    <div class="input-group">
+<form method="GET" action="{{ route('orders.index') }}" class="mb-3 d-flex justify-content-end align-items-center w-100">
+    <div class="search-container d-flex">
         <input type="text" name="search" class="form-control" placeholder="Tìm theo mã đơn, trạng thái..." value="{{ request('search') }}">
-        <div class="input-group-append">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
+        <button type="submit" class="btn btn-primary ml-2">
+            <i class="fas fa-search"></i> Tìm kiếm
+        </button>
     </div>
 </form>
+
+<style>
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .search-container input {
+        width: 250px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .search-container button {
+        border-radius: 5px;
+    }
+
+    .ml-2 {
+        margin-left: 10px;
+    }
+</style>
+
 
 
 

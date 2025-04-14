@@ -13,15 +13,29 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'variants.size', 'variants.color'])->paginate(10);
+        $query = Product::with(['category', 'variants.size', 'variants.color']);
+    
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            // Tìm kiếm theo tên sản phẩm hoặc tên danh mục
+            $query->where(function($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                  ->orWhereHas('category', function($query) use ($keyword) {
+                      $query->where('name', 'like', '%' . $keyword . '%');
+                  });
+            });
+        }
+    
+        $products = $query->latest()->paginate(10);
         $colors = Color::all();
         $sizes = Size::all();
-        
-
+    
         return view('admin.products.index', compact('products', 'colors', 'sizes'));
     }
+    
+
 
     public function create()
     {
