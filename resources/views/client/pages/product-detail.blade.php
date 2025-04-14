@@ -141,10 +141,14 @@
                                 <span class="stock-brand-title">Tình trạng:</span>
 
 
-                                <span class="a-stock">
-                                    Còn hàng
+                                <span class="a-stock" id="stock-status" style="font-weight: bold;">
+                                    @if(isset($defaultVariant) && $defaultVariant->stock_quantity > 0)
+                                        <span style="color: green;">Còn hàng</span>
+                                    @else
+                                        <span style="color: red;">Hết hàng</span>
+                                    @endif
                                 </span>
-
+                                
 
                             </span>
                         </div>
@@ -751,179 +755,6 @@
     </div>
 @endforeach
 
-
-
-                        {{-- <div class="swiper-slide">
-                            <div class="item_product_main" data-id="292172622">
-                                <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                    class="variants product-action wishItem" data-cart-form
-                                    data-id="product-actions-29217262" enctype="multipart/form-data">
-                                    <div class="product-thumbnail  ">
-                                        <a class="image_thumb" href="ao-phong-nu-mau-hong.html"
-                                            title="Áo phông nữ màu hồng">
-                                            <div class="product-image">
-                                                <img class="lazy img-responsive" width="300" height="300"
-                                                    src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    data-src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    alt="&#193;o ph&#244;ng nữ m&#224;u hồng" />
-                                            </div>
-
-                                            <div class="product-image second-image">
-                                                <img class="lazy img-responsive" width="300" height="300"
-                                                    src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    data-src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    alt="&#193;o ph&#244;ng nữ m&#224;u hồng" />
-                                            </div>
-
-                                        </a>
-                                        <div class="action-cart">
-                                            <a href="javascript:void(0)"
-                                                class="action btn-compare js-btn-wishlist setWishlist btn-views"
-                                                data-wish="ao-phong-nu-mau-hong" tabindex="0"
-                                                title="Thêm vào yêu thích">
-                                                <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    xmlns="http://www.w3.org/2000/svg" width="18" height="17"
-                                                    viewBox="0 0 18 17" fill="none">
-                                                    <path
-                                                        d="M1.34821 8.7354C0.330209 5.77575 1.60274 2.00897 4.40225 1.2018C5.92926 0.663681 7.96523 1.20177 8.98323 2.81612C10.0012 1.20177 12.0372 0.663681 13.5642 1.2018C16.6182 2.27803 17.6363 5.77575 16.6183 8.7354C15.3458 13.3094 10.2557 16 8.98323 16C7.71073 15.7309 2.87522 13.5784 1.34821 8.7354Z"
-                                                        stroke="#000" stroke-width="1.5px" stroke-linecap="round"
-                                                        stroke-linejoin="round" fill="none"></path>
-                                                </svg>
-                                            </a>
-                                            <a title="Xem nhanh" href="ao-phong-nu-mau-hong.html"
-                                                data-handle="ao-phong-nu-mau-hong" class="quick-view btn-views">
-                                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M13.3638 8.90944C13.0122 8.90944 12.7276 9.19411 12.7276 9.54567V11.8277L8.72278 7.82367C8.47389 7.57478 8.071 7.57478 7.82289 7.82367C7.574 8.07178 7.574 8.47467 7.82289 8.72356L11.8269 12.7283H9.54489C9.19333 12.7283 8.90867 13.013 8.90867 13.3646C8.90867 13.7161 9.19333 14.0008 9.54489 14.0008H13.363C13.7153 14 14 13.7146 14 13.3638V9.54567C14 9.19411 13.7153 8.90944 13.3638 8.90944Z"
-                                                        fill="black" />
-                                                    <path
-                                                        d="M0.636222 5.09056C0.987778 5.09056 1.27244 4.80589 1.27244 4.45433V2.17311L5.27722 6.17711C5.40167 6.30156 5.56422 6.36378 5.72756 6.36378C5.89011 6.36378 6.05344 6.30156 6.17711 6.17711C6.426 5.929 6.426 5.52611 6.17711 5.27722L2.17311 1.27322H4.45511C4.80667 1.27322 5.09133 0.988556 5.09133 0.637C5.09056 0.284667 4.80589 0 4.45433 0H0.636222C0.284667 0 0 0.285444 0 0.636222V4.45433C0 4.80589 0.284667 5.09056 0.636222 5.09056Z"
-                                                        fill="black" />
-                                                    <path
-                                                        d="M5.27722 7.82289L1.27244 11.8269V9.54489C1.27244 9.19333 0.987778 8.90867 0.636222 8.90867C0.284667 8.90944 0 9.19411 0 9.54567V13.3638C0 13.7153 0.285444 14 0.636222 14H4.45433C4.80589 14 5.09056 13.7153 5.09056 13.3638C5.09056 13.0122 4.80589 12.7276 4.45433 12.7276H2.17311L6.17711 8.72278C6.426 8.47389 6.426 8.071 6.17711 7.82289C5.929 7.574 5.52533 7.574 5.27722 7.82289Z"
-                                                        fill="black" />
-                                                    <path
-                                                        d="M8.27244 6.36378C8.435 6.36378 8.59833 6.30156 8.722 6.17711L12.7268 2.17311V4.45511C12.7268 4.80667 13.0114 5.09133 13.363 5.09133C13.7153 5.09056 14 4.80589 14 4.45433V0.636222C14 0.284667 13.7146 0 13.3638 0H9.54567C9.19411 0 8.90944 0.284667 8.90944 0.636222C8.90944 0.987778 9.19411 1.27244 9.54567 1.27244H11.8277L7.82367 5.27722C7.57478 5.52611 7.57478 5.929 7.82367 6.17711C7.94733 6.30156 8.10989 6.36378 8.27244 6.36378Z"
-                                                        fill="black" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <div class="lofi-product">
-                                            <div class="product-type">
-
-                                                Áo
-
-                                            </div>
-                                        </div>
-
-                                        <h3 class="product-name"><a href="ao-phong-nu-mau-hong.html"
-                                                title="Áo phông nữ màu hồng">Áo phông nữ màu hồng</a></h3>
-
-
-                                        <div class="bottom-action">
-                                            <div class="price-box">
-
-
-
-                                                169.000₫
-
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="item_product_main" data-id="292172622">
-                                <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                    class="variants product-action wishItem" data-cart-form
-                                    data-id="product-actions-29217262" enctype="multipart/form-data">
-                                    <div class="product-thumbnail  ">
-                                        <a class="image_thumb" href="ao-phong-nu-mau-hong.html"
-                                            title="Áo phông nữ màu hồng">
-                                            <div class="product-image">
-                                                <img class="lazy img-responsive" width="300" height="300"
-                                                    src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    data-src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    alt="&#193;o ph&#244;ng nữ m&#224;u hồng" />
-                                            </div>
-
-                                            <div class="product-image second-image">
-                                                <img class="lazy img-responsive" width="300" height="300"
-                                                    src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    data-src="http://127.0.0.1:5500/bizweb.dktcdn.net/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max4325.jpg?v=1673192703397"
-                                                    alt="&#193;o ph&#244;ng nữ m&#224;u hồng" />
-                                            </div>
-
-                                        </a>
-                                        <div class="action-cart">
-                                            <a href="javascript:void(0)"
-                                                class="action btn-compare js-btn-wishlist setWishlist btn-views"
-                                                data-wish="ao-phong-nu-mau-hong" tabindex="0"
-                                                title="Thêm vào yêu thích">
-                                                <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    xmlns="http://www.w3.org/2000/svg" width="18" height="17"
-                                                    viewBox="0 0 18 17" fill="none">
-                                                    <path
-                                                        d="M1.34821 8.7354C0.330209 5.77575 1.60274 2.00897 4.40225 1.2018C5.92926 0.663681 7.96523 1.20177 8.98323 2.81612C10.0012 1.20177 12.0372 0.663681 13.5642 1.2018C16.6182 2.27803 17.6363 5.77575 16.6183 8.7354C15.3458 13.3094 10.2557 16 8.98323 16C7.71073 15.7309 2.87522 13.5784 1.34821 8.7354Z"
-                                                        stroke="#000" stroke-width="1.5px" stroke-linecap="round"
-                                                        stroke-linejoin="round" fill="none"></path>
-                                                </svg>
-                                            </a>
-                                            <a title="Xem nhanh" href="ao-phong-nu-mau-hong.html"
-                                                data-handle="ao-phong-nu-mau-hong" class="quick-view btn-views">
-                                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M13.3638 8.90944C13.0122 8.90944 12.7276 9.19411 12.7276 9.54567V11.8277L8.72278 7.82367C8.47389 7.57478 8.071 7.57478 7.82289 7.82367C7.574 8.07178 7.574 8.47467 7.82289 8.72356L11.8269 12.7283H9.54489C9.19333 12.7283 8.90867 13.013 8.90867 13.3646C8.90867 13.7161 9.19333 14.0008 9.54489 14.0008H13.363C13.7153 14 14 13.7146 14 13.3638V9.54567C14 9.19411 13.7153 8.90944 13.3638 8.90944Z"
-                                                        fill="black" />
-                                                    <path
-                                                        d="M0.636222 5.09056C0.987778 5.09056 1.27244 4.80589 1.27244 4.45433V2.17311L5.27722 6.17711C5.40167 6.30156 5.56422 6.36378 5.72756 6.36378C5.89011 6.36378 6.05344 6.30156 6.17711 6.17711C6.426 5.929 6.426 5.52611 6.17711 5.27722L2.17311 1.27322H4.45511C4.80667 1.27322 5.09133 0.988556 5.09133 0.637C5.09056 0.284667 4.80589 0 4.45433 0H0.636222C0.284667 0 0 0.285444 0 0.636222V4.45433C0 4.80589 0.284667 5.09056 0.636222 5.09056Z"
-                                                        fill="black" />
-                                                    <path
-                                                        d="M5.27722 7.82289L1.27244 11.8269V9.54489C1.27244 9.19333 0.987778 8.90867 0.636222 8.90867C0.284667 8.90944 0 9.19411 0 9.54567V13.3638C0 13.7153 0.285444 14 0.636222 14H4.45433C4.80589 14 5.09056 13.7153 5.09056 13.3638C5.09056 13.0122 4.80589 12.7276 4.45433 12.7276H2.17311L6.17711 8.72278C6.426 8.47389 6.426 8.071 6.17711 7.82289C5.929 7.574 5.52533 7.574 5.27722 7.82289Z"
-                                                        fill="black" />
-                                                    <path
-                                                        d="M8.27244 6.36378C8.435 6.36378 8.59833 6.30156 8.722 6.17711L12.7268 2.17311V4.45511C12.7268 4.80667 13.0114 5.09133 13.363 5.09133C13.7153 5.09056 14 4.80589 14 4.45433V0.636222C14 0.284667 13.7146 0 13.3638 0H9.54567C9.19411 0 8.90944 0.284667 8.90944 0.636222C8.90944 0.987778 9.19411 1.27244 9.54567 1.27244H11.8277L7.82367 5.27722C7.57478 5.52611 7.57478 5.929 7.82367 6.17711C7.94733 6.30156 8.10989 6.36378 8.27244 6.36378Z"
-                                                        fill="black" />
-                                                </svg>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <div class="lofi-product">
-                                            <div class="product-type">
-
-                                                Áo
-
-                                            </div>
-                                        </div>
-
-                                        <h3 class="product-name"><a href="ao-phong-nu-mau-hong.html"
-                                                title="Áo phông nữ màu hồng">Áo phông nữ màu hồng</a></h3>
-
-
-                                        <div class="bottom-action">
-                                            <div class="price-box">
-
-
-
-                                                169.000₫
-
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div> --}}
                     </div>
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
@@ -1182,35 +1013,39 @@
     });
 
     // Xử lý khi nhấn "Thêm vào giỏ hàng"
-    document.querySelector(".btn-cart").addEventListener("click", function (event) {
-        if (!selectedColor || !selectedSize) {
-            showAlert("Vui lòng chọn màu sắc và size trước khi thêm vào giỏ hàng!");
-            event.preventDefault();
-        } else {
-            fetch("{{ route('cart.add') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    product_id: productId,
-                    color_id: selectedColor,
-                    size_id: selectedSize,
-                    quantity: quantityInput.value
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    showAlert("🎉 Sản phẩm đã được thêm vào giỏ hàng!");
-                } else {
-                    showAlert("Không thể thêm sản phẩm vào giỏ hàng, vui lòng thử lại!");
-                }
-            })
-            .catch(error => console.error("Lỗi:", error));
-        }
-    });
+document.querySelector(".btn-cart").addEventListener("click", function (event) {
+    if (!selectedColor || !selectedSize) {
+        showAlert("Vui lòng chọn màu sắc và size trước khi thêm vào giỏ hàng!");
+        event.preventDefault();
+    } else if (stockQuantity === 0) {
+        showAlert("❌ Sản phẩm này đã hết hàng, không thể thêm vào giỏ hàng!");
+        event.preventDefault();
+    } else {
+        fetch("{{ route('cart.add') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                color_id: selectedColor,
+                size_id: selectedSize,
+                quantity: quantityInput.value
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                showAlert("🎉 Sản phẩm đã được thêm vào giỏ hàng!");
+            } else {
+                showAlert("Không thể thêm sản phẩm vào giỏ hàng, vui lòng thử lại!");
+            }
+        })
+        .catch(error => console.error("Lỗi:", error));
+    }
+});
+
 
     // Xử lý khi nhấn "Mua ngay"
     document.querySelector(".btn-buy-now").addEventListener("click", function (event) {

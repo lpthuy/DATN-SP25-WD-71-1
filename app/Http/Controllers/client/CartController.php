@@ -160,34 +160,27 @@ public function index()
 
     $user = Auth::user();
 
-    // Map lại các item trong đơn hàng
     $checkoutItems = $order->items->map(function ($item) {
-        $totalPrice = $item->price * $item->quantity;
-
-        $product = \App\Models\Product::find($item->product_id);
-        $image = $product ? $product->image : 'default.png';
-
         return [
             'product_id' => $item->product_id,
             'name' => $item->product_name,
-            'image' => $image,
+            'image' => optional($item->product)->image ?? 'default.png',
             'color' => $item->color,
             'size' => $item->size,
             'quantity' => $item->quantity,
             'price' => $item->price,
-            'total_price' => $totalPrice,
+            'total_price' => $item->price * $item->quantity,
         ];
     })->toArray();
 
     $total = array_sum(array_column($checkoutItems, 'total_price'));
-
-    // 👉 Thiết lập phí vận chuyển mặc định
     $shippingFee = $total >= 300000 ? 0 : 20000;
 
-    // Lưu session
     session([
         'checkout_items' => $checkoutItems,
         'order_code' => $order->order_code,
+        'retry_payment' => true,
+        'retry_order_id' => $order->id,
     ]);
 
     return view('client.pages.checkout-confirm', [
@@ -197,6 +190,7 @@ public function index()
         'user' => $user,
     ]);
 }
+
 
 
 

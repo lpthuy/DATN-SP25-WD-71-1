@@ -10,15 +10,7 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    public function show($id)
-    {
-        // Lấy sản phẩm theo ID kèm theo danh sách kích thước và màu sắc
-        $product = Product::with(['sizes', 'colors'])->findOrFail($id);
-
-        $comments = $product->comments()->get();
-
-        return view('client.products.detail', compact('product', 'comments'));
-    }
+    
 
     public function category($slug)
     {
