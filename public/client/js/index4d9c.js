@@ -1,10 +1,5 @@
 $(document).ready(function(){
-	$(".product-action .thumbs-list .thumbs-list-item img").hover(function () {
-		var t = $(this).attr("data-img");
-		$(this).parent().siblings().removeClass("active"), $(this).parent().addClass("active");
-		var e = $(this).parents(".product-action").find(".product-thumbnail .image_thumb img");
-		e && $(e).attr("src", t);
-	});
+
 });
 
 var swiper = new Swiper('.swipertab', {

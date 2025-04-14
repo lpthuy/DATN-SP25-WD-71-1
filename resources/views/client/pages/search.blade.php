@@ -44,6 +44,7 @@
                         @else
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
+                    
                                     @foreach($products as $product)
                                         <div class="swiper-slide">
                                             <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}"
@@ -72,12 +73,7 @@
                                                             </div>
                                                         </a>
                                                         <div class="action-cart">
-                                                            <a href="javascript:void(0)"
-                                                                class="action btn-compare js-btn-wishlist setWishlist btn-views"
-                                                                data-wish="{{ $product->id }}" tabindex="0"
-                                                                title="Thêm vào yêu thích">
-                                                                ❤️
-                                                            </a>
+                                                         
 
                                                             <a title="Xem nhanh"
                                                                 href="{{ route('productDetail', $product->id) }}"
