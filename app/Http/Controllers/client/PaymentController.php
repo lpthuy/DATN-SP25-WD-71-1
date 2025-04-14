@@ -96,8 +96,6 @@ class PaymentController extends Controller
 
 
 
-
-
 public function vnpayReturn(Request $request)
 {
     $vnp_ResponseCode = $request->input('vnp_ResponseCode');
@@ -176,6 +174,7 @@ public function vnpayReturn(Request $request)
         return redirect()->route('order')->with('error', "Thanh toán thất bại hoặc bị huỷ từ VNPay.");
     }
 }
+
 
 
 }
