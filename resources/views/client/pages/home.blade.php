@@ -192,23 +192,24 @@
                         <h2>Danh mục phổ biến</h2>
                     </div>
                 </div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
                 <div class="block-content">
                     <div class="category-swiper swiper-container">
                         <div class="swiper-wrapper">
                             @foreach($categories as $category)
-                                <div class="item swiper-slide">
-                                    <a href="{{ route('productbycategory', ['id' => $category->id]) }}">
-                                        <div class="cate-img">
-                                            <img width="130" height="130" class="lazy img-responsive"
-                                                 src="{{ asset('storage/' . ($category->image_url ?? 'default.png')) }}"
-                                                 data-src="{{ asset('storage/' . ($category->image_url ?? 'default.png')) }}"
-                                                 alt="{{ $category->name }}" />
-                                        </div>
-                                        <div class="cate-info">
-                                            <div class="cate-name">{{ $category->name }}</div>
-                                        </div>
-                                    </a>
-                                </div>
+                            <div class="item swiper-slide">
+                                <a href="{{ route('productbycategory', ['id' => $category->id]) }}" title="{{ $category->name }}">
+                                    <div class="cate-img">
+                                        <img width="130" height="130" class="lazyload img-responsive"
+                                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                                             data-src="{{ asset('storage/' . ($category->image_url ?? 'default.png')) }}"
+                                             alt="{{ $category->name }}" />
+                                    </div>
+                                    <div class="cate-info">
+                                        <div class="cate-name">{{ $category->name }}</div>
+                                    </div>
+                                </a>
+                            </div>
                             @endforeach
                         </div>
                         
@@ -220,8 +221,9 @@
     </section>
     
     
+    
     <!-- Swiper JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    {{-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         var swiper = new Swiper('.swiper-container', {
             slidesPerView: 5, // Hiển thị tối đa 5 danh mục
@@ -236,28 +238,20 @@
             
         });
 
-    </script>
+    </script> --}}
     <style>
-        .cate-img {
-            width: 130px;
-            height: 130px;
-            overflow: hidden;
-            border-radius: 50%;
-            margin: 0 auto;
-        }
-    
-        .cate-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-    
-        .cate-info {
-            text-align: center;
-            margin-top: 10px;
-        }
-    </style>
+       .cate-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cate-img img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+    </style> 
 
 
      <section class="awe-section-4">
