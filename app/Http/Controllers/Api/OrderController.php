@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CompletedOrder;
 use App\Models\Order;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -142,6 +143,70 @@ public function completed(Request $request)
         'orders' => $completedOrders,
     ]);
 }
+
+
+
+
+public function show($id)
+{
+    $user = auth()->user();
+
+    if ($user->role !== 'shipper') {
+        return response()->json(['message' => 'Không có quyền'], 403);
+    }
+
+    $order = Order::with(['user', 'items'])->findOrFail($id);
+    $customer = $order->user;
+    $items = $order->items;
+
+    $totalPrice = $items->sum(function ($item) {
+        return $item->price * $item->quantity;
+    });
+    
+    $promotion = null;
+    $discountValue = 0;
+    $discountPercent = 0;
+    
+    if ($order->promotion_code) {
+        $promotion = Promotion::where('code', $order->promotion_code)->first();
+    
+        if ($promotion) {
+            if ($promotion->discount_type === 'percentage') {
+                $discountPercent = $promotion->discount_value;
+                $discountValue = round($totalPrice * ($discountPercent / 100));
+            } elseif ($promotion->discount_type === 'fixed') {
+                $discountValue = $promotion->discount_value;
+            }
+        }
+    }
+    
+    // ✅ Miễn phí ship nếu giá gốc >= 300k
+    $shippingFee = $totalPrice >= 300000 ? 0 : 20000;
+    $totalAmount = $totalPrice - $discountValue + $shippingFee;
+    
+    $order->shipping_fee = $shippingFee;
+    
+
+
+    // 👉 override shipping_fee để frontend dùng đúng
+    $order->shipping_fee = $shippingFee;
+
+    return response()->json([
+        'status' => 'success',
+        'order' => $order,
+        'customer' => $customer,
+        'items' => $items,
+        'promotion_code' => $order->promotion_code,
+        'discount' => $discountValue,
+        'discount_percent' => $discountPercent,
+        'total_price' => $totalPrice,
+        'shipping_fee' => $shippingFee,
+        'total_amount' => $totalAmount,
+    ]);
+}
+
+
+
 
 
 
