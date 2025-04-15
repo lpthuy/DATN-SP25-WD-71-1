@@ -3,7 +3,7 @@
 @section('title', 'Thêm Kích thước')
 
 @section('content_header')
-    <h1>Thêm Kích thước</h1>
+    <h1 class="text-center font-weight-bold text-primary">Thêm Kích thước</h1>
 @endsection
 
 @section('content')

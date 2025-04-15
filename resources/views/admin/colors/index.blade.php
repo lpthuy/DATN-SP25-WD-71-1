@@ -1,9 +1,8 @@
 @extends('adminlte::page')
 
 @section('title', 'Danh sách Màu sắc')
-
 @section('content_header')
-    <h1>Danh sách Màu sắc</h1>
+    <h1 class="text-center font-weight-bold text-primary">Danh sách Màu sắc</h1>
 @endsection
 
 @section('content')

@@ -1,4 +1,5 @@
 @extends('adminlte::page')
+@section('title', 'danh sách khuyến mãi ')
 @section('content_header')
     <h1 class="text-center font-weight-bold text-primary">danh sách mã khuyến mãi</h1>
 @endsection

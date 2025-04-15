@@ -3,7 +3,7 @@
 @section('title', 'Chi tiết bài viết')
 
 @section('content_header')
-    <h1 class="text-primary">Chi tiết bài viết</h1>
+    <h1 class="text-center font-weight-bold text-primary">Chi tiết bài viết</h1>
 @endsection
 
 @section('content')

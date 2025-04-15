@@ -1,10 +1,12 @@
 @extends('adminlte::page')
 
 @section('title', 'Thống kê tổng quan')
-
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">📊 Thống kê tổng quan</h1>
+@endsection
 @section('content')
 <div class="container-fluid mt-4">
-    <h2 class="text-center mb-4">📊 Thống kê tổng quan</h2>
+    
     @php
     $statusMap = [
         'processing' => 'Đang xử lý',

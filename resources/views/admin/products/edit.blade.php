@@ -3,7 +3,7 @@
 @section('title', 'Chỉnh sửa sản phẩm')
 
 @section('content_header')
-    <h1 class="text-primary">Chỉnh sửa sản phẩm</h1>
+    <h1 class="text-center font-weight-bold text-primary">Chỉnh sửa sản phẩm : {{$product->name}}</h1>
 @endsection
 
 @section('content')

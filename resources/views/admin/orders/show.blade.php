@@ -1,7 +1,9 @@
 @extends('adminlte::page')
 
 @section('title', 'Chi tiết đơn hàng #' . $order->order_code)
-
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">Chi tiết đơn hàng : {{$order->order_code}}</h1>
+@endsection
 @section('content')
 <style>
     * {
@@ -206,7 +208,7 @@
 </style>
 
 <div class="container">
-    <h2>Chi tiết đơn hàng #{{ $order->order_code }}</h2>
+    
 
     <!-- Nút quay lại -->
     <a href="{{ route('orders.index') }}" class="btn-back mb-3">

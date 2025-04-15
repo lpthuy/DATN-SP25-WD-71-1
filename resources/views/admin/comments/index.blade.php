@@ -3,7 +3,7 @@
 @section('title', 'Danh sách Bình luận')
 
 @section('content_header')
-    <h1>Danh sách Bình luận</h1>
+    <h1 class="text-center font-weight-bold text-primary">Danh sách Bình luận</h1>
 @endsection
 
 @section('content')

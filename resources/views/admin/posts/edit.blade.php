@@ -3,7 +3,7 @@
 @section('title', 'Chỉnh sửa bài viết')
 
 @section('content_header')
-    <h1 class="text-primary">Chỉnh sửa bài viết</h1>
+    <h1 class="text-center font-weight-bold text-primary">Chỉnh sửa bài viết : {{$post->title}}</h1>
 @endsection
 
 @section('content')

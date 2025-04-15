@@ -3,7 +3,7 @@
 @section('title', 'Chỉnh sửa danh mục')
 
 @section('content_header')
-    <h1>Chỉnh sửa danh mục: {{ $category->name }}</h1>
+    <h1 class="text-center font-weight-bold text-primary">Chỉnh sửa danh mục : {{ $category->name }}</h1>
 @endsection
 
 @section('content')

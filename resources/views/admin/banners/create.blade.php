@@ -1,7 +1,10 @@
 @extends('adminlte::page')
-
+@section('title', 'thêm banner')
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">thêm banner</h1>
+@endsection
 @section('content')
-<h1>Thêm Banner</h1>
+
 
 @if(session('success'))
 <div class="alert alert-success">{{ session('success') }}</div>
