@@ -250,35 +250,35 @@
 
                     <!-- Sản phẩm -->
                     @foreach ($checkoutItems as $index => $item)
-                                        @php
-                                            $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
-                                                ->whereHas('color', fn($q) => $q->where('color_name', $item['color']))
-                                                ->whereHas('size', fn($q) => $q->where('size_name', $item['size']))
-                                                ->first();
-                                            $maxQty = $variant ? $variant->stock_quantity : 1;
-                                        @endphp
+                                    @php
+                                        $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
+                                            ->whereHas('color', fn($q) => $q->where('color_name', $item['color']))
+                                            ->whereHas('size', fn($q) => $q->where('size_name', $item['size']))
+                                            ->first();
+                                        $maxQty = $variant ? $variant->stock_quantity : 1;
+                                    @endphp
 
-                                        <div class="product-item" id="checkout-item-{{ $index }}">
-                                            <img src="{{ asset('storage/' . explode(',', $item['image'])[0]) }}" alt="{{ $item['name'] }}">
-                                            <div class="product-info">
-                                                <p>{{ $item['name'] }}</p>
-                                                <p>{{ $item['color'] }} / {{ $item['size'] }}</p>
+                                    <div class="product-item" id="checkout-item-{{ $index }}">
+                                        <img src="{{ asset('storage/' . explode(',', $item['image'])[0]) }}" alt="{{ $item['name'] }}">
+                                        <div class="product-info">
+                                            <p>{{ $item['name'] }}</p>
+                                            <p>{{ $item['color'] }} / {{ $item['size'] }}</p>
 
-                                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
-                                                    <input type="number" class="checkout-qty" data-index="{{ $index }}"
-                                                        value="{{ $item['quantity'] }}" min="1" max="{{ $maxQty }}"
-                                                        style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
-                                                    <span class="text-danger error-msg" id="error-qty-{{ $index }}"
-                                                        style="font-size: 0.85rem;"></span>
-                                                </div>
+                                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                                                <input type="number" class="checkout-qty" data-index="{{ $index }}"
+                                                    value="{{ $item['quantity'] }}" min="1" max="{{ $maxQty }}"
+                                                    style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
+                                                <span class="text-danger error-msg" id="error-qty-{{ $index }}"
+                                                    style="font-size: 0.85rem;"></span>
                                             </div>
-                                            <div class="product-price" id="price-{{ $index }}">
-                                                {{ number_format($item['total_price'], 0, ',', '.') }}₫
-                                            </div>
-                                            <!-- Nút xoá sản phẩm -->
-
-
                                         </div>
+                                        <div class="product-price" id="price-{{ $index }}">
+                                            {{ number_format($item['total_price'], 0, ',', '.') }}₫
+                                        </div>
+                                        <!-- Nút xoá sản phẩm -->
+
+
+                                    </div>
                     @endforeach
 
 
@@ -308,7 +308,7 @@
 
                     <!-- Tổng tiền -->
                     <!-- Tổng tiền -->
-                    <p>Tạm tính <span>{{ number_format($total, 0, ',', '.') }}₫</span></p>
+                    <p>Tạm tính <span id="temp-total">{{ number_format($total, 0, ',', '.') }}₫</span></p>
                     <p>Phí vận chuyển
                         <span>{{ $shippingFee == 0 ? 'Miễn phí' : number_format($shippingFee, 0, ',', '.') . '₫' }}</span>
                     </p>
@@ -323,7 +323,8 @@
 
                     <!-- Nút đặt hàng -->
                     <div class="action-buttons">
-                        <a href="#">Quay về giỏ hàng</a>
+                        <a href="{{ route('cart') }}">Quay về giỏ hàng</a>
+
                         <button id="buy-now-btn">Đặt hàng</button>
                     </div>
                 </div>
@@ -336,83 +337,83 @@
 
     <script>
         document.getElementById("buy-now-btn").addEventListener("click", function () {
-    let paymentMethod = document.querySelector("input[name='payment_method']:checked")?.value;
+            let paymentMethod = document.querySelector("input[name='payment_method']:checked")?.value;
 
-    if (!paymentMethod) {
-        alert("Vui lòng chọn phương thức thanh toán!");
-        return;
-    }
-
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-
-    const totalText = document.getElementById("total-price").innerText.replace(/[^\d]/g, "");
-    const totalPrice = parseInt(totalText);
-
-    const promoCode = sessionStorage.getItem('promo_code') || null;
-    const promoDiscount = parseInt(sessionStorage.getItem('promo_discount')) || 0;
-
-    if (paymentMethod === "vnpay") {
-        console.log("👉 Đang gửi yêu cầu thanh toán VNPay...");
-        fetch("{{ route('vnpay.payment') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken
-            },
-            body: JSON.stringify({
-                price: totalPrice,
-                bank_code: "",
-                promo_code: promoCode,
-                promo_discount: promoDiscount
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("✅ Phản hồi từ server:", data);
-            if (data.code === "00" && data.data) {
-                window.location.href = data.data; // VNPAY sẽ tự redirect về sau
-            } else {
-                alert("Không thể tạo thanh toán. Hãy thử lại!");
+            if (!paymentMethod) {
+                alert("Vui lòng chọn phương thức thanh toán!");
+                return;
             }
-        })
-        .catch(err => {
-            console.error("❌ Lỗi fetch:", err);
-            alert("Lỗi khi gửi yêu cầu đến VNPay!");
-        });
-    } else {
-        console.log("👉 Gửi yêu cầu thanh toán COD...");
-        fetch("{{ route('order.cod') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken
-            },
-            body: JSON.stringify({})
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("✅ Phản hồi COD:", data);
-            if (data.status === "success") {
-                const msg = encodeURIComponent(data.message + " Mã đơn hàng: " + data.order_code);
-                window.location.href = data.redirect + '?success=' + msg;
-            } else {
-                alert(data.message || "Lỗi khi lưu đơn hàng COD.");
-            }
-        })
-        .catch(err => {
-            console.error("❌ Lỗi gửi COD:", err);
-            alert("Không thể gửi đơn hàng COD!");
-        });
-    }
-});
 
-    
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            const totalText = document.getElementById("total-price").innerText.replace(/[^\d]/g, "");
+            const totalPrice = parseInt(totalText);
+
+            const promoCode = sessionStorage.getItem('promo_code') || null;
+            const promoDiscount = parseInt(sessionStorage.getItem('promo_discount')) || 0;
+
+            if (paymentMethod === "vnpay") {
+                console.log("👉 Đang gửi yêu cầu thanh toán VNPay...");
+                fetch("{{ route('vnpay.payment') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        price: totalPrice,
+                        bank_code: "",
+                        promo_code: promoCode,
+                        promo_discount: promoDiscount
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("✅ Phản hồi từ server:", data);
+                        if (data.code === "00" && data.data) {
+                            window.location.href = data.data; // VNPAY sẽ tự redirect về sau
+                        } else {
+                            alert("Không thể tạo thanh toán. Hãy thử lại!");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("❌ Lỗi fetch:", err);
+                        alert("Lỗi khi gửi yêu cầu đến VNPay!");
+                    });
+            } else {
+                console.log("👉 Gửi yêu cầu thanh toán COD...");
+                fetch("{{ route('order.cod') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({})
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("✅ Phản hồi COD:", data);
+                        if (data.status === "success") {
+                            const msg = encodeURIComponent(data.message + " Mã đơn hàng: " + data.order_code);
+                            window.location.href = data.redirect + '?success=' + msg;
+                        } else {
+                            alert(data.message || "Lỗi khi lưu đơn hàng COD.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("❌ Lỗi gửi COD:", err);
+                        alert("Không thể gửi đơn hàng COD!");
+                    });
+            }
+        });
+
+
         function applyCoupon() {
             const code = document.getElementById('coupon-code').value.trim();
             const messageEl = document.getElementById('coupon-message');
             let total = {{ $total }};
             let shipping = {{ $shippingFee }};
-    
+
             fetch('{{ route('apply.coupon') }}', {
                 method: 'POST',
                 headers: {
@@ -421,85 +422,128 @@
                 },
                 body: JSON.stringify({ code: code, total: total })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const discountedTotal = total - data.discount;
-                    const grandTotal = discountedTotal + shipping;
-    
-                    // 👉 Lưu mã vào sessionStorage và session server
-                    sessionStorage.setItem('promo_code', code);
-                    sessionStorage.setItem('promo_discount', data.discount);
-    
-                    fetch('{{ route('save.promo.code') }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            code: code,
-                            discount: data.discount
-                        })
-                    });
-    
-                    // 👉 Cập nhật giao diện
-                    document.getElementById('total-price').innerText = new Intl.NumberFormat('vi-VN').format(grandTotal) + '₫';
-                    messageEl.innerHTML = `<span class="text-success">${data.message} - Giảm ${data.discount.toLocaleString('vi-VN')}₫</span>`;
-                } else {
-                    messageEl.innerText = data.message;
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi:', error);
-                messageEl.innerText = 'Lỗi khi áp dụng mã!';
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const discountedTotal = total - data.discount;
+                        const grandTotal = discountedTotal + shipping;
+
+                        // 👉 Lưu mã vào sessionStorage và session server
+                        sessionStorage.setItem('promo_code', code);
+                        sessionStorage.setItem('promo_discount', data.discount);
+
+                        fetch('{{ route('save.promo.code') }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                code: code,
+                                discount: data.discount
+                            })
+                        });
+
+                        // 👉 Cập nhật giao diện
+                        document.getElementById('total-price').innerText = new Intl.NumberFormat('vi-VN').format(grandTotal) + '₫';
+                        messageEl.innerHTML = `<span class="text-success">${data.message} - Giảm ${data.discount.toLocaleString('vi-VN')}₫</span>`;
+                    } else {
+                        messageEl.innerText = data.message;
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    messageEl.innerText = 'Lỗi khi áp dụng mã!';
+                });
         }
     </script>
-    
 
-    <script>
+
+<script>
+    const shippingFee = {{ $shippingFee }};
+
+    // 👉 Khi load trang, lấy lại số lượng đã nhập từ localStorage
+    document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.checkout-qty').forEach(input => {
-            input.addEventListener('change', function () {
-                const index = this.dataset.index;
-                const newQty = parseInt(this.value);
-                const errorMsg = document.getElementById(`error-qty-${index}`);
-
-                if (isNaN(newQty) || newQty < 1) {
-                    errorMsg.innerText = "Số lượng không hợp lệ.";
-                    this.value = 1;
-                    return;
-                }
-
-                fetch('{{ route("checkout.updateQty") }}', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ index, quantity: newQty })
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            // ✅ Nếu thành công, xóa lỗi, cập nhật giá
-                            errorMsg.innerText = "";
-                            document.getElementById(`price-${index}`).innerText = data.item_total + '₫';
-                            document.getElementById("total-price").innerText = data.total + '₫';
-                        } else {
-                            // ❌ Nếu thất bại (vượt số lượng), hiển thị thông báo chính xác
-                            errorMsg.innerText = data.message || "Số lượng vượt quá tồn kho.";
-                            this.value = data.current_qty; // quay lại số lượng cũ
-                        }
-                    })
-                    .catch(err => {
-                        errorMsg.innerText = "Lỗi khi gửi yêu cầu!";
-                    });
-            });
+            const index = input.dataset.index;
+            const savedQty = localStorage.getItem('checkout_qty_' + index);
+            if (savedQty && !isNaN(savedQty)) {
+                input.value = savedQty;
+                input.dispatchEvent(new Event('input')); // Gửi sự kiện để cập nhật giá
+            }
         });
-    </script>
+    });
 
-   
+    // 👉 Khi người dùng nhập số lượng
+    document.querySelectorAll('.checkout-qty').forEach(input => {
+        input.addEventListener('input', function () {
+            const index = this.dataset.index;
+            const newQty = parseInt(this.value);
+            const errorMsg = document.getElementById(`error-qty-${index}`);
 
+            // ✅ Lưu lại số vào localStorage để giữ sau F5
+            localStorage.setItem('checkout_qty_' + index, newQty);
+
+            if (isNaN(newQty) || newQty < 1) {
+                errorMsg.innerText = "Số lượng không hợp lệ.";
+                this.value = 1;
+                return;
+            }
+
+            fetch('{{ route("checkout.updateQty") }}', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ index, quantity: newQty })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        errorMsg.innerText = "";
+
+                        document.getElementById(`price-${index}`).innerText = data.item_total + '₫';
+                        document.getElementById("temp-total").innerText = new Intl.NumberFormat('vi-VN').format(data.total_raw) + '₫';
+                        const totalWithShipping = data.total_raw + shippingFee;
+                        document.getElementById("total-price").innerText = new Intl.NumberFormat('vi-VN').format(totalWithShipping) + '₫';
+                    } else {
+                        errorMsg.innerText = data.message || "Số lượng vượt quá tồn kho.";
+                        this.value = data.current_qty;
+                        localStorage.setItem('checkout_qty_' + index, data.current_qty);
+                    }
+                })
+                .catch(err => {
+                    console.error("Lỗi cập nhật:", err);
+                    errorMsg.innerText = "Lỗi khi gửi yêu cầu!";
+                });
+        });
+    });
+
+    // 👉 Khi đặt hàng, xoá localStorage các số lượng
+    document.getElementById("buy-now-btn").addEventListener("click", function () {
+        document.querySelectorAll('.checkout-qty').forEach(input => {
+            const index = input.dataset.index;
+            localStorage.removeItem('checkout_qty_' + index);
+        });
+    });
+</script>
+
+
+
+
+    <style>
+        /* Ẩn mũi tên tăng/giảm trong input number trên tất cả trình duyệt */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+            /* Firefox */
+        }
+    </style>
 
 @endsection

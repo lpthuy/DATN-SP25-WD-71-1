@@ -17,6 +17,7 @@ export default function OrderDetailScreen() {
     if (params.order) {
       try {
         const parsed = typeof params.order === 'string' ? JSON.parse(params.order) : params.order;
+        console.log('📦 Dữ liệu order:', parsed); // Thêm dòng này
         setOrder(parsed);
         setStatus(parsed.status);
       } catch (err) {
@@ -25,16 +26,17 @@ export default function OrderDetailScreen() {
     }
   }, [params.order]);
 
+
   const updateStatus = async (newStatus = status) => {
     const token = await AsyncStorage.getItem('shipperToken');
     if (!token || !order) {
       Alert.alert('❌ Lỗi', 'Không có token hoặc đơn hàng không hợp lệ');
       return;
     }
-  
+
     try {
       setLoading(true);
-  
+
       const res = await axios.put(
         `${API.BASE_URL}/api/shipper/orders/${order.id}/status`,
         { status: newStatus },
@@ -45,7 +47,7 @@ export default function OrderDetailScreen() {
           },
         }
       );
-  
+
       if (res.data.status === 'success') {
         setStatus(res.data.order.status);
         Alert.alert('✅ Thành công', 'Đơn hàng đã được cập nhật');
@@ -62,7 +64,7 @@ export default function OrderDetailScreen() {
       setLoading(false);
     }
   };
-  
+
 
   // ✅ Hàm gọi API xác nhận thanh toán
   const markAsPaid = async () => {
@@ -71,10 +73,10 @@ export default function OrderDetailScreen() {
       Alert.alert('❌ Lỗi', 'Không có token hoặc đơn hàng không hợp lệ');
       return;
     }
-  
+
     try {
       setLoading(true);
-  
+
       const res = await axios.put(
         `${API.BASE_URL}/api/shipper/orders/${order.id}/paid`,
         { is_paid: 1 },
@@ -85,7 +87,7 @@ export default function OrderDetailScreen() {
           },
         }
       );
-  
+
       if (res.data.status === 'success') {
         setMarkedPaid(true);
         setOrder((prev: any) => ({ ...prev, is_paid: 1 }));
@@ -102,7 +104,7 @@ export default function OrderDetailScreen() {
       setLoading(false);
     }
   };
-  
+
 
   if (!order) {
     return (
@@ -117,43 +119,57 @@ export default function OrderDetailScreen() {
     (order.payment_method === 'vnpay' && order.is_paid === 1) ||
     (order.payment_method === 'cod' && (order.is_paid === 1 || markedPaid));
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Chi tiết đơn hàng</Text>
-      <Text>Mã đơn: {order.order_code}</Text>
-      <Text>Phương thức: {order.payment_method}</Text>
-      <Text>Thanh toán: {order.is_paid ? 'Đã thanh toán' : 'Chưa thanh toán'}</Text>
-      <Text>Trạng thái hiện tại: {translateStatus(status)}</Text>
-
-      {status === 'shipping' && (
-        <View style={styles.buttonGroup}>
-          {/* ✅ Nếu là COD chưa thanh toán thì hiển thị nút xác nhận */}
-          {order.payment_method === 'cod' && !order.is_paid && !markedPaid && (
-            <Button
-              title="Xác nhận đã thanh toán"
-              onPress={markAsPaid}
-              disabled={loading}
-            />
-          )}
-
-          {/* ✅ Hiện nút hoàn thành nếu đã xác nhận thanh toán */}
-          {canMarkComplete && (
-            <View style={{ marginTop: 10 }}>
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Chi tiết đơn hàng</Text>
+        <Text>Mã đơn: {order.order_code}</Text>
+        <Text>Phương thức: {order.payment_method}</Text>
+        <Text>Thanh toán: {order.is_paid ? 'Đã thanh toán' : 'Chưa thanh toán'}</Text>
+        <Text>Trạng thái hiện tại: {translateStatus(status)}</Text>
+    
+        {/* ✅ THÔNG TIN NGƯỜI NHẬN */}
+        <Text style={styles.sectionTitle}>Thông tin người nhận</Text>
+        <Text>Họ tên: {order.customer_name || '---'}</Text>
+        <Text>Số điện thoại: {order.customer_phone || '---'}</Text>
+        <Text>Địa chỉ: {order.customer_address || '---'}</Text>
+    
+        {/* ✅ CHI PHÍ ĐƠN HÀNG */}
+        <Text style={styles.sectionTitle}>Chi phí đơn hàng</Text>
+        <Text>Giá sản phẩm: {Number(order.total_price ?? 0).toLocaleString()}₫</Text>
+        <Text>Phí vận chuyển: {Number(order.shipping_fee ?? 0).toLocaleString()}₫</Text>
+        <Text style={{ fontWeight: 'bold' }}>
+          Tổng thanh toán: {Number(order.total_amount ?? 0).toLocaleString()}₫
+        </Text>
+    
+        {/* ✅ XỬ LÝ NÚT GIAO THÀNH CÔNG / XÁC NHẬN */}
+        {status === 'shipping' && (
+          <View style={styles.buttonGroup}>
+            {order.payment_method?.toLowerCase() === 'cod' && !Number(order.is_paid) && !markedPaid && (
               <Button
-                title="Hoàn thành đơn hàng"
-                onPress={() => updateStatus('completed')}
+                title="Xác nhận đã thanh toán"
+                onPress={markAsPaid}
                 disabled={loading}
               />
-            </View>
-          )}
-        </View>
-      )}
-
-      {status === 'completed' && (
-        <Text style={styles.disabledText}>Đơn hàng đã hoàn tất.</Text>
-      )}
-    </View>
-  );
+            )}
+    
+            {(order.payment_method?.toLowerCase() === 'vnpay' || Number(order.is_paid) === 1 || markedPaid) && (
+              <View style={{ marginTop: 10 }}>
+                <Button
+                  title="Đã giao thành công"
+                  onPress={() => updateStatus('completed')}
+                  disabled={loading}
+                />
+              </View>
+            )}
+          </View>
+        )}
+    
+        {status === 'completed' && (
+          <Text style={styles.disabledText}>Đơn hàng đã hoàn tất.</Text>
+        )}
+      </View>
+    );
+    
 }
 
 const translateStatus = (status: string) => {
@@ -177,4 +193,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
   },
+  // 👇 THÊM DÒNG NÀY
+  sectionTitle: {
+    marginTop: 20,
+    marginBottom: 8,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
+

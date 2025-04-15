@@ -63,6 +63,7 @@ public function updateQty(Request $request)
     $quantity = (int) $request->input('quantity');
 
     $checkoutItems = session('checkout_items', []);
+    $cart = session('cart', []); // 👈 Lấy cart hiện tại
 
     if (!isset($checkoutItems[$index])) {
         return response()->json([
@@ -73,7 +74,7 @@ public function updateQty(Request $request)
 
     $item = $checkoutItems[$index];
 
-    // Lấy biến thể để kiểm tra tồn kho
+    // Kiểm tra tồn kho
     $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
         ->whereHas('color', fn($q) => $q->where('color_name', $item['color']))
         ->whereHas('size', fn($q) => $q->where('size_name', $item['size']))
@@ -90,25 +91,45 @@ public function updateQty(Request $request)
     if ($quantity > $variant->stock_quantity) {
         return response()->json([
             'success' => false,
-            'message' => 'Sản phẩm còn ' . $variant->stock_quantity . ' sản phẩm.',
+            'message' => 'Sản phẩm chỉ còn ' . $variant->stock_quantity . ' sản phẩm.',
             'current_qty' => $item['quantity']
         ]);
     }
 
-    // Cập nhật lại số lượng và tổng tiền item
+    // ✅ Cập nhật trong checkout
     $checkoutItems[$index]['quantity'] = $quantity;
     $checkoutItems[$index]['total_price'] = $quantity * $item['price'];
 
     session(['checkout_items' => $checkoutItems]);
 
+    // ✅ Tìm và cập nhật trong session cart
+    foreach ($cart as $key => $cartItem) {
+        if (
+            $cartItem['product_id'] === $item['product_id'] &&
+            $cartItem['color'] === $item['color'] &&
+            $cartItem['size'] === $item['size']
+        ) {
+            $cart[$key]['quantity'] = $quantity;
+            $cart[$key]['total_price'] = $quantity * $cartItem['price'];
+            break;
+        }
+    }
+
+    session(['cart' => $cart]);
+
+    // Tính tổng mới
     $total = array_sum(array_column($checkoutItems, 'total_price'));
 
     return response()->json([
         'success' => true,
         'item_total' => number_format($checkoutItems[$index]['total_price'], 0, ',', '.'),
-        'total' => number_format($total, 0, ',', '.')
+        'total' => number_format($total, 0, ',', '.'),
+        'total_raw' => $total,
+        'current_qty' => $quantity
     ]);
 }
+
+
 
 
 
