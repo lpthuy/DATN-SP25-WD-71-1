@@ -3,7 +3,7 @@
 @section('title', 'Chỉnh sửa Màu sắc')
 
 @section('content_header')
-    <h1>Chỉnh sửa Màu sắc: {{ $color->color_name }}</h1>
+    <h1 class="text-center font-weight-bold text-primary">Chỉnh sửa Màu sắc : {{ $color->color_name }}</h1>
 @endsection
 
 @section('content')

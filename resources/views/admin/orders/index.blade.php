@@ -1,9 +1,12 @@
 @extends('adminlte::page')
 
-@section('content')
-<h2>Danh sách đơn hàng</h2>
+@section('title', 'Danh sách đơn hàng')
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">Danh sách đơn hàng</h1>
+@endsection
 
-    
+@section('content')
+ 
 <form method="GET" action="{{ route('orders.index') }}" class="mb-3 d-flex justify-content-end align-items-center w-100">
     <div class="search-container d-flex">
         <input type="text" name="search" class="form-control" placeholder="Tìm theo mã đơn, trạng thái..." value="{{ request('search') }}">

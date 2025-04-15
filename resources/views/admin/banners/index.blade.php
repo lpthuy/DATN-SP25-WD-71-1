@@ -1,7 +1,10 @@
 @extends('adminlte::page')
-
+@section('title', 'Danh sách Banner')
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">Danh sách Banner</h1>
+@endsection
 @section('content')
-<h1>Danh sách Banner</h1>
+
 <a href="{{ route('admin.banners.create') }}" class="btn btn-primary">Thêm mới</a>
 
 @if(session('success'))
