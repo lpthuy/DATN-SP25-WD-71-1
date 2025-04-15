@@ -15,6 +15,7 @@ use App\Models\ProductVariant;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderSuccessMail;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 
@@ -168,6 +169,20 @@ class PaymentController extends Controller
                     'price' => $item['price'] ?? 0,
                 ]);
             }
+        }
+
+        // ✅ Tạo mã QR cho đơn hàng
+        try {
+            $qrContent = route('orders.track', ['code' => $order->order_code]); // hoặc thay bằng $order->order_code
+            $qrFileName = 'qrcodes/order_' . $order->id . '_' . time() . '.png';
+            $qrFullPath = storage_path('app/public/' . $qrFileName);
+
+            QrCode::format('png')->size(300)->generate($qrContent, $qrFullPath);
+
+            $order->qr_code_path = 'storage/' . $qrFileName;
+            $order->save();
+        } catch (\Exception $e) {
+            Log::error("❌ Lỗi tạo mã QR: " . $e->getMessage());
         }
 
         // ✅ Gửi email nếu thanh toán thành công

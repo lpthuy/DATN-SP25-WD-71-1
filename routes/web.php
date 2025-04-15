@@ -52,6 +52,9 @@ Route::get('/api/order-status/{id}', function ($id) {
     ]);
 });
 
+Route::get('/order/track/{code}')->name('orders.track');
+
+
 Route::post('/apply-coupon', [PromotionController::class, 'apply'])->name('apply.coupon');
 Route::post('/save-promo-code', [PromotionController::class, 'saveCode'])->name('save.promo.code');
 

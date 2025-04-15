@@ -14,7 +14,7 @@ class Order extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['user_id', 'order_code', 'payment_method', 'promotion_code', 'status', 'is_paid'];
+    protected $fillable = ['user_id', 'order_code', 'payment_method', 'promotion_code', 'status', 'is_paid','qr_code_path'];
 
 
 
