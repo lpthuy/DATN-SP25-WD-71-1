@@ -21,45 +21,42 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
 {
-    $request->validate([
-        'product_id' => 'required|exists:products,id',
-        'color_id' => 'required|exists:colors,id',
-        'size_id' => 'required|exists:sizes,id',
-        'quantity' => 'required|integer|min:1',
-    ]);
-
-    $product = Product::findOrFail($request->product_id);
-    $variant = ProductVariant::where('product_id', $product->id)
-                            ->where('color_id', $request->color_id)
-                            ->where('size_id', $request->size_id)
-                            ->first();
-
-    if (!$variant) {
-        return redirect()->back()->with('error', 'Sản phẩm với màu sắc và size này không tồn tại.');
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
     }
 
-    $cart = session()->get('cart', []);
-    $cartKey = $product->id . '-' . $variant->id;
+    // ✅ Đã đăng nhập mới xử lý
+    $productId = $request->input('product_id');
+    $variantId = $request->input('variant_id');
+    $quantity = (int)$request->input('quantity', 1);
 
-    // ✅ Sửa tại đây: Ghi đè đúng số lượng mới nhập
-    $cart[$cartKey] = [
-        'product_id' => $product->id,
-        'variant_id' => $variant->id,
-        'name' => $product->name,
-        'color' => $variant->color->color_name,
-        'size' => $variant->size->size_name,
-        'price' => $variant->discount_price ?? $variant->price,
-        'quantity' => $request->quantity,
-        'image' => $product->image
-    ];
+    // Lấy thông tin biến thể (color, size, giá,...)
+    $variant = ProductVariant::with(['product', 'color', 'size'])->findOrFail($variantId);
+
+    $cart = session()->get('cart', []);
+
+    $cartKey = $productId . '-' . $variantId;
+
+    if (isset($cart[$cartKey])) {
+        $cart[$cartKey]['quantity'] += $quantity;
+    } else {
+        $cart[$cartKey] = [
+            'product_id' => $productId,
+            'variant_id' => $variantId,
+            'name' => $variant->product->name,
+            'price' => $variant->price,
+            'quantity' => $quantity,
+            'image' => $variant->product->image, // nếu có
+            'color' => $variant->color->color_name,
+            'size' => $variant->size->size_name
+        ];
+    }
 
     session()->put('cart', $cart);
 
-    // Tính tổng tiền nếu cần dùng
-    $totalPrice = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
-
-    return redirect()->route('cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng!');
+    return redirect()->route('cart')->with('success', 'Đã thêm vào giỏ hàng!');
 }
+
 
 
 public function removeItem(Request $request)

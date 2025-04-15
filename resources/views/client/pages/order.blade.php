@@ -2,6 +2,8 @@
 
 @section('title', 'Đơn hàng')
 
+
+
 @section('content')
 <section class="bread-crumb">
     <div class="container">
@@ -40,6 +42,13 @@
             </div>
 
             <div class="col-lg-10 col-12 col-right-ac">
+                @if(session('success') || request('success'))
+    <div style="padding: 12px; background-color: #e6ffed; border-left: 5px solid #28a745; margin-bottom: 20px; border-radius: 4px;">
+        <strong>✅ {{ session('success') ?? request('success') }}</strong>
+    </div>
+@endif
+
+
                 <h1 class="title-head margin-top-0">Đơn hàng của bạn</h1>
 
                 <div class="my-account">
