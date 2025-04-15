@@ -47,7 +47,7 @@
                     
                                     @foreach($products as $product)
                                         <div class="swiper-slide">
-                                            <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}"
+                                            <div class="admin" data-url="{{ route('productDetail', $product->id) }}"
                                                 data-id="{{ $product->id }}">
                                                 <form action="{{ route('cart.add', $product->id) }}" method="post"
                                                     class="variants product-action wishItem" data-cart-form
@@ -72,15 +72,7 @@
                                                                 @endif
                                                             </div>
                                                         </a>
-                                                        <div class="action-cart">
-                                                         
-
-                                                            <a title="Xem nhanh"
-                                                                href="{{ route('productDetail', $product->id) }}"
-                                                                class="quick-view btn-views">
-                                                                🔍
-                                                            </a>
-                                                        </div>
+                                                       
                                                     </div>
                                                     <div class="product-info">
                                                         <div class="lofi-product">
@@ -151,6 +143,69 @@
 
 @section('css')
     <style>
+        .admin {
+    border: 2px solid #000; /* Viền đen xung quanh sản phẩm */
+    border-radius: 8px; /* Bo góc cho sản phẩm */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Đổ bóng đậm cho sản phẩm */
+    padding: 10px;
+    background-color: #fff;
+    transition: transform 0.3s ease-in-out; /* Thêm hiệu ứng khi hover */
+    display: flex;
+    flex-direction: column;
+}
+
+.admin:hover {
+    transform: translateY(-5px); /* Hiệu ứng khi hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); /* Đổ bóng đậm hơn khi hover */
+}
+
+.product-thumbnail {
+    margin-bottom: 15px;
+    height: 250px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #000; /* Viền đen cho ảnh */
+    border-radius: 4px; /* Bo góc ảnh */
+}
+
+.product-image img {
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    width: 100%;
+    height: 100%;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.price-box {
+    text-align: center;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.compare-price {
+    font-size: 14px;
+    color: #aaa;
+    text-decoration: line-through;
+}
+
         .search-results {
             margin-top: 20px;
             padding: 15px;
