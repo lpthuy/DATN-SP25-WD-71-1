@@ -262,7 +262,7 @@
                                             <img src="{{ asset('storage/' . explode(',', $item['image'])[0]) }}" alt="{{ $item['name'] }}">
                                             <div class="product-info">
                                                 <p>{{ $item['name'] }}</p>
-                                                <p>{{ $item['color'] }} / {{ $item['size'] }}</p>
+                                                <p>{{ $item['color'] }} / {{ $item['size'] }} </p>
 
                                                 <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
                                                     <input type="number" class="checkout-qty" data-index="{{ $index }}"
