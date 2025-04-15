@@ -63,6 +63,7 @@ public function updateQty(Request $request)
     $quantity = (int) $request->input('quantity');
 
     $checkoutItems = session('checkout_items', []);
+    $cart = session('cart', []); // 👈 Lấy cart hiện tại
 
     if (!isset($checkoutItems[$index])) {
         return response()->json([
@@ -73,7 +74,7 @@ public function updateQty(Request $request)
 
     $item = $checkoutItems[$index];
 
-    // Lấy biến thể để kiểm tra tồn kho
+    // Kiểm tra tồn kho
     $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
         ->whereHas('color', fn($q) => $q->where('color_name', $item['color']))
         ->whereHas('size', fn($q) => $q->where('size_name', $item['size']))
@@ -95,24 +96,39 @@ public function updateQty(Request $request)
         ]);
     }
 
-    // ✅ Cập nhật số lượng và giá
+    // ✅ Cập nhật trong checkout
     $checkoutItems[$index]['quantity'] = $quantity;
     $checkoutItems[$index]['total_price'] = $quantity * $item['price'];
 
-    // Lưu lại session
     session(['checkout_items' => $checkoutItems]);
 
-    // Tính tổng lại tất cả item
+    // ✅ Tìm và cập nhật trong session cart
+    foreach ($cart as $key => $cartItem) {
+        if (
+            $cartItem['product_id'] === $item['product_id'] &&
+            $cartItem['color'] === $item['color'] &&
+            $cartItem['size'] === $item['size']
+        ) {
+            $cart[$key]['quantity'] = $quantity;
+            $cart[$key]['total_price'] = $quantity * $cartItem['price'];
+            break;
+        }
+    }
+
+    session(['cart' => $cart]);
+
+    // Tính tổng mới
     $total = array_sum(array_column($checkoutItems, 'total_price'));
 
     return response()->json([
         'success' => true,
         'item_total' => number_format($checkoutItems[$index]['total_price'], 0, ',', '.'),
         'total' => number_format($total, 0, ',', '.'),
-        'total_raw' => $total, // 👈 Thêm dòng này để JS dùng tính tổng + ship
+        'total_raw' => $total,
         'current_qty' => $quantity
     ]);
 }
+
 
 
 
