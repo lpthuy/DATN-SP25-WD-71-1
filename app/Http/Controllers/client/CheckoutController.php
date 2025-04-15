@@ -90,25 +90,30 @@ public function updateQty(Request $request)
     if ($quantity > $variant->stock_quantity) {
         return response()->json([
             'success' => false,
-            'message' => 'Sản phẩm còn ' . $variant->stock_quantity . ' sản phẩm.',
+            'message' => 'Sản phẩm chỉ còn ' . $variant->stock_quantity . ' sản phẩm.',
             'current_qty' => $item['quantity']
         ]);
     }
 
-    // Cập nhật lại số lượng và tổng tiền item
+    // ✅ Cập nhật số lượng và giá
     $checkoutItems[$index]['quantity'] = $quantity;
     $checkoutItems[$index]['total_price'] = $quantity * $item['price'];
 
+    // Lưu lại session
     session(['checkout_items' => $checkoutItems]);
 
+    // Tính tổng lại tất cả item
     $total = array_sum(array_column($checkoutItems, 'total_price'));
 
     return response()->json([
         'success' => true,
         'item_total' => number_format($checkoutItems[$index]['total_price'], 0, ',', '.'),
-        'total' => number_format($total, 0, ',', '.')
+        'total' => number_format($total, 0, ',', '.'),
+        'total_raw' => $total, // 👈 Thêm dòng này để JS dùng tính tổng + ship
+        'current_qty' => $quantity
     ]);
 }
+
 
 
 

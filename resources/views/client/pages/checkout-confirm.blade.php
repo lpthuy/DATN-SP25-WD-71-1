@@ -308,7 +308,7 @@
 
                     <!-- Tổng tiền -->
                     <!-- Tổng tiền -->
-                    <p>Tạm tính <span>{{ number_format($total, 0, ',', '.') }}₫</span></p>
+                    <p>Tạm tính <span id="temp-total">{{ number_format($total, 0, ',', '.') }}₫</span></p>
                     <p>Phí vận chuyển
                         <span>{{ $shippingFee == 0 ? 'Miễn phí' : number_format($shippingFee, 0, ',', '.') . '₫' }}</span>
                     </p>
@@ -459,47 +459,70 @@
     
 
     <script>
-        document.querySelectorAll('.checkout-qty').forEach(input => {
-            input.addEventListener('change', function () {
-                const index = this.dataset.index;
-                const newQty = parseInt(this.value);
-                const errorMsg = document.getElementById(`error-qty-${index}`);
+        const shippingFee = {{ $shippingFee }};
 
-                if (isNaN(newQty) || newQty < 1) {
-                    errorMsg.innerText = "Số lượng không hợp lệ.";
-                    this.value = 1;
-                    return;
-                }
+document.querySelectorAll('.checkout-qty').forEach(input => {
+    input.addEventListener('change', function () {
+        const index = this.dataset.index;
+        const newQty = parseInt(this.value);
+        const errorMsg = document.getElementById(`error-qty-${index}`);
 
-                fetch('{{ route("checkout.updateQty") }}', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ index, quantity: newQty })
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            // ✅ Nếu thành công, xóa lỗi, cập nhật giá
-                            errorMsg.innerText = "";
-                            document.getElementById(`price-${index}`).innerText = data.item_total + '₫';
-                            document.getElementById("total-price").innerText = data.total + '₫';
-                        } else {
-                            // ❌ Nếu thất bại (vượt số lượng), hiển thị thông báo chính xác
-                            errorMsg.innerText = data.message || "Số lượng vượt quá tồn kho.";
-                            this.value = data.current_qty; // quay lại số lượng cũ
-                        }
-                    })
-                    .catch(err => {
-                        errorMsg.innerText = "Lỗi khi gửi yêu cầu!";
-                    });
-            });
+        if (isNaN(newQty) || newQty < 1) {
+            errorMsg.innerText = "Số lượng không hợp lệ.";
+            this.value = 1;
+            return;
+        }
+
+        fetch('{{ route("checkout.updateQty") }}', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ index, quantity: newQty })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                errorMsg.innerText = "";
+
+                document.getElementById(`price-${index}`).innerText = data.item_total + '₫';
+
+                // ✅ Cập nhật Tạm tính
+                document.getElementById("temp-total").innerText = new Intl.NumberFormat('vi-VN').format(data.total_raw) + '₫';
+
+                // ✅ Cập nhật Tổng cộng
+                const totalWithShipping = data.total_raw + shippingFee;
+                document.getElementById("total-price").innerText = new Intl.NumberFormat('vi-VN').format(totalWithShipping) + '₫';
+            } else {
+                errorMsg.innerText = data.message || "Số lượng vượt quá tồn kho.";
+                this.value = data.current_qty;
+            }
+        })
+        .catch(err => {
+            console.error("Lỗi cập nhật:", err);
+            errorMsg.innerText = "Lỗi khi gửi yêu cầu!";
         });
+    });
+});
+
     </script>
+    
 
    
+<style>
 
+    /* Ẩn mũi tên tăng/giảm trong input number trên tất cả trình duyệt */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+</style>
 
 @endsection
