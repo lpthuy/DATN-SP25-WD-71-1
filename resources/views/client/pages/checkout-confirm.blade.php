@@ -336,75 +336,76 @@
 
     <script>
         document.getElementById("buy-now-btn").addEventListener("click", function () {
-            let paymentMethod = document.querySelector("input[name='payment_method']:checked")?.value;
-    
-            if (!paymentMethod) {
-                alert("Vui lòng chọn phương thức thanh toán!");
-                return;
-            }
-    
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-    
-            // 👉 Lấy tổng tiền đã áp dụng khuyến mãi + phí ship từ giao diện
-            const totalText = document.getElementById("total-price").innerText.replace(/[^\d]/g, "");
-            const totalPrice = parseInt(totalText);
-    
-            const promoCode = sessionStorage.getItem('promo_code') || null;
-            const promoDiscount = parseInt(sessionStorage.getItem('promo_discount')) || 0;
-    
-            if (paymentMethod === "vnpay") {
-                console.log("👉 Đang gửi yêu cầu thanh toán VNPay...");
-                fetch("{{ route('vnpay.payment') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({
-                        price: totalPrice, // Tổng đã giảm + phí ship
-                        bank_code: "",
-                        promo_code: promoCode,
-                        promo_discount: promoDiscount
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("✅ Phản hồi từ server:", data);
-                    if (data.code === "00" && data.data) {
-                        window.location.href = data.data;
-                    } else {
-                        alert("Không thể tạo thanh toán. Hãy thử lại!");
-                    }
-                })
-                .catch(err => {
-                    console.error("❌ Lỗi fetch:", err);
-                    alert("Lỗi khi gửi yêu cầu đến VNPay!");
-                });
+    let paymentMethod = document.querySelector("input[name='payment_method']:checked")?.value;
+
+    if (!paymentMethod) {
+        alert("Vui lòng chọn phương thức thanh toán!");
+        return;
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    const totalText = document.getElementById("total-price").innerText.replace(/[^\d]/g, "");
+    const totalPrice = parseInt(totalText);
+
+    const promoCode = sessionStorage.getItem('promo_code') || null;
+    const promoDiscount = parseInt(sessionStorage.getItem('promo_discount')) || 0;
+
+    if (paymentMethod === "vnpay") {
+        console.log("👉 Đang gửi yêu cầu thanh toán VNPay...");
+        fetch("{{ route('vnpay.payment') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify({
+                price: totalPrice,
+                bank_code: "",
+                promo_code: promoCode,
+                promo_discount: promoDiscount
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("✅ Phản hồi từ server:", data);
+            if (data.code === "00" && data.data) {
+                window.location.href = data.data; // VNPAY sẽ tự redirect về sau
             } else {
-                console.log("👉 Gửi yêu cầu thanh toán COD...");
-                fetch("{{ route('order.cod') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({})
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("✅ Phản hồi COD:", data);
-                    if (data.status === "success") {
-                        window.location.href = data.redirect;
-                    } else {
-                        alert(data.message || "Lỗi khi lưu đơn hàng COD.");
-                    }
-                })
-                .catch(err => {
-                    console.error("❌ Lỗi gửi COD:", err);
-                    alert("Không thể gửi đơn hàng COD!");
-                });
+                alert("Không thể tạo thanh toán. Hãy thử lại!");
             }
+        })
+        .catch(err => {
+            console.error("❌ Lỗi fetch:", err);
+            alert("Lỗi khi gửi yêu cầu đến VNPay!");
         });
+    } else {
+        console.log("👉 Gửi yêu cầu thanh toán COD...");
+        fetch("{{ route('order.cod') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify({})
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("✅ Phản hồi COD:", data);
+            if (data.status === "success") {
+                const msg = encodeURIComponent(data.message + " Mã đơn hàng: " + data.order_code);
+                window.location.href = data.redirect + '?success=' + msg;
+            } else {
+                alert(data.message || "Lỗi khi lưu đơn hàng COD.");
+            }
+        })
+        .catch(err => {
+            console.error("❌ Lỗi gửi COD:", err);
+            alert("Không thể gửi đơn hàng COD!");
+        });
+    }
+});
+
     
         function applyCoupon() {
             const code = document.getElementById('coupon-code').value.trim();

@@ -26,6 +26,7 @@
             <div class="wrap_background_aside  page_login">
                 <div class="wrap_background_aside">
                     <div class="row">
+                        
                         <div
                             class="col-lg-6 col-md-6 col-sm-12 col-12 col-xl-4 offset-xl-4 offset-lg-3 offset-md-3 offset-xl-3">
                             <div class="row">
