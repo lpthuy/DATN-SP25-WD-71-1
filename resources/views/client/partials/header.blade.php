@@ -77,9 +77,9 @@
 
                             <style>
                                 .logo-img {
-                                    height: 100px;
+                                    height: 70px;
                                     width: auto;
-                                    max-width: 100%;
+                                    max-width: 70%;
                                     object-fit: contain;
                                 }
                             </style>
@@ -88,58 +88,48 @@
                         <div class="col-lg-8 header-mid">
                             <div class="header-menu-des">
                                 <div class="close-menu d-lg-none d-block">
-                                    <img width="25" height="25" src="{{ asset('client/images/close4d9c.png') }}"
-                                        alt="Lofi Style">
+                                    <img width="25" height="25" src="{{ asset('client/images/close4d9c.png') }}" alt="Lofi Style">
                                 </div>
                                 <div id="main-nav-menu">
                                     <ul class="menuList-main">
-                                        <li class="nav-item active">
-                                            <a class="nav-link" href="{{ route('home') }}" title="Trang chủ">Trang
-                                                chủ</a>
+                                        <li class="nav-item {{ Route::currentRouteName() == 'home' ? 'active' : '' }}">
+                                            <a class="nav-link" href="{{ route('home') }}" title="Trang chủ">Trang chủ</a>
                                         </li>
-                                        <li class="nav-item ">
-                                            <a class="nav-link" href="{{ route('about') }}" title="Giới thiệu">Giới
-                                                thiệu</a>
+                                        <li class="nav-item {{ Route::currentRouteName() == 'about' ? 'active' : '' }}">
+                                            <a class="nav-link" href="{{ route('about') }}" title="Giới thiệu">Giới thiệu</a>
                                         </li>
-                                        <li class="nav-item has-submenu">
-                                            <a class="nav-link caret-down" href="{{ route('products.all') }}"
-                                                title="Sản phẩm">Sản phẩm</a>
+                                        <li class="nav-item has-submenu
+                                            {{ in_array(Route::currentRouteName(), ['products.all', 'productbycategory']) ? 'active' : '' }}">
+                                            <a class="nav-link caret-down" href="{{ route('products.all') }}" title="Sản phẩm">Sản phẩm</a>
                                             <i class="fa ic-caret-down"></i>
                                             <ul class="menuList-submain level-1">
                                                 @foreach ($categories as $category)
                                                     <li>
-                                                        <a
-                                                            href="{{ route('productbycategory', ['id' => $category->id]) }}">{{ $category->name }}</a>
+                                                        <a class="{{ request()->routeIs('productbycategory') && request()->route('id') == $category->id ? 'active' : '' }}"
+                                                           href="{{ route('productbycategory', ['id' => $category->id]) }}">
+                                                            {{ $category->name }}
+                                                        </a>
                                                     </li>
                                                 @endforeach
                                             </ul>
-
                                         </li>
-
-
-                                        <li class="nav-item ">
+                                        <li class="nav-item {{ Route::currentRouteName() == 'post' ? 'active' : '' }}">
                                             <a class="nav-link" href="{{ route('post') }}" title="Tin tức">Tin tức</a>
                                         </li>
-                                        <li class="nav-item ">
-                                            <a class="nav-link" href="{{ route('contact') }}" title="Liên hệ">Liên
-                                                hệ</a>
+                                        <li class="nav-item {{ Route::currentRouteName() == 'contact' ? 'active' : '' }}">
+                                            <a class="nav-link" href="{{ route('contact') }}" title="Liên hệ">Liên hệ</a>
                                         </li>
                                     </ul>
                                 </div>
-
-
-
-
+                        
                                 <div class="flash-scroll">
                                     <a href="javascript:;" data-href=".section_flash_sale" class="scroll-down">
-                                        <img width="12" src="{{ asset('client/images/menu_icon_34d9c.png') }}"
-                                            alt="Lofi Style"> Flash sale
+                                        <img width="12" src="{{ asset('client/images/menu_icon_34d9c.png') }}" alt="Lofi Style"> Flash sale
                                     </a>
                                 </div>
-
-
                             </div>
                         </div>
+                        
                         <div class="col-lg-2 col-md-2 col-4 header-right">
                             <div class="header-wrap-icon">
 

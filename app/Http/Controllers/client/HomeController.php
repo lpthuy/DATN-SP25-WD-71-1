@@ -240,7 +240,7 @@ class HomeController extends Controller
     return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
 }
 
-
+    }
 
 
     public function checkAvailability(Request $request)

@@ -64,7 +64,7 @@
                                         Giao hàng toàn quốc
                                     </h3>
                                     <p>
-                                        Miễn phí giao hàng với các đơn trị giá trên 2.000.000Đ
+                                        Miễn phí giao hàng với các đơn trị giá trên 300.000Đ
                                     </p>
                                 </div>
                             </div>
