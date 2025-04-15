@@ -17,7 +17,7 @@ use App\Mail\OrderSuccessMail; // Thêm dòng này nếu đã tạo Mailable
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\File;
 
 class OrderController extends Controller
 {
@@ -163,18 +163,34 @@ class OrderController extends Controller
             }
 
             // ✅ Tạo mã QR cho đơn hàng
-        try {
-            $qrContent = route('orders.track', ['code' => $order->order_code]); // hoặc thay bằng $order->order_code
-            $qrFileName = 'qrcodes/order_' . $order->id . '_' . time() . '.png';
-            $qrFullPath = storage_path('app/public/' . $qrFileName);
+try {
+    $qrContent = route('orders.track', ['code' => $order->order_code]); // Nội dung QR
 
-            QrCode::format('png')->size(300)->generate($qrContent, $qrFullPath);
+    $qrFileName = 'order_' . $order->id . '_' . time() . '.png';
+    $qrStoragePath = 'public/qrcodes/' . $qrFileName; // Nơi lưu tạm QR
+    $qrPublicPath = 'qrcodes/' . $qrFileName;         // Sẽ copy sang public
 
-            $order->qr_code_path = 'storage/' . $qrFileName;
-            $order->save();
-        } catch (\Exception $e) {
-            Log::error("❌ Lỗi tạo mã QR: " . $e->getMessage());
-        }
+    // Tạo QR code vào storage
+    Storage::put($qrStoragePath, QrCode::format('png')->size(300)->generate($qrContent));
+
+    // ✅ Copy file từ storage → public
+    $from = storage_path('app/public/qrcodes/' . $qrFileName);
+    $to = public_path('qrcodes/' . $qrFileName);
+
+    // Đảm bảo thư mục public/qrcodes tồn tại
+    if (!File::exists(public_path('qrcodes'))) {
+        File::makeDirectory(public_path('qrcodes'), 0755, true);
+    }
+
+    File::copy($from, $to);
+
+    // ✅ Lưu đường dẫn public vào DB
+    $order->qr_code_path = $qrPublicPath;
+    $order->save();
+} catch (\Exception $e) {
+    Log::error("❌ Lỗi tạo mã QR hoặc copy ảnh: " . $e->getMessage());
+}
+
 
             try {
                 $order->load('items');
@@ -365,16 +381,35 @@ class OrderController extends Controller
         }
     }
 
-    public function exportPDF($id)
-    {
-        $order = Order::with('user')->findOrFail($id);
-        $items = OrderItem::where('order_id', $id)->get();
 
-        $pdf = Pdf::loadView('client.pages.pdf', [
-            'order' => $order,
-            'items' => $items
-        ]);
+    
 
-        return $pdf->download("order_{$order->order_code}.pdf");
+public function exportPDF($id)
+{
+    $order = Order::with('user')->findOrFail($id);
+    $items = OrderItem::where('order_id', $id)->get();
+
+    $qrPath = null;
+    if ($order->qr_code_path) {
+        $fullPath = public_path($order->qr_code_path); // Ví dụ: public/qrcodes/xxx.png
+
+        Log::debug('[PDF Export] Absolute path: ' . $fullPath);
+
+        if (file_exists($fullPath)) {
+            $qrImage = file_get_contents($fullPath);
+            $qrPath = 'data:image/png;base64,' . base64_encode($qrImage);
+
+            Log::debug('[PDF Export] Base64 QR length: ' . strlen($qrPath));
+        }
     }
+
+    $pdf = Pdf::loadView('client.pages.pdf', [
+        'order' => $order,
+        'items' => $items,
+        'qrPath' => $qrPath
+    ]);
+
+    return $pdf->download("order_{$order->order_code}.pdf");
+}
+
 }
