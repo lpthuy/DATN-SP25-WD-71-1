@@ -63,6 +63,7 @@ Route::middleware(['auth:sanctum', 'throttle:none'])->prefix('shipper')->group(f
 Route::middleware(['auth:sanctum', 'shipper'])->group(function () {
     Route::put('/shipper/orders/{id}/status', [OrderController::class, 'updateStatus']);
     Route::put('/shipper/orders/{id}/paid', [OrderController::class, 'markAsPaid']);
+    Route::get('/shipper/orders/{id}', [OrderController::class, 'show']);
 
 });
 
