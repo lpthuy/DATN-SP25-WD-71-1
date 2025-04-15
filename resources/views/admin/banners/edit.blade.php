@@ -1,7 +1,10 @@
 @extends('adminlte::page')
-
+@section('title', 'chỉnh sửa banner')
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">chỉnh sửa banner : {{ $banner->title }}</h1>
+@endsection
 @section('content')
-    <h1>Chỉnh sửa Banner</h1>
+
 
     <form action="{{ route('admin.banners.update', $banner->id) }}" method="POST" enctype="multipart/form-data">
         @csrf

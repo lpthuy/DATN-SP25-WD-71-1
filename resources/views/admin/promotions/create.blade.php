@@ -1,6 +1,6 @@
 @extends('adminlte::page')
-
-@section('content')
+@section('title', 'Tạo Khuyến Mãi Mới')
+@section('content_header')
 <div class="container">
     <h1 class="mt-4">Tạo Khuyến Mãi Mới</h1>
     <form action="{{ route('promotions.store') }}" method="POST">

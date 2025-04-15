@@ -3,8 +3,8 @@
 @section('title', 'Thêm bài viết')
 
 @section('content_header')
-    <h1>Thêm bài viết mới</h1>
-@stop
+    <h1 class="text-center font-weight-bold text-primary">Thêm bài viết</h1>
+@endsection
 
 @section('content')
     <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">

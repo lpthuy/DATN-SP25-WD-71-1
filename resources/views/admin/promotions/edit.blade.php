@@ -1,8 +1,11 @@
 @extends('adminlte::page')
-
+@section('title', 'chỉnh sửa khuyến mãi ')
+@section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">chỉnh sữa khuyến mãi : {{$promotion->code}}</h1>
+@endsection
 @section('content')
 <div class="container">
-    <h1 class="mt-4">Chỉnh Sửa Khuyến Mãi</h1>
+
     <form action="{{ route('promotions.update', $promotion->promotion_id) }}" method="POST">
         @csrf
         @method('PUT')

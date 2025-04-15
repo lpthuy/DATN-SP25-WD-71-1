@@ -28,72 +28,87 @@
                 <div class="sidebar">
                     <!-- Form lọc -->
                     <form method="GET" action="{{ route('products.all') }}" id="filter-form">
-                        <!-- Lọc danh mục -->
-                        <div class="group-menu">
-                            <div class="collection_title title_block">
-                                <h2>Danh mục sản phẩm</h2>
-                            </div>
-                            <div class="layered-category">
-                                <ul class="menuList-links">
-                                    @foreach ($categories as $category)
-                                    <li>
-                                        <label>
-                                            <input type="radio" name="category_id" value="{{ $category->id }}"
-                                                {{ request('category_id') == $category->id ? 'checked' : '' }}
-                                                onchange="this.form.submit()">
-                                            {{ $category->name }}
-                                        </label>
-                                    </li>
-                                    @endforeach
-                                    <li>
-                                        <label>
-                                            <input type="radio" name="category_id" value=""
-                                                {{ !request('category_id') ? 'checked' : '' }}
-                                                onchange="this.form.submit()">
-                                            Tất cả danh mục
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                      <!-- Lọc danh mục -->
+<div class="group-menu">
+    <div class="collection_title title_block">
+        <h2>Danh mục sản phẩm</h2>
+    </div>
+    <div class="layered-category">
+        <ul class="menuList-links">
+            @foreach ($categories as $category)
+            <li>
+                <label>
+                    <input type="radio" name="category_id" value="{{ $category->id }}"
+                        {{ request('category_id') == $category->id ? 'checked' : '' }}
+                        onchange="this.form.submit()">
+                    <strong>{{ $category->name }}</strong>
+                </label>
+            </li>
+            @endforeach
+            <li>
+                <label>
+                    <input type="radio" name="category_id" value=""
+                        {{ !request('category_id') ? 'checked' : '' }}
+                        onchange="this.form.submit()">
+                    <strong>Tất cả danh mục</strong>
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
+
                         <!-- Lọc khoảng giá -->
                         <div class="group-menu">
                             <div class="collection_title title_block">
                                 <h2>Khoảng giá</h2>
                             </div>
                             <div class="layered-price">
-                                <label>
-                                    <input type="radio" name="price_range" value="under_200k"
-                                        {{ request('price_range') == 'under_200k' ? 'checked' : '' }}
-                                        onchange="this.form.submit()">
-                                    Dưới 200.000₫
-                                </label><br>
-                                <label>
-                                    <input type="radio" name="price_range" value="200k_to_300k"
-                                        {{ request('price_range') == '200k_to_300k' ? 'checked' : '' }}
-                                        onchange="this.form.submit()">
-                                    200.000₫ - 300.000₫
-                                </label><br>
-                                <label>
-                                    <input type="radio" name="price_range" value="300k_to_400k"
-                                        {{ request('price_range') == '300k_to_400k' ? 'checked' : '' }}
-                                        onchange="this.form.submit()">
-                                    300.000₫ - 400.000₫
-                                </label><br>
-                                <label>
-                                    <input type="radio" name="price_range" value="above_500k"
-                                        {{ request('price_range') == 'above_500k' ? 'checked' : '' }}
-                                        onchange="this.form.submit()">
-                                    Trên 500.000₫
-                                </label><br>
-                                <label>
-                                    <input type="radio" name="price_range" value=""
-                                        {{ !request('price_range') ? 'checked' : '' }}
-                                        onchange="this.form.submit()">
-                                    Tất cả giá
-                                </label>
+                                <ul class="menuList-links">
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price_range" value="under_200k"
+                                                {{ request('price_range') == 'under_200k' ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>Dưới 200.000₫</strong>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price_range" value="200k_to_300k"
+                                                {{ request('price_range') == '200k_to_300k' ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>200.000₫ - 300.000₫</strong>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price_range" value="300k_to_400k"
+                                                {{ request('price_range') == '300k_to_400k' ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>300.000₫ - 400.000₫</strong>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price_range" value="above_500k"
+                                                {{ request('price_range') == 'above_500k' ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>Trên 500.000₫</strong>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price_range" value=""
+                                                {{ !request('price_range') ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>Tất cả giá</strong>
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                        
+                        
 
                         <!-- Lọc màu sắc -->
                         <div class="group-menu">
@@ -102,20 +117,24 @@
                             </div>
                             <div class="layered-color">
                                 @php
-                                $colors = \App\Models\Color::all();
+                                    $colors = \App\Models\Color::all();
                                 @endphp
-                                @foreach ($colors as $color)
-                                <label>
-                                    <input type="checkbox" name="colors[]" value="{{ $color->id }}"
-                                        {{ in_array($color->id, request('colors', [])) ? 'checked' : '' }}
-                                        onchange="this.form.submit()">
-                                    {{ $color->color_name }}
-                                    <span style="background: {{ $color->color_code }}; width: 20px; height: 20px; display: inline-block;"></span>
-                                </label><br>
-                                @endforeach
+                                <ul class="menuList-links">
+                                    @foreach ($colors as $color)
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" name="colors[]" value="{{ $color->id }}"
+                                                {{ in_array($color->id, request('colors', [])) ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>{{ $color->color_name }}</strong>
+                                            <span style="background: {{ $color->color_code }}; width: 20px; height: 20px; display: inline-block; border: 1px solid #ccc; margin-left: 5px;"></span>
+                                        </label>
+                                    </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
-
+                        
                         <!-- Lọc kích thước -->
                         <div class="group-menu">
                             <div class="collection_title title_block">
@@ -125,22 +144,29 @@
                                 @php
                                 $sizes = \App\Models\Size::all();
                                 @endphp
-                                @foreach ($sizes as $size)
-                                <label>
-                                    <input type="checkbox" name="sizes[]" value="{{ $size->id }}"
-                                        {{ in_array($size->id, request('sizes', [])) ? 'checked' : '' }}
-                                        onchange="this.form.submit()">
-                                    {{ $size->size_name }}
-                                </label><br>
-                                @endforeach
+                                <ul class="menuList-links" style="list-style: none; padding: 0; margin: 0;">
+                                    @foreach ($sizes as $size)
+                                    <li style="border-bottom: 1px dashed #ccc; padding: 8px 0;">
+                                        <label style="font-weight: 600;">
+                                            <input type="checkbox" name="sizes[]" value="{{ $size->id }}"
+                                                {{ in_array($size->id, request('sizes', [])) ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>{{ $size->size_name }}</strong>
+                                        </label>
+                                    </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
+                        
+                        
 
 
 
                         <!-- Nút reset -->
                         <div class="group-menu">
-                            <a href="{{ route('products.all') }}" class="btn btn-secondary">Xóa bộ lọc</a>
+                            <a href="{{ route('products.all') }}" class="btn btn-secondary" style="font-weight: bold;">Xóa bộ lọc</a>
+
                         </div>
                     </form>
                 </div>
@@ -224,4 +250,27 @@
 <div id="open-filters" class="open-filters d-lg-none d-block">
     <span class="fter"></span>
 </div>
+<style>
+    .layered-color label {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+    
+    .layered-color label span {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        margin-left: 8px;
+        border: 1px solid #ccc;
+    }.layered-size label {
+    text-transform: uppercase;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+    </style>
+    
 @endsection

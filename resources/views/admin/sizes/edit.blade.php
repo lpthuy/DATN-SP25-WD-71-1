@@ -3,7 +3,7 @@
 @section('title', 'Chỉnh sửa Kích thước')
 
 @section('content_header')
-    <h1>Chỉnh sửa Kích thước: {{ $size->size_name }}</h1>
+    <h1 class="text-center font-weight-bold text-primary">Chỉnh sửa Kích thước : {{ $size->size_name }}</h1>
 @endsection
 
 @section('content')

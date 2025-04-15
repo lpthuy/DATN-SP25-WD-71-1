@@ -1,10 +1,10 @@
 @extends('adminlte::page')
 
-@section('title', 'Thêm sản phẩm')
-
+@section('title', 'Thêm sản phẩm ')
 @section('content_header')
-    <h1 class="text-primary">Thêm sản phẩm</h1>
+    <h1 class="text-center font-weight-bold text-primary">Thêm sản phẩm</h1>
 @endsection
+
 
 @section('content')
     <div class="card shadow p-4">
