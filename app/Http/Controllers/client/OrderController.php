@@ -167,6 +167,17 @@ class OrderController extends Controller
             Log::error('❌ Không gửi được email xác nhận: ' . $e->getMessage());
         }
 
+        // ✅ Xoá sản phẩm đã đặt khỏi giỏ hàng session('cart')
+$cart = session('cart', []);
+foreach ($checkoutItems as $item) {
+    if (!empty($item['product_id']) && !empty($item['variant_id'])) {
+        $cartKey = $item['product_id'] . '-' . $item['variant_id'];
+        unset($cart[$cartKey]);
+    }
+}
+session()->put('cart', $cart);
+
+
         // ✅ Xoá session
         session()->forget([
             'checkout_items',
