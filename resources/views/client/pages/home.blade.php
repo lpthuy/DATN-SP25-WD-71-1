@@ -16,7 +16,7 @@
                     <div class="swiper-wrapper">
                         @foreach($banners as $banner)
                             <div class="swiper-slide">
-                                <a href="{{ $banner->link ?? '#' }}" class="clearfix" title="{{ $banner->title }}">
+                                <a href="{{ $banner->link ?? '#' }}" class="clearfix" title="{{ $banner->title }}" style="padding: 0ch">
                                     <picture>
                                         <source media="(min-width: 1200px)" srcset="{{ asset('storage/' . $banner->image) }}">
                                         <source media="(min-width: 992px)" srcset="{{ asset('storage/' . $banner->image) }}">
@@ -35,6 +35,15 @@
                     <div class="swiper-button-next"></div>
                 </div>
             </div>
+            <style>
+                .section_slider, .swiper-container, .swiper-wrapper {
+        margin: 0 auto;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+            </style>
         </section>
         
 
