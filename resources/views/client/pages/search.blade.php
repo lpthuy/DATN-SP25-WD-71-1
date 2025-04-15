@@ -44,6 +44,7 @@
                         @else
                             <div class="swiper-container">
                                 <div class="swiper-wrapper">
+                    
                                     @foreach($products as $product)
                                         <div class="swiper-slide">
                                             <div class="admin" data-url="{{ route('productDetail', $product->id) }}"
@@ -71,7 +72,7 @@
                                                                 @endif
                                                             </div>
                                                         </a>
-                                                     
+                                                       
                                                     </div>
                                                     <div class="product-info">
                                                         <div class="lofi-product">

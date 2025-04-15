@@ -194,7 +194,6 @@ public function index()
 
 
 
-
 public function checkStock(Request $request)
 {
     $selected = $request->input('selected_products', []);

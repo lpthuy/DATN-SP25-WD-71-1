@@ -277,6 +277,7 @@ class HomeController extends Controller
             'stock_quantity' => $stockQuantity, // Trả về số lượng tồn kho
         ]);
     }
+    
 
     public function search(Request $request)
     {
