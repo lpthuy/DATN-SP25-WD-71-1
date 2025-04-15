@@ -43,6 +43,9 @@ class CartController extends Controller
 
     $variantId = $variant->id;
 
+    // ✅ Ưu tiên lấy discount_price nếu có
+    $price = $variant->discount_price > 0 ? $variant->discount_price : $variant->price;
+
     $cart = session()->get('cart', []);
     $cartKey = $productId . '-' . $variantId;
 
@@ -53,7 +56,7 @@ class CartController extends Controller
             'product_id' => $productId,
             'variant_id' => $variantId,
             'name' => $variant->product->name,
-            'price' => $variant->price,
+            'price' => $price, // ✅ Đã lấy giá có khuyến mãi
             'quantity' => $quantity,
             'image' => $variant->product->image,
             'color' => $variant->color->color_name,
@@ -65,6 +68,7 @@ class CartController extends Controller
 
     return redirect()->route('cart')->with('success', 'Đã thêm vào giỏ hàng!');
 }
+
 
 
 
