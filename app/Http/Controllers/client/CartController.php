@@ -25,16 +25,28 @@ class CartController extends Controller
         return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
     }
 
-    // ✅ Đã đăng nhập mới xử lý
     $productId = $request->input('product_id');
-    $variantId = $request->input('variant_id');
+    $colorId = $request->input('color_id');
+    $sizeId = $request->input('size_id');
     $quantity = (int)$request->input('quantity', 1);
 
-    // Lấy thông tin biến thể (color, size, giá,...)
-    $variant = ProductVariant::with(['product', 'color', 'size'])->findOrFail($variantId);
+    // ✅ Truy biến thể dựa trên color & size
+    $variant = ProductVariant::with(['product', 'color', 'size'])
+        ->where('product_id', $productId)
+        ->where('color_id', $colorId)
+        ->where('size_id', $sizeId)
+        ->first();
+
+    if (!$variant) {
+        return redirect()->back()->with('error', 'Không tìm thấy biến thể sản phẩm phù hợp!');
+    }
+
+    $variantId = $variant->id;
+
+    // ✅ Ưu tiên lấy discount_price nếu có
+    $price = $variant->discount_price > 0 ? $variant->discount_price : $variant->price;
 
     $cart = session()->get('cart', []);
-
     $cartKey = $productId . '-' . $variantId;
 
     if (isset($cart[$cartKey])) {
@@ -44,9 +56,9 @@ class CartController extends Controller
             'product_id' => $productId,
             'variant_id' => $variantId,
             'name' => $variant->product->name,
-            'price' => $variant->price,
+            'price' => $price, // ✅ Đã lấy giá có khuyến mãi
             'quantity' => $quantity,
-            'image' => $variant->product->image, // nếu có
+            'image' => $variant->product->image,
             'color' => $variant->color->color_name,
             'size' => $variant->size->size_name
         ];
@@ -56,6 +68,8 @@ class CartController extends Controller
 
     return redirect()->route('cart')->with('success', 'Đã thêm vào giỏ hàng!');
 }
+
+
 
 
 
