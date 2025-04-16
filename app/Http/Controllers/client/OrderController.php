@@ -15,7 +15,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail; // Thêm dòng này ở đầu file
 use App\Mail\OrderSuccessMail; // Thêm dòng này nếu đã tạo Mailable
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class OrderController extends Controller
 {
@@ -76,133 +78,162 @@ class OrderController extends Controller
 
 
     public function store(Request $request)
-{
-    try {
-        $user = Auth::user();
-        $checkoutItems = session('checkout_items', []);
-        $retryOrderId = session('retry_order_id');
-        $isRetry = session('retry_payment', false);
+    {
+        try {
+            $user = Auth::user();
+            $checkoutItems = session('checkout_items', []);
+            $retryOrderId = session('retry_order_id');
+            $isRetry = session('retry_payment', false);
 
-        if (!$checkoutItems || !$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Không tìm thấy giỏ hàng hoặc chưa đăng nhập!'
-            ], 400);
-        }
-
-        $promotionCode = session('promo_code');
-        $discount = session('promo_discount', 0);
-        $shippingFee = session('shipping_fee', 0);
-        $subtotal = collect($checkoutItems)->sum(fn($item) => $item['quantity'] * $item['price']);
-        $finalTotal = $subtotal + $shippingFee - $discount;
-
-        if ($isRetry && $retryOrderId) {
-            // 👉 Nếu là thanh toán lại
-            $order = Order::where('id', $retryOrderId)
-                ->where('user_id', $user->id)
-                ->first();
-
-            if (!$order) {
+            if (!$checkoutItems || !$user) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Không tìm thấy đơn hàng để thanh toán lại.'
-                ], 404);
+                    'message' => 'Không tìm thấy giỏ hàng hoặc chưa đăng nhập!'
+                ], 400);
             }
 
-            $order->update([
-                'payment_method' => 'cod',
-                'status' => 'processing',
-                'promotion_code' => $promotionCode,
-                'discount' => $discount,
-                'shipping_fee' => $shippingFee,
-            ]);
+            $promotionCode = session('promo_code');
+            $discount = session('promo_discount', 0);
+            $shippingFee = session('shipping_fee', 0);
+            $subtotal = collect($checkoutItems)->sum(fn($item) => $item['quantity'] * $item['price']);
+            $finalTotal = $subtotal + $shippingFee - $discount;
 
-            $order->items()->delete();
-        } else {
-            // 👉 Tạo đơn hàng mới nếu không phải thanh toán lại
-            $orderCode = 'OD' . strtoupper(Str::random(8));
-            $order = Order::create([
-                'order_code' => $orderCode,
-                'user_id' => $user->id,
-                'payment_method' => 'cod',
-                'status' => 'processing',
-                'promotion_code' => $promotionCode,
-                'discount' => $discount,
-                'shipping_fee' => $shippingFee,
-            ]);
-        }
-
-        // ✅ Tạo sản phẩm và trừ kho
-        foreach ($checkoutItems as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item['product_id'],
-                'product_name' => $item['name'],
-                'color' => $item['color'],
-                'size' => $item['size'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-            ]);
-
-            $sizeId = \App\Models\Size::where('size_name', strtolower(trim($item['size'])))->value('id');
-            $colorId = \App\Models\Color::where('color_name', ucfirst(strtolower(trim($item['color']))))->value('id');
-
-            if ($sizeId && $colorId) {
-                $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
-                    ->where('size_id', $sizeId)
-                    ->where('color_id', $colorId)
+            if ($isRetry && $retryOrderId) {
+                // 👉 Nếu là thanh toán lại
+                $order = Order::where('id', $retryOrderId)
+                    ->where('user_id', $user->id)
                     ->first();
 
-                if ($variant) {
-                    $variant->stock_quantity = max(0, $variant->stock_quantity - $item['quantity']);
-                    $variant->save();
+                if (!$order) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Không tìm thấy đơn hàng để thanh toán lại.'
+                    ], 404);
+                }
+
+                $order->update([
+                    'payment_method' => 'cod',
+                    'status' => 'processing',
+                    'promotion_code' => $promotionCode,
+                    'discount' => $discount,
+                    'shipping_fee' => $shippingFee,
+                ]);
+
+                $order->items()->delete();
+            } else {
+                // 👉 Tạo đơn hàng mới nếu không phải thanh toán lại
+                $orderCode = 'OD' . strtoupper(Str::random(8));
+                $order = Order::create([
+                    'order_code' => $orderCode,
+                    'user_id' => $user->id,
+                    'payment_method' => 'cod',
+                    'status' => 'processing',
+                    'promotion_code' => $promotionCode,
+                    'discount' => $discount,
+                    'shipping_fee' => $shippingFee,
+                ]);
+            }
+
+            // ✅ Tạo sản phẩm và trừ kho
+            foreach ($checkoutItems as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['product_id'],
+                    'product_name' => $item['name'],
+                    'color' => $item['color'],
+                    'size' => $item['size'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                ]);
+
+                $sizeId = \App\Models\Size::where('size_name', strtolower(trim($item['size'])))->value('id');
+                $colorId = \App\Models\Color::where('color_name', ucfirst(strtolower(trim($item['color']))))->value('id');
+
+                if ($sizeId && $colorId) {
+                    $variant = \App\Models\ProductVariant::where('product_id', $item['product_id'])
+                        ->where('size_id', $sizeId)
+                        ->where('color_id', $colorId)
+                        ->first();
+
+                    if ($variant) {
+                        $variant->stock_quantity = max(0, $variant->stock_quantity - $item['quantity']);
+                        $variant->save();
+                    }
                 }
             }
-        }
 
-        try {
-            $order->load('items');
-            Mail::to($user->email)->send(new OrderSuccessMail($order));
-        } catch (\Exception $e) {
-            Log::error('❌ Không gửi được email xác nhận: ' . $e->getMessage());
-        }
+            // ✅ Tạo mã QR cho đơn hàng
+try {
+    $qrContent = route('orders.track', ['code' => $order->order_code]); // Nội dung QR
 
-        // ✅ Xoá sản phẩm đã đặt khỏi giỏ hàng session('cart')
-$cart = session('cart', []);
-foreach ($checkoutItems as $item) {
-    if (!empty($item['product_id']) && !empty($item['variant_id'])) {
-        $cartKey = $item['product_id'] . '-' . $item['variant_id'];
-        unset($cart[$cartKey]);
+    $qrFileName = 'order_' . $order->id . '_' . time() . '.png';
+    $qrStoragePath = 'public/qrcodes/' . $qrFileName; // Nơi lưu tạm QR
+    $qrPublicPath = 'qrcodes/' . $qrFileName;         // Sẽ copy sang public
+
+    // Tạo QR code vào storage
+    Storage::put($qrStoragePath, QrCode::format('png')->size(300)->generate($qrContent));
+
+    // ✅ Copy file từ storage → public
+    $from = storage_path('app/public/qrcodes/' . $qrFileName);
+    $to = public_path('qrcodes/' . $qrFileName);
+
+    // Đảm bảo thư mục public/qrcodes tồn tại
+    if (!File::exists(public_path('qrcodes'))) {
+        File::makeDirectory(public_path('qrcodes'), 0755, true);
     }
+
+    File::copy($from, $to);
+
+    // ✅ Lưu đường dẫn public vào DB
+    $order->qr_code_path = $qrPublicPath;
+    $order->save();
+} catch (\Exception $e) {
+    Log::error("❌ Lỗi tạo mã QR hoặc copy ảnh: " . $e->getMessage());
 }
-session()->put('cart', $cart);
 
 
-        // ✅ Xoá session
-        session()->forget([
-            'checkout_items',
-            'promo_code',
-            'promo_discount',
-            'shipping_fee',
-            'retry_payment',
-            'retry_order_id',
-        ]);
+            try {
+                $order->load('items');
+                Mail::to($user->email)->send(new OrderSuccessMail($order));
+            } catch (\Exception $e) {
+                Log::error('❌ Không gửi được email xác nhận: ' . $e->getMessage());
+            }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Đặt hàng thành công!',
-            'order_code' => $order->order_code,
-            'redirect' => route('order')
-        ], 200);
+            // ✅ Xoá sản phẩm đã đặt khỏi giỏ hàng session('cart')
+            $cart = session('cart', []);
+            foreach ($checkoutItems as $item) {
+                if (!empty($item['product_id']) && !empty($item['variant_id'])) {
+                    $cartKey = $item['product_id'] . '-' . $item['variant_id'];
+                    unset($cart[$cartKey]);
+                }
+            }
+            session()->put('cart', $cart);
 
-    } catch (\Throwable $e) {
-        Log::error("❌ Lỗi trong quá trình xử lý COD: " . $e->getMessage());
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.'
-        ], 500);
+
+            // ✅ Xoá session
+            session()->forget([
+                'checkout_items',
+                'promo_code',
+                'promo_discount',
+                'shipping_fee',
+                'retry_payment',
+                'retry_order_id',
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Đặt hàng thành công!',
+                'order_code' => $order->order_code,
+                'redirect' => route('order')
+            ], 200);
+        } catch (\Throwable $e) {
+            Log::error("❌ Lỗi trong quá trình xử lý COD: " . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.'
+            ], 500);
+        }
     }
-}
 
 
 
@@ -350,16 +381,35 @@ session()->put('cart', $cart);
         }
     }
 
-    public function exportPDF($id)
-    {
-        $order = Order::with('user')->findOrFail($id);
-        $items = OrderItem::where('order_id', $id)->get();
+
     
-        $pdf = Pdf::loadView('client.pages.pdf', [
-            'order' => $order,
-            'items' => $items
-        ]);
-    
-        return $pdf->download("order_{$order->order_code}.pdf");
+
+public function exportPDF($id)
+{
+    $order = Order::with('user')->findOrFail($id);
+    $items = OrderItem::where('order_id', $id)->get();
+
+    $qrPath = null;
+    if ($order->qr_code_path) {
+        $fullPath = public_path($order->qr_code_path); // Ví dụ: public/qrcodes/xxx.png
+
+        Log::debug('[PDF Export] Absolute path: ' . $fullPath);
+
+        if (file_exists($fullPath)) {
+            $qrImage = file_get_contents($fullPath);
+            $qrPath = 'data:image/png;base64,' . base64_encode($qrImage);
+
+            Log::debug('[PDF Export] Base64 QR length: ' . strlen($qrPath));
+        }
     }
+
+    $pdf = Pdf::loadView('client.pages.pdf', [
+        'order' => $order,
+        'items' => $items,
+        'qrPath' => $qrPath
+    ]);
+
+    return $pdf->download("order_{$order->order_code}.pdf");
+}
+
 }
