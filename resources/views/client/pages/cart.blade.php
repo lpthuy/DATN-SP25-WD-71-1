@@ -11,16 +11,16 @@
             font-family: 'Roboto', sans-serif;
         }
 
-        body {
+        /* body {
             background: #f5f5f5;
             color: #333;
-        }
+        } */
 
-        .container {
+        /* .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-        }
+        } */
 
         /* Breadcrumb */
         .bread-crumb {

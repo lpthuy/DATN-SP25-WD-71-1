@@ -50,7 +50,7 @@ class CartController extends Controller
     $cartKey = $productId . '-' . $variantId;
 
     if (isset($cart[$cartKey])) {
-        $cart[$cartKey]['quantity'] += $quantity;
+        $cart[$cartKey]['quantity'] = $quantity;
     } else {
         $cart[$cartKey] = [
             'product_id' => $productId,
