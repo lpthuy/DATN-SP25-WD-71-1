@@ -1,6 +1,6 @@
 @extends('client.layouts.main')
 
-@section('title', 'Đăng ký')
+@section('title', 'ĐĂNG NHẬP')
 
 @section('content')
     <section class="bread-crumb">
