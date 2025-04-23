@@ -14,7 +14,7 @@
 
     <div class="search-container">
         <form action="{{ route('products.index') }}" method="GET" class="d-flex align-items-center">
-            <input type="text" name="keyword" class="form-control" placeholder="Tìm tên hoặc danh muc..." value="{{ request('keyword') }}">
+            <input type="text" name="keyword" class="form-control" placeholder="Tìm tên hoặc danh mục..." value="{{ request('keyword') }}">
             <button type="submit" class="btn btn-primary ml-2">
                 <i class="fas fa-search"></i> Tìm kiếm
             </button>
@@ -42,99 +42,119 @@
     .search-container button {
         border-radius: 5px;
     }
+
+    .text-truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+    }
 </style>
 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered text-center align-middle">
-            <thead class="thead-dark">
+<div class="table-responsive">
+    <table class="table table-hover table-bordered text-center align-middle">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Danh mục</th>
+                <th>Mô tả</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($products as $product)
                 <tr>
-                    <th>ID</th>
-                    <th>Hình ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Danh mục</th>
-                    <th>Mô tả</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($products as $product)
-                    <tr>
-                        <td class="align-middle">{{ $product->id }}</td>
-                        <td class="align-middle">
-                            @if($product->image)
-                                <img src="{{ asset('storage/' . explode(',', $product->image)[0]) }}" alt="{{ $product->name }}" width="80" class="rounded shadow">
-                            @else
-                                <span class="text-muted">Không có ảnh</span>
-                            @endif
-                        </td>
-                        <td class="align-middle">{{ $product->name }}</td>
-                        <td class="align-middle">{{ $product->category->name ?? 'Không có danh mục' }}</td>
-                        {{-- <td class="align-middle">{!! Str::limit($product->description, 100) !!}</td> --}}
-                               <td class="align-middle"><div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{!! $product->description !!}</div></td>
-                        <td class="align-middle">
-                            <button class="btn btn-info btn-sm open-variants" data-product-id="{{ $product->id }}" data-variants='@json($product->variants->toArray())'>
-                                <i class="fas fa-eye"></i> Biến thể
+                    <td class="align-middle">{{ $product->id }}</td>
+                    <td class="align-middle">
+                        @if($product->image)
+                            <img src="{{ asset('storage/' . explode(',', $product->image)[0]) }}" alt="{{ $product->name }}" width="80" class="rounded shadow">
+                        @else
+                            <span class="text-muted">Không có ảnh</span>
+                        @endif
+                    </td>
+                    <td class="align-middle">{{ $product->name }}</td>
+                    <td class="align-middle">{{ $product->category->name ?? 'Không có danh mục' }}</td>
+                    <td class="align-middle">
+                        @php
+                            $plainText = strip_tags($product->description);
+                            $words = explode(' ', $plainText);
+                            $short = implode(' ', array_slice($words, 0, 10));
+                            $fullText = e($plainText);
+                        @endphp
+                        <span 
+                            class="d-inline-block text-truncate" 
+                            style="max-width: 150px;" 
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top" 
+                            title="{{ $fullText }}">
+                            {{ $short }}{{ count($words) > 10 ? '...' : '' }}
+                        </span>
+                    </td>
+                    <td class="align-middle">
+                        <button class="btn btn-info btn-sm open-variants" data-product-id="{{ $product->id }}" data-variants='@json($product->variants->toArray())'>
+                            <i class="fas fa-eye"></i> Biến thể
+                        </button>
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Sửa
+                        </a>
+                        <form action="{{ route('products.toggleActive', $product->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-sm {{ $product->is_active ? 'btn-secondary' : 'btn-success' }}">
+                                <i class="fas {{ $product->is_active ? 'fa-eye-slash' : 'fa-eye' }}"></i> 
+                                {{ $product->is_active ? 'Ẩn' : 'Hiện' }}
                             </button>
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Sửa
-                            </a>
-                            <form action="{{ route('products.toggleActive', $product->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit" class="btn btn-sm {{ $product->is_active ? 'btn-secondary' : 'btn-success' }}">
-                                    <i class="fas {{ $product->is_active ? 'fa-eye-slash' : 'fa-eye' }}"></i> 
-                                    {{ $product->is_active ? 'Ẩn' : 'Hiện' }}
-                                </button>
-                            </form>
-                            
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
-    {{ $products->links() }}
+{{ $products->links() }}
 
-    <!-- Modal hiển thị biến thể -->
-    <div class="modal fade" id="variantModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Danh sách biến thể</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-bordered text-center">
-                        <thead class="bg-light">
-                            <tr>
-                                <th>Màu</th>
-                                <th>Size</th>
-                                <th>Giá cũ</th>
-                                <th>Giá mới</th>
-                                <th>Số lượng</th>
-                            </tr>
-                        </thead>
-                        <tbody id="variantTableBody">
-                            <!-- Dữ liệu sẽ được load vào đây bằng JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                </div>
+<!-- Modal hiển thị biến thể -->
+<div class="modal fade" id="variantModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Danh sách biến thể</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered text-center">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Màu</th>
+                            <th>Size</th>
+                            <th>Giá cũ</th>
+                            <th>Giá mới</th>
+                            <th>Số lượng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="variantTableBody">
+                        <!-- Dữ liệu sẽ được load vào đây bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 @section('js')
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    // Biến thể
     document.querySelectorAll('.open-variants').forEach(button => {
         button.addEventListener('click', function () {
             let variants = JSON.parse(this.getAttribute('data-variants')) || [];
@@ -152,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 ${variant.color.color_name}
                             </td>
                             <td>${variant.size ? variant.size.size_name : 'Không có size'}</td>
-                            <td style="text-decoration: line-through; color: #999;">${variant.price} đ</td> <!-- Giá cũ bị gạch ngang -->
+                            <td style="text-decoration: line-through; color: #999;">${variant.price} đ</td>
                             <td>${variant.discount_price} đ</td>
                             <td>${variant.stock_quantity}</td>
                         </tr>
@@ -163,7 +183,11 @@ document.addEventListener("DOMContentLoaded", function () {
             $('#variantModal').modal('show');
         });
     });
-});
 
+    // Tooltip Bootstrap
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+});
 </script>
 @endsection
