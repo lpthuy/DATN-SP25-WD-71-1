@@ -1,6 +1,6 @@
 @extends('client.layouts.main')
 
-@section('title', 'ĐĂNG NHẬP')
+@section('title', 'Đăng nhập')
 
 @section('content')
     <section class="bread-crumb">
@@ -14,7 +14,7 @@
                 </li>
 
                 <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <strong itemprop="name">Đăng ký</strong>
+                    <strong itemprop="name">Đăng nhập</strong>
                     <meta itemprop="position" content="2" />
                 </li>
 
