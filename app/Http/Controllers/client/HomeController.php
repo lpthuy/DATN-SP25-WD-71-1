@@ -329,6 +329,14 @@ class HomeController extends Controller
     {
         return view('client.pages.chinh-sach-giao-hang');
     }
+    public function chinhSachDoiTraDoiTra()
+    {
+        return view('client.pages.chinh-sach-doi-tra');
+    }
+    public function ChinhSachBanHang()
+    {
+        return view('client.pages.chinh-sach-ban-hang');
+    }
 
     public function login()
     {
