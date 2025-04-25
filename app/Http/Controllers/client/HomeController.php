@@ -133,6 +133,11 @@ class HomeController extends Controller
 
         // Truyền biến category để tương thích với view
         $category = null;
+if ($request->filled('category_id')) {
+    $category = Category::find($request->category_id);
+}
+
+
 
         return view('client.pages.product-by-category', compact('products', 'promotions', 'categories', 'category'));
     }

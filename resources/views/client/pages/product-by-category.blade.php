@@ -35,6 +35,8 @@
                             </div>
                             <div class="layered-category">
                                 <ul class="menuList-links">
+                                    {{-- @section('title', $category->name ?? 'Tất cả sản phẩm') --}}
+
                                     @foreach ($categories as $category)
                                     <li>
                                         <label>
