@@ -34,6 +34,7 @@
                         <th class="text-center">Giá</th>
                         <th class="text-center">Số lượng</th>
                         <th class="text-center">Tổng</th>
+                        <th class="text-center">Đánh Giá</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,6 +47,12 @@
                             <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }}₫</td>
+                            <td>
+                                <a href="{{ route('productDetail', $item->product->id) }}">
+                                    Đánh giá
+                                </a>
+                            </td>
+                            
                         </tr>
                         @php $total += $item->price * $item->quantity; @endphp
                     @endforeach
