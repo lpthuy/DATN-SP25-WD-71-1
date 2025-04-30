@@ -80,7 +80,7 @@
                     <div class="product-detail-left product-images col-12 col-md-12 col-lg-6 col-left">
                         <div class="product-image-block relative">
                             <!-- Ảnh lớn - Dạng slider -->
-                            <div class="swiper-container gallery-top">
+                            <div class="swiper-container gallery-top ">
                                 <div class="swiper-wrapper" id="lightgallery">
                                     @foreach($images as $index => $image)
                                         @php
@@ -119,8 +119,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="details-pro col-12 col-md-12 col-lg-6 col-center">
                         <div class="title-product">
