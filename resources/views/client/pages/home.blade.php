@@ -33,7 +33,7 @@
         <section class="awe-section-1">
             <div class="section_slider">
                 <div class="home-slider swiper-container"> --}}
-                    <div class="swiper-wrapper">
+                    {{-- <div class="swiper-wrapper">
                         @foreach($banners as $banner)
                             <div class="swiper-slide">
                                 <a href="{{ $banner->link ?? '#' }}" class="clearfix" title="{{ $banner->title }}" style="padding: 0ch">
@@ -52,8 +52,9 @@
                         @endforeach
                     </div>
                     <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
->>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5
+                    <div class="swiper-button-next"></div> --}}
+                    
+{{-- >>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5 --}}
                 </div>
                 @endforeach
             </div>
@@ -76,7 +77,7 @@
             </style>
         </section>
         
->>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5  --}}
+{}>>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5  --}}
 
     <section class="awe-section-2">
         <section class="section_service">
@@ -327,663 +328,77 @@
     </section>
 </section>
 
-{{-- <section class="awe-section-5">
-        <link rel="preload" as="script" href="{{ asset('client/js/count-down4d9c.js') }}" />
-<script src="{{ asset('client/js/count-down4d9c.js') }}" type="text/javascript"></script>
-<section class="section_flash_sale module_product">
-    <div class="container">
-        <div class="heading-home">
-            <div class="site-animation">
-                <h2>
-                    <a href="san-pham-noi-bat.html" title="Giảm giá sốc">Giảm giá sốc</a>
-                </h2>
-
-                <div class="timer">
-                    <span class="text">Kết thúc sau:</span>
-                    <div class="time" data-countdown="countdown" data-date="02-13-2025-12-00-00"></div>
+<section class="awe-section-6">
+    <div class="section_product_new module_product">
+        <div class="container">
+            <div class="heading-home">
+                <div class="site-animation">
+                    <h2><a href="san-pham-moi.html" title="Sản phẩm mới">Sản phẩm mới</a></h2>
                 </div>
-
             </div>
-        </div>
 
-        <div class="block-product">
-            <div class="deal-hot-swiper swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide flashsale__item" data-pdid="29237846" data-inventory-quantity="350"
-                        data-available="true">
-                        <div class="item_product_main">
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29237846" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail  ">
-                                            <a class="image_thumb"
-                                                href="vi-nu-dai-cam-tay-2-ngan-keo-nhieu-ngan-tien-dung.html"
-                                                title="Ví nữ dài cầm tay 2 ngăn kéo nhiều ngăn tiện dụng">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="block-product">
+                        <div class="row">
+                            @foreach($products as $product)
+                            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                                <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}" data-id="{{ $product->id }}">
+                                    <form action="{{ route('cart.add', $product->id) }}" method="post" class="variants product-action wishItem" data-cart-form enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="product-thumbnail">
+                                            <a class="image_thumb" href="{{ route('productDetail', $product->id) }}" title="{{ $product->name }}">
                                                 <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="{{ asset('client/images/blhess-simg-d0daf0-800x1200-max.jpg') }}"
-                                                        data-src="{{ asset('client/images/blhess-simg-d0daf0-800x1200-max.jpg') }}"
-                                                        alt="V&#237; nữ d&#224;i cầm tay 2 ngăn k&#233;o nhiều ngăn tiện dụng" />
+                                                    @php
+                                                    $images = explode(',', $product->image);
+                                                    $firstImage = isset($images[0]) ? trim($images[0]) : null;
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img class="img-fluid" src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}">
+                                                    @else
+                                                    <img class="img-fluid" src="{{ asset('images/no-image.png') }}" alt="Không có ảnh">
+                                                    @endif
                                                 </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="{{ asset('client/images/odraybrjkx1cudni9cmp-simg-d0daf0-800x1200-max.jpg') }}"
-                                                        data-src="{{ asset('client/images/odraybrjkx1cudni9cmp-simg-d0daf0-800x1200-max.jpg') }}"
-                                                        alt="V&#237; nữ d&#224;i cầm tay 2 ngăn k&#233;o nhiều ngăn tiện dụng" />
-                                                </div>
-
                                             </a>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-                                                    Phụ kiện
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a
-                                                    href="vi-nu-dai-cam-tay-2-ngan-keo-nhieu-ngan-tien-dung.html"
-                                                    title="Ví nữ dài cầm tay 2 ngăn kéo nhiều ngăn tiện dụng">Ví
-                                                    nữ dài cầm tay 2 ngăn kéo nhiều ngăn tiện dụng</a>
+                                        <div class="product-info mt-2">
+                                            <h3 class="product-name">
+                                                <a href="{{ route('productDetail', $product->id) }}">{{ $product->name }}</a>
                                             </h3>
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-                                                    <span class="price">159.000₫</span>
-                                                    <span class="compare-price"></span>
-                                                </div>
+                                            <div class="price-box">
+                                                @if($product->discount_price && $product->discount_price < $product->price)
+                                                    <span class="price text-success font-weight-bold">{{ number_format($product->discount_price, 0, ',', '.') }}₫</span>
+                                                    <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                                                @else
+                                                    @php $variant = $product->variants->first(); @endphp
+                                                    @if($variant)
+                                                        @if($variant->discount_price && $variant->discount_price < $variant->price)
+                                                            <span class="price text-success font-weight-bold">{{ number_format($variant->discount_price, 0, ',', '.') }}₫</span>
+                                                            <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
+                                                        @else
+                                                            <span class="price font-weight-bold">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
+                                                        @endif
+                                                    @endif
+                                                @endif
                                             </div>
                                         </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
+                            @endforeach
                         </div>
-                    </div>
-
-                    <div class="swiper-slide flashsale__item" data-pdid="29237810" data-inventory-quantity="0"
-                        data-management="true" data-available="true">
-                        <div class="item_product_main">
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29237810" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail  ">
-                                            <a class="image_thumb"
-                                                href="tui-xach-nu-deo-cheo-da-pu-di-du-tiec-du-lich.html"
-                                                title="Túi Xách Nữ Đeo Chéo Da Pu Đi Dự Tiệc Du Lịch">
-                                                <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="{{ asset('client/images/anh1.png') }}"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/pdwkie-simg-d0daf0-800x1200-max.png?v=1673363151100"
-                                                        alt="T&#250;i X&#225;ch Nữ Đeo Ch&#233;o Da Pu Đi Dự Tiệc Du Lịch" />
-                                                </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="{{ asset('client/images/anh2.png') }}"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/blhess-simg-d0daf0-800x1200-max.png?v=1673363152457"
-                                                        alt="T&#250;i X&#225;ch Nữ Đeo Ch&#233;o Da Pu Đi Dự Tiệc Du Lịch" />
-                                                </div>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-                                                    Phụ kiện
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a
-                                                    href="tui-xach-nu-deo-cheo-da-pu-di-du-tiec-du-lich.html"
-                                                    title="Túi Xách Nữ Đeo Chéo Da Pu Đi Dự Tiệc Du Lịch">Túi
-                                                    Xách Nữ Đeo Chéo Da Pu Đi Dự Tiệc Du Lịch</a></h3>
-
-
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-
-
-                                                    <span class="price">300.000₫</span>
-                                                    <span class="compare-price"></span>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-
-
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide flashsale__item" data-pdid="29237802" data-inventory-quantity="350"
-                        data-available="true">
-                        <div class="item_product_main">
-
-
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29237802" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail sale " data-sale="-
-        35%
-        ">
-                                            <a class="image_thumb" href="tui-xach-nu-hoa-tiet-thoi-trang.html"
-                                                title="Túi xách nữ họa tiết thời trang">
-                                                <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="{{ asset('client/images/anh1.png') }}"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/jwonepcvkjlswxyixhqt-simg-d0daf0-800x1200-max.jpg?v=1673362979710"
-                                                        alt="T&#250;i x&#225;ch nữ họa tiết thời trang" />
-                                                </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="{{ asset('client/images/anh2.png') }}"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/odraybrjkx1cudni9cmp-simg-d0daf0-800x1200-max.jpg?v=1673362980193"
-                                                        alt="T&#250;i x&#225;ch nữ họa tiết thời trang" />
-                                                </div>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-
-                                                    Phụ kiện
-
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a href="tui-xach-nu-hoa-tiet-thoi-trang.html"
-                                                    title="Túi xách nữ họa tiết thời trang">Túi xách nữ
-                                                    họa tiết thời trang</a></h3>
-
-
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-
-
-
-                                                    <span class="price">150.000₫</span>
-
-                                                    <span class="compare-price">230.000₫</span>
-
-
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-
-
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide flashsale__item" data-pdid="29237692" data-inventory-quantity="350"
-                        data-available="true">
-                        <div class="item_product_main">
-
-
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29237692" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail sale " data-sale="-
-        39%
-        ">
-                                            <a class="image_thumb"
-                                                href="quan-short-nu-cap-cao-4-cuc-cap-cheo-cach-dieu.html"
-                                                title="Quần Short Nữ Cạp Cao 4 Cúc Cạp Chéo Cách Điệu">
-                                                <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/rufkqze8ki024f0lzru6-simg-d0daf0-800x1200-max.jpg?v=1673361556170"
-                                                        alt="Quần Short Nữ Cạp Cao 4 C&#250;c Cạp Ch&#233;o C&#225;ch Điệu" />
-                                                </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/8ismbno6w1kd3xcq5zgk-simg-d0daf0-800x1200-max.jpg?v=1673361556707"
-                                                        alt="Quần Short Nữ Cạp Cao 4 C&#250;c Cạp Ch&#233;o C&#225;ch Điệu" />
-                                                </div>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-
-                                                    Quần
-
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a
-                                                    href="quan-short-nu-cap-cao-4-cuc-cap-cheo-cach-dieu.html"
-                                                    title="Quần Short Nữ Cạp Cao 4 Cúc Cạp Chéo Cách Điệu">Quần
-                                                    Short Nữ Cạp Cao 4 Cúc Cạp Chéo Cách Điệu</a></h3>
-
-
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-
-
-                                                    <span class="price">100.000₫</span>
-                                                    <span class="compare-price">165.000₫</span>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-
-
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide flashsale__item" data-pdid="29237671" data-inventory-quantity="350"
-                        data-available="true">
-                        <div class="item_product_main">
-
-
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29237671" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail sale " data-sale="-
-        44%
-        ">
-                                            <a class="image_thumb" href="quan-short-dui-nu.html"
-                                                title="Quần short đũi nữ">
-                                                <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/pmioumgmndfegdh4amhg-simg-d0daf0-800x1200-max.jpg?v=1673361292573"
-                                                        alt="Quần short đũi nữ" />
-                                                </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/ugasezzc9qg3gcptfnf6-simg-d0daf0-800x1200-max.png?v=1673361293383"
-                                                        alt="Quần short đũi nữ" />
-                                                </div>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-
-                                                    Quần
-
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a href="quan-short-dui-nu.html"
-                                                    title="Quần short đũi nữ">Quần short đũi nữ</a></h3>
-
-
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-
-
-                                                    <span class="price">90.000₫</span>
-                                                    <span class="compare-price">160.000₫</span>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-
-
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide flashsale__item" data-pdid="29217357" data-inventory-quantity="350"
-                        data-available="true">
-                        <div class="item_product_main">
-
-
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29217357" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail sale " data-sale="-
-        40%
-        ">
-                                            <a class="image_thumb" href="quan-baggy-kaki-nu.html"
-                                                title="Quần baggy kaki nữ">
-                                                <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/bub1xb-simg-d0daf0-800x1200-max.jpg?v=1673194785170"
-                                                        alt="Quần baggy kaki nữ" />
-                                                </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/bub1xb-simg-d0daf0-800x1200-max.jpg?v=1673194785170"
-                                                        alt="Quần baggy kaki nữ" />
-                                                </div>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-
-                                                    Quần
-
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a href="quan-baggy-kaki-nu.html"
-                                                    title="Quần baggy kaki nữ">Quần baggy kaki nữ</a>
-                                            </h3>
-
-
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-
-
-
-                                                    <span class="price">90.000₫</span>
-
-                                                    <span class="compare-price">150.000₫</span>
-
-
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-
-
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide flashsale__item" data-pdid="29217317" data-inventory-quantity="350"
-                        data-available="true">
-                        <div class="item_product_main">
-
-
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29217317" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail  ">
-                                            <a class="image_thumb" href="quan-baggy-jeans-nu-phong-cach.html"
-                                                title="Quần Baggy Jeans Nữ Phong Cách">
-                                                <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/kz6cb8fyvc2y67ftu3xx-simg-d0daf0-800x1200-max.jpg?v=1673193856937"
-                                                        alt="Quần Baggy Jeans Nữ Phong C&#225;ch" />
-                                                </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/0kzkbkmh1dck7chifown-simg-d0daf0-800x1200-max.jpg?v=1673193858470"
-                                                        alt="Quần Baggy Jeans Nữ Phong C&#225;ch" />
-                                                </div>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-
-                                                    Quần
-
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a href="quan-baggy-jeans-nu-phong-cach.html"
-                                                    title="Quần Baggy Jeans Nữ Phong Cách">Quần Baggy
-                                                    Jeans Nữ Phong Cách</a></h3>
-
-
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-
-
-                                                    Liên hệ
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-
-
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-
-
-                    <div class="swiper-slide flashsale__item" data-pdid="29217273" data-inventory-quantity="350"
-                        data-available="true">
-                        <div class="item_product_main">
-
-
-                            <form action="https://lofi-style.mysapo.net/cart/add" method="post"
-                                class="variants product-action wishItem" data-cart-form
-                                data-id="product-actions-29217273" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-12 pd-right-0">
-                                        <div class="product-thumbnail sale " data-sale="-
-        45%
-        ">
-                                            <a class="image_thumb" href="ao-phong-thun-nu-form-rong.html"
-                                                title="Áo Phông, Thun Nữ Form Rộng">
-                                                <div class="product-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/ujfb9jsyjr0rygdja304-simg-cf603b-938x938-max.jpg?v=1673192703397"
-                                                        alt="&#193;o Ph&#244;ng, Thun Nữ Form Rộng" />
-                                                </div>
-
-                                                <div class="product-image second-image">
-                                                    <img class="lazy img-responsive" width="480" height="480"
-                                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="//bizweb.dktcdn.net/thumb/large/100/456/491/products/bcbchsie3amjuunh6y8j-simg-e8409c-967x967-max.jpg?v=1673192704330"
-                                                        alt="&#193;o Ph&#244;ng, Thun Nữ Form Rộng" />
-                                                </div>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7 col-md-7 col-12">
-                                        <div class="product-info">
-                                            <div class="lofi-product">
-                                                <div class="product-type">
-
-                                                    Áo
-
-                                                </div>
-                                            </div>
-                                            <h3 class="product-name"><a href="ao-phong-thun-nu-form-rong.html"
-                                                    title="Áo Phông, Thun Nữ Form Rộng">Áo Phông, Thun
-                                                    Nữ Form Rộng</a></h3>
-
-
-                                            <div class="bottom-action">
-                                                <div class="price-box">
-
-
-                                                    <span class="price">109.000₫</span>
-                                                    <span class="compare-price">199.000₫</span>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flashsale__bottom" style="display:none">
-                                            <div class="flashsale__label">
-                                                <b class="flashsale__sold-qty"></b> sản phẩm đã bán
-                                            </div>
-
-
-                                            <div class="flashsale__progressbar  ">
-                                                <div class="flashsale___percent"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
+                        
                     </div>
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
-        </div>
 
+
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    </div>
     </div>
 </section>
-</section> --}}
-
-{{-- <section class="awe-section-6">
-        <div class="section_banner_featured feature_banner">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-12">
-                        <div class="banner_left">
-                            <a href="san-pham-moi.html" title="Lofi Style" class="image_hover">
-                                <img width="770" height="471" class="lazy img-responsive"
-                                    src="{{ asset('client/images/anh1.png') }}"
-data-src="//bizweb.dktcdn.net/100/456/491/themes/864044/assets/feature_banner_1.png?1708522613834"
-alt="Lofi Style" />
-</a>
-</div>
-</div>
-<div class="col-lg-4 col-12">
-    <div class="row">
-        <div class="banner_right mb-30 col-lg-12 col-md-6 col-12">
-            <a href="san-pham-noi-bat.html" title="Lofi Style" class="image_hover">
-                <img width="370" height="220" class="lazy img-responsive"
-                    src="{{ asset('client/images/anh2.png') }}"
-                    data-src="//bizweb.dktcdn.net/100/456/491/themes/864044/assets/feature_banner_2.png?1708522613834"
-                    alt="Lofi Style" />
-            </a>
-        </div>
-        <div class="banner_right col-lg-12 col-md-6 col-12">
-            <a href="flash-sale.html" title="Lofi Style" class="image_hover">
-                <img width="370" height="220" class="lazy img-responsive"
-                    src="{{ asset('client/images/anh3.png') }}"
-                    data-src="//bizweb.dktcdn.net/100/456/491/themes/864044/assets/feature_banner_3.png?1708522613834"
-                    alt="Lofi Style" />
-            </a>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-</div>
-</section> --}}
 
 <section class="awe-section-7">
     <div class="section_product_new module_product">
@@ -993,7 +408,6 @@ alt="Lofi Style" />
                     <h2><a href="san-pham-moi.html" title="Sản phẩm mới">Sản phẩm mới</a></h2>
                 </div>
             </div>
-
 
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
@@ -1167,148 +581,6 @@ alt="Lofi Style" />
 
 </section>
 
-{{-- <section class="awe-section-10">
-        <section class="section_instagram">
-            <div class="container">
-                <div class="heading-home">
-                    <div class="site-animation">
-                        <h2><a href="https://www.instagram.com/" title="Theo dõi instagram">Theo dõi
-                                instagram</a></h2>
-                    </div>
-                </div>
-                <div class="block-content">
-                    <div class="instagram-swiper swiper-container">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="instagram-item">
-                                    <a href="#" class="clearfix" title="Lofi Style">
-                                        <img width="170" height="170" class="lazy img-responsive"
-                                            src="{{ asset('client/images/ig1.png') }}"
-data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-<div class="icon">
-    <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-        alt="Lofi Style">
-</div>
-</a>
-</div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-</div>
-<div class="swiper-pagination"></div>
-</div>
-<script>
-    var swiper = new Swiper('.instagram-swiper', {
-        slidesPerView: 6,
-        spaceBetween: 20,
-        slidesPerColumn: 1,
-        slidesPerColumnFill: 'row',
-        slidesPerGroup: 1,
-        navigation: false,
-        pagination: {
-            el: '.instagram-swiper .swiper-pagination',
-            clickable: true,
-        },
-        breakpoints: {
-            300: {
-                slidesPerView: 2,
-                spaceBetween: 10
-            },
-            500: {
-                slidesPerView: 2,
-                spaceBetween: 10
-            },
-            640: {
-                slidesPerView: 3,
-                spaceBetween: 10
-            },
-            768: {
-                slidesPerView: 4,
-                spaceBetween: 20
-            },
-            1024: {
-                slidesPerView: 5,
-                spaceBetween: 20
-            },
-            1200: {
-                slidesPerView: 6,
-                spaceBetween: 20
-            }
-        }
-    });
-</script>
-</div>
-</div>
-</section>
-</section> --}}
 @endsection
 
 @section('js')
@@ -1598,71 +870,5 @@ data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
     }
 </style>
 
-{{--
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.addEventListener("click", function (event) {
-                // Kiểm tra nếu click vào phần tử hoặc icon bên trong nút giỏ hàng
-                const targetButton = event.target.closest(".add-to-cart");
-
-                if (!targetButton) {
-                    console.warn("⚠ Click không phải vào nút giỏ hàng.");
-                    return;
-                }
-
-                event.preventDefault(); // Ngăn trang reload nếu có
-
-                const productId = targetButton.getAttribute("data-product-id");
-
-                if (!productId) {
-                    console.error("❌ Lỗi: `data-product-id` không tồn tại hoặc bị null.");
-                    return;
-                }
-
-                console.log("✅ Đã nhấn vào nút giỏ hàng:", targetButton);
-                console.log("📌 Product ID:", productId);
-
-                // Kiểm tra xem thẻ CSRF token có tồn tại không
-                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfTokenElement) {
-                    console.error("❌ Lỗi: CSRF token không tìm thấy!");
-                    alert("❌ Lỗi bảo mật! Không thể thêm vào giỏ hàng.");
-                    return;
-                }
-
-                const csrfToken = csrfTokenElement.getAttribute("content");
-
-                // Gửi request thêm vào giỏ hàng
-                fetch("/add-to-cart", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({ product_id: productId })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("❌ Lỗi từ server: " + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("📌 Server response:", data);
-                        alert("✅ Sản phẩm đã được thêm vào giỏ hàng!");
-
-                        // Cập nhật số lượng giỏ hàng trên giao diện nếu có phần tử .cart-count
-                        const cartCountElement = document.querySelector(".cart-count");
-                        if (cartCountElement && data.totalItems !== undefined) {
-                            cartCountElement.textContent = data.totalItems;
-                        }
-                    })
-                    .catch(error => {
-                        console.error("❌ Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
-                        alert("❌ Đã xảy ra lỗi, vui lòng thử lại!");
-                    });
-            });
-        });
-    </script> --}}
 
 @endsection
