@@ -9,7 +9,8 @@
 <h1 class="d-none"> RAINBOW - STORE Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm
     2016, RAINBOW - STORE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng
     tích cực cho khách hàng.</h1>
-
+{{-- 
+<<<<<<< HEAD --}}
 <section class="awe-section-1">
     <div class="section_slider">
         <div class="home-slider swiper-container">
@@ -28,15 +29,54 @@
                                 class="img-responsive lazy" />
                         </picture>
                     </a>
+{{-- =======
+        <section class="awe-section-1">
+            <div class="section_slider">
+                <div class="home-slider swiper-container"> --}}
+                    <div class="swiper-wrapper">
+                        @foreach($banners as $banner)
+                            <div class="swiper-slide">
+                                <a href="{{ $banner->link ?? '#' }}" class="clearfix" title="{{ $banner->title }}" style="padding: 0ch">
+                                    <picture>
+                                        <source media="(min-width: 1200px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <source media="(min-width: 992px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <source media="(min-width: 569px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <source media="(max-width: 567px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <img width="1903" height="694"
+                                            src="{{ asset('storage/' . $banner->image) }}" 
+                                            alt="{{ $banner->title }}"
+                                            class="img-responsive lazy" />
+                                    </picture>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+>>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5
                 </div>
                 @endforeach
             </div>
+{{-- <<<<<<< HEAD --}}
             <div class="swiper-button-prev"></div>
             <div class="swiper-button-next"></div>
         </div>
     </div>
 </section>
 
+{{-- =======
+            <style>
+                .section_slider, .swiper-container, .swiper-wrapper {
+        margin: 0 auto;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+            </style>
+        </section>
+        
+>>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5  --}}
 
     <section class="awe-section-2">
         <section class="section_service">
@@ -958,98 +998,54 @@ alt="Lofi Style" />
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="block-product">
-                        <div class="product-new-swiper swiper-container">
-                            <div class="swiper-wrapper">
-                                @foreach($products as $product)
-                                <div class="swiper-slide">
-                                    <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}"
-                                        data-id="{{ $product->id }}">
-                                        <form action="{{ route('cart.add', $product->id) }}" method="post"
-                                            class="variants product-action wishItem" data-cart-form
-                                            data-id="product-actions-{{ $product->id }}" enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="product-thumbnail">
-                                                <a class="image_thumb" href="{{ route('productDetail', $product->id) }}"
-                                                    title="{{ $product->name }}">
-                                                    <div class="product-image">
-                                                        @php
-                                                        $images = explode(',', $product->image); // Tách ảnh thành mảng
-                                                        $firstImage = isset($images[0]) ? trim($images[0]) : null; // Lấy ảnh đầu tiên
-                                                        @endphp
-                                                        @if($firstImage)
-                                                        <img class="lazy img-responsive" width="300" height="300"
-                                                            src="{{ asset('storage/' . $firstImage) }}"
-                                                            alt="{{ $product->name }}" />
+                        <div class="row">
+                            @foreach($products as $product)
+                            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                                <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}" data-id="{{ $product->id }}">
+                                    <form action="{{ route('cart.add', $product->id) }}" method="post" class="variants product-action wishItem" data-cart-form enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="product-thumbnail">
+                                            <a class="image_thumb" href="{{ route('productDetail', $product->id) }}" title="{{ $product->name }}">
+                                                <div class="product-image">
+                                                    @php
+                                                    $images = explode(',', $product->image);
+                                                    $firstImage = isset($images[0]) ? trim($images[0]) : null;
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img class="img-fluid" src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}">
+                                                    @else
+                                                    <img class="img-fluid" src="{{ asset('images/no-image.png') }}" alt="Không có ảnh">
+                                                    @endif
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="product-info mt-2">
+                                            <h3 class="product-name">
+                                                <a href="{{ route('productDetail', $product->id) }}">{{ $product->name }}</a>
+                                            </h3>
+                                            <div class="price-box">
+                                                @if($product->discount_price && $product->discount_price < $product->price)
+                                                    <span class="price text-success font-weight-bold">{{ number_format($product->discount_price, 0, ',', '.') }}₫</span>
+                                                    <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                                                @else
+                                                    @php $variant = $product->variants->first(); @endphp
+                                                    @if($variant)
+                                                        @if($variant->discount_price && $variant->discount_price < $variant->price)
+                                                            <span class="price text-success font-weight-bold">{{ number_format($variant->discount_price, 0, ',', '.') }}₫</span>
+                                                            <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
                                                         @else
-                                                        <img class="lazy img-responsive" width="300" height="300"
-                                                            src="{{ asset('images/no-image.png') }}"
-                                                            alt="Không có ảnh" />
+                                                            <span class="price font-weight-bold">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
                                                         @endif
-                                                    </div>
-                                                </a>
-                                                <div class="action-cart">
-
-                                                    <a title="Xem nhanh"
-                                                        href="{{ route('productDetail', $product->id) }}"
-                                                        class="quick-view btn-views">
-                                                        🔍
-                                                    </a>
-                                                </div>
+                                                    @endif
+                                                @endif
                                             </div>
-                                            <div class="product-info">
-                                                <div class="lofi-product">
-                                                    <div class="product-type"></div>
-                                                </div>
-                                                <h3 class="product-name">
-                                                    <a href="{{ route('productDetail', $product->id) }}"
-                                                        title="{{ $product->name }}">
-                                                        {{ $product->name }}
-                                                    </a>
-                                                </h3>
-                                                <div class="bottom-action">
-                                                    <div class="price-box">
-                                                        @if($product->discount_price && $product->discount_price < $product->price)
-                                                            <span class="price text-success font-weight-bold">
-                                                                {{ number_format($product->discount_price, 0, ',', '.') }}₫
-                                                            </span>
-                                                            <span class="compare-price text-danger"
-                                                                style="text-decoration: line-through;">
-                                                                {{ number_format($product->price, 0, ',', '.') }}₫
-                                                            </span>
-                                                            @else
-                                                            @php
-                                                            $variant = $product->variants->first(); // Lấy một biến thể bất kỳ
-                                                            @endphp
-
-                                                            @if($variant)
-                                                            <div class="price-box">
-                                                                @if($variant->discount_price && $variant->discount_price < $variant->price)
-                                                                    <span class="price text-success font-weight-bold">
-                                                                        {{ number_format($variant->discount_price, 0, ',', '.') }}₫
-                                                                    </span>
-                                                                    <span class="compare-price text-danger"
-                                                                        style="text-decoration: line-through;">
-                                                                        {{ number_format($variant->price, 0, ',', '.') }}₫
-                                                                    </span>
-                                                                    @else
-                                                                    <span class="price font-weight-bold">
-                                                                        {{ number_format($variant->price, 0, ',', '.') }}₫
-                                                                    </span>
-                                                                    @endif
-                                                            </div>
-                                                            @endif
-
-                                                            @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                @endforeach
                             </div>
-                            <div class="swiper-pagination"></div>
+                            @endforeach
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -1162,94 +1158,7 @@ alt="Lofi Style" />
                         @endforeach
 
 
-                        {{-- <div class="swiper-slide">
-                                <div class="blogs-item">
-                                    <div class="post-image">
-                                        <a class="thumb" href="tu-tin-dien-ao-nhun-nguc-chuan-trend-2023.html"
-                                            title="Tự tin diện áo nhún ngực chuẩn trend 2023">
-                                            <img class="lazy" src="{{ asset('client/images/tin1.png') }}"
-                        data-src="{{ asset('client/images/tin1.png') }}"
-                        alt="Tự tin diện áo nhún ngực chuẩn trend 2023">
-                        </a>
-                    </div>
-                    <div class="post-body">
-                        <div class="time-post f">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="clock"
-                                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                class="svg-inline--fa fa-clock fa-w-16">
-                                <path fill="currentColor"
-                                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm216 248c0 118.7-96.1 216-216 216-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216zm-148.9 88.3l-81.2-59c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h14c6.6 0 12 5.4 12 12v146.3l70.5 51.3c5.4 3.9 6.5 11.4 2.6 16.8l-8.2 11.3c-3.9 5.3-11.4 6.5-16.8 2.6z"
-                                    class=""></path>
-                            </svg>
-                            Thứ Ba,
-                            28/02/2023
-                        </div>
-                        <div class="time-post">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user"
-                                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                                class="svg-inline--fa fa-user fa-w-14">
-                                <path fill="currentColor"
-                                    d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
-                                    class=""></path>
-                            </svg>
-                            <span>Rainbow - store</span>
-                        </div>
-                        <h3>
-                            <a href="tu-tin-dien-ao-nhun-nguc-chuan-trend-2023.html"
-                                title="Tự tin diện áo nhún ngực chuẩn trend 2023">Tự tin diện áo
-                                nhún ngực chuẩn trend 2023</a>
-                        </h3>
-
-                        <p class="justify">Thêm một lưu ý nữa, nàng nên cân nhắc chọn mẫu áo lót
-                            phù hợp khi mặc&nbsp;áo nhún ngực. Với một số mẫu&nbsp;áo nhún
-                            ngực&nbsp;mà...</p>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="blogs-item">
-                    <div class="post-image">
-                        <a class="thumb" href="tu-tin-dien-ao-nhun-nguc-chuan-trend-2023.html"
-                            title="Tự tin diện áo nhún ngực chuẩn trend 2023">
-                            <img class="lazy" src="{{ asset('client/images/tin1.png') }}"
-                                data-src="{{ asset('client/images/tin1.png') }}"
-                                alt="Tự tin diện áo nhún ngực chuẩn trend 2023">
-                        </a>
-                    </div>
-                    <div class="post-body">
-                        <div class="time-post f">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="clock"
-                                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                class="svg-inline--fa fa-clock fa-w-16">
-                                <path fill="currentColor"
-                                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm216 248c0 118.7-96.1 216-216 216-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216zm-148.9 88.3l-81.2-59c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h14c6.6 0 12 5.4 12 12v146.3l70.5 51.3c5.4 3.9 6.5 11.4 2.6 16.8l-8.2 11.3c-3.9 5.3-11.4 6.5-16.8 2.6z"
-                                    class=""></path>
-                            </svg>
-                            Thứ Ba,
-                            28/02/2023
-                        </div>
-                        <div class="time-post">
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user"
-                                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                                class="svg-inline--fa fa-user fa-w-14">
-                                <path fill="currentColor"
-                                    d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
-                                    class=""></path>
-                            </svg>
-                            <span>Rainbow - store</span>
-                        </div>
-                        <h3>
-                            <a href="tu-tin-dien-ao-nhun-nguc-chuan-trend-2023.html"
-                                title="Tự tin diện áo nhún ngực chuẩn trend 2023">Tự tin diện áo
-                                nhún ngực chuẩn trend 2023</a>
-                        </h3>
-
-                        <p class="justify">Thêm một lưu ý nữa, nàng nên cân nhắc chọn mẫu áo lót
-                            phù hợp khi mặc&nbsp;áo nhún ngực. Với một số mẫu&nbsp;áo nhún
-                            ngực&nbsp;mà...</p>
-                    </div>
-                </div>
-            </div> --}}
+        
         </div>
     </div>
     </div>

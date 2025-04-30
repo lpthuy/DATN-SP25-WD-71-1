@@ -283,7 +283,7 @@
 		</div>
 
 	</header>
-	<div class="header-menu">
+	{{-- <div class="header-menu">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-9 col-12 col-menu">
@@ -424,7 +424,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --}}
 	<div class="bodywrap">
 		<h1 class="d-none">Template Alena - </h1>
 
