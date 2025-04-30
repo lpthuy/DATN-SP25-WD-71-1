@@ -958,98 +958,54 @@ alt="Lofi Style" />
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="block-product">
-                        <div class="product-new-swiper swiper-container">
-                            <div class="swiper-wrapper">
-                                @foreach($products as $product)
-                                <div class="swiper-slide">
-                                    <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}"
-                                        data-id="{{ $product->id }}">
-                                        <form action="{{ route('cart.add', $product->id) }}" method="post"
-                                            class="variants product-action wishItem" data-cart-form
-                                            data-id="product-actions-{{ $product->id }}" enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="product-thumbnail">
-                                                <a class="image_thumb" href="{{ route('productDetail', $product->id) }}"
-                                                    title="{{ $product->name }}">
-                                                    <div class="product-image">
-                                                        @php
-                                                        $images = explode(',', $product->image); // Tách ảnh thành mảng
-                                                        $firstImage = isset($images[0]) ? trim($images[0]) : null; // Lấy ảnh đầu tiên
-                                                        @endphp
-                                                        @if($firstImage)
-                                                        <img class="lazy img-responsive" width="300" height="300"
-                                                            src="{{ asset('storage/' . $firstImage) }}"
-                                                            alt="{{ $product->name }}" />
+                        <div class="row">
+                            @foreach($products as $product)
+                            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                                <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}" data-id="{{ $product->id }}">
+                                    <form action="{{ route('cart.add', $product->id) }}" method="post" class="variants product-action wishItem" data-cart-form enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="product-thumbnail">
+                                            <a class="image_thumb" href="{{ route('productDetail', $product->id) }}" title="{{ $product->name }}">
+                                                <div class="product-image">
+                                                    @php
+                                                    $images = explode(',', $product->image);
+                                                    $firstImage = isset($images[0]) ? trim($images[0]) : null;
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img class="img-fluid" src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}">
+                                                    @else
+                                                    <img class="img-fluid" src="{{ asset('images/no-image.png') }}" alt="Không có ảnh">
+                                                    @endif
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="product-info mt-2">
+                                            <h3 class="product-name">
+                                                <a href="{{ route('productDetail', $product->id) }}">{{ $product->name }}</a>
+                                            </h3>
+                                            <div class="price-box">
+                                                @if($product->discount_price && $product->discount_price < $product->price)
+                                                    <span class="price text-success font-weight-bold">{{ number_format($product->discount_price, 0, ',', '.') }}₫</span>
+                                                    <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                                                @else
+                                                    @php $variant = $product->variants->first(); @endphp
+                                                    @if($variant)
+                                                        @if($variant->discount_price && $variant->discount_price < $variant->price)
+                                                            <span class="price text-success font-weight-bold">{{ number_format($variant->discount_price, 0, ',', '.') }}₫</span>
+                                                            <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
                                                         @else
-                                                        <img class="lazy img-responsive" width="300" height="300"
-                                                            src="{{ asset('images/no-image.png') }}"
-                                                            alt="Không có ảnh" />
+                                                            <span class="price font-weight-bold">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
                                                         @endif
-                                                    </div>
-                                                </a>
-                                                <div class="action-cart">
-
-                                                    <a title="Xem nhanh"
-                                                        href="{{ route('productDetail', $product->id) }}"
-                                                        class="quick-view btn-views">
-                                                        🔍
-                                                    </a>
-                                                </div>
+                                                    @endif
+                                                @endif
                                             </div>
-                                            <div class="product-info">
-                                                <div class="lofi-product">
-                                                    <div class="product-type"></div>
-                                                </div>
-                                                <h3 class="product-name">
-                                                    <a href="{{ route('productDetail', $product->id) }}"
-                                                        title="{{ $product->name }}">
-                                                        {{ $product->name }}
-                                                    </a>
-                                                </h3>
-                                                <div class="bottom-action">
-                                                    <div class="price-box">
-                                                        @if($product->discount_price && $product->discount_price < $product->price)
-                                                            <span class="price text-success font-weight-bold">
-                                                                {{ number_format($product->discount_price, 0, ',', '.') }}₫
-                                                            </span>
-                                                            <span class="compare-price text-danger"
-                                                                style="text-decoration: line-through;">
-                                                                {{ number_format($product->price, 0, ',', '.') }}₫
-                                                            </span>
-                                                            @else
-                                                            @php
-                                                            $variant = $product->variants->first(); // Lấy một biến thể bất kỳ
-                                                            @endphp
-
-                                                            @if($variant)
-                                                            <div class="price-box">
-                                                                @if($variant->discount_price && $variant->discount_price < $variant->price)
-                                                                    <span class="price text-success font-weight-bold">
-                                                                        {{ number_format($variant->discount_price, 0, ',', '.') }}₫
-                                                                    </span>
-                                                                    <span class="compare-price text-danger"
-                                                                        style="text-decoration: line-through;">
-                                                                        {{ number_format($variant->price, 0, ',', '.') }}₫
-                                                                    </span>
-                                                                    @else
-                                                                    <span class="price font-weight-bold">
-                                                                        {{ number_format($variant->price, 0, ',', '.') }}₫
-                                                                    </span>
-                                                                    @endif
-                                                            </div>
-                                                            @endif
-
-                                                            @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                @endforeach
                             </div>
-                            <div class="swiper-pagination"></div>
+                            @endforeach
                         </div>
+                        
                     </div>
                 </div>
             </div>
