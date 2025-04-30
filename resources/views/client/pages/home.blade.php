@@ -9,7 +9,8 @@
 <h1 class="d-none"> RAINBOW - STORE Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm
     2016, RAINBOW - STORE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng
     tích cực cho khách hàng.</h1>
-
+{{-- 
+<<<<<<< HEAD --}}
 <section class="awe-section-1">
     <div class="section_slider">
         <div class="home-slider swiper-container">
@@ -28,15 +29,54 @@
                                 class="img-responsive lazy" />
                         </picture>
                     </a>
+{{-- =======
+        <section class="awe-section-1">
+            <div class="section_slider">
+                <div class="home-slider swiper-container"> --}}
+                    <div class="swiper-wrapper">
+                        @foreach($banners as $banner)
+                            <div class="swiper-slide">
+                                <a href="{{ $banner->link ?? '#' }}" class="clearfix" title="{{ $banner->title }}" style="padding: 0ch">
+                                    <picture>
+                                        <source media="(min-width: 1200px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <source media="(min-width: 992px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <source media="(min-width: 569px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <source media="(max-width: 567px)" srcset="{{ asset('storage/' . $banner->image) }}">
+                                        <img width="1903" height="694"
+                                            src="{{ asset('storage/' . $banner->image) }}" 
+                                            alt="{{ $banner->title }}"
+                                            class="img-responsive lazy" />
+                                    </picture>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+>>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5
                 </div>
                 @endforeach
             </div>
+{{-- <<<<<<< HEAD --}}
             <div class="swiper-button-prev"></div>
             <div class="swiper-button-next"></div>
         </div>
     </div>
 </section>
 
+{{-- =======
+            <style>
+                .section_slider, .swiper-container, .swiper-wrapper {
+        margin: 0 auto;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+            </style>
+        </section>
+        
+>>>>>>> db879214b7adc6d06a10af2f2e2cdb5b878a60b5  --}}
 
     <section class="awe-section-2">
         <section class="section_service">
