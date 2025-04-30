@@ -945,7 +945,78 @@ alt="Lofi Style" />
 </div>
 </section> --}}
 
+<section class="awe-section-7">
+    <div class="section_product_new module_product">
+        <div class="container">
+            <div class="heading-home">
+                <div class="site-animation">
+                    <h2><a href="san-pham-moi.html" title="Sản phẩm mới">Sản phẩm mới</a></h2>
+                </div>
+            </div>
 
+
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="block-product">
+                        <div class="row">
+                            @foreach($products as $product)
+                            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                                <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}" data-id="{{ $product->id }}">
+                                    <form action="{{ route('cart.add', $product->id) }}" method="post" class="variants product-action wishItem" data-cart-form enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="product-thumbnail">
+                                            <a class="image_thumb" href="{{ route('productDetail', $product->id) }}" title="{{ $product->name }}">
+                                                <div class="product-image">
+                                                    @php
+                                                    $images = explode(',', $product->image);
+                                                    $firstImage = isset($images[0]) ? trim($images[0]) : null;
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img class="img-fluid" src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}">
+                                                    @else
+                                                    <img class="img-fluid" src="{{ asset('images/no-image.png') }}" alt="Không có ảnh">
+                                                    @endif
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="product-info mt-2">
+                                            <h3 class="product-name">
+                                                <a href="{{ route('productDetail', $product->id) }}">{{ $product->name }}</a>
+                                            </h3>
+                                            <div class="price-box">
+                                                @if($product->discount_price && $product->discount_price < $product->price)
+                                                    <span class="price text-success font-weight-bold">{{ number_format($product->discount_price, 0, ',', '.') }}₫</span>
+                                                    <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($product->price, 0, ',', '.') }}₫</span>
+                                                @else
+                                                    @php $variant = $product->variants->first(); @endphp
+                                                    @if($variant)
+                                                        @if($variant->discount_price && $variant->discount_price < $variant->price)
+                                                            <span class="price text-success font-weight-bold">{{ number_format($variant->discount_price, 0, ',', '.') }}₫</span>
+                                                            <span class="compare-price text-danger" style="text-decoration: line-through;">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
+                                                        @else
+                                                            <span class="price font-weight-bold">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    </div>
+    </div>
+</section>
 
 <section class="awe-section-8">
     <section class="section_feedback">
