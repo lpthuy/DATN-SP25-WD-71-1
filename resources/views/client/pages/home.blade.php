@@ -1502,7 +1502,7 @@ data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
 <script src="{{ asset('client/js/flashsale4d9c.js') }}" defer></script>
 <script>
     var swiperwish = new Swiper('.product-new-swiper', {
-        slidesPerView: 20,
+        slidesPerView: 4,
         loop: false,
         grabCursor: true,
         spaceBetween: 30,
