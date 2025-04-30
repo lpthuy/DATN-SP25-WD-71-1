@@ -12,7 +12,28 @@
                 <div class="col-md-6">
                     <h2 class="section-title">Chi tiết đơn hàng #{{ $order->order_code }}</h2>
                     <p><strong>Phương thức thanh toán:</strong> {{ strtoupper($order->payment_method) }}</p>
-                    <p><strong>Trạng thái:</strong> <span id="order-status">{{ ucfirst($order->status) }}</span></p>
+                    <p><strong>Trạng thái:</strong> 
+                        <span id="order-status-{{ $order->id }}">
+                            @if ($order->status === 'confirming')
+                                Đang xác nhận
+                            @elseif ($order->status === 'processing')
+                                Đang xử lý
+                            @elseif ($order->status === 'shipping')
+                                Đang giao hàng
+                            @elseif ($order->status === 'completed')
+                                Đã giao hàng
+                            @elseif ($order->status === 'received')
+                                Đã nhận hàng
+                            @elseif ($order->status === 'cancelled')
+                                Đã huỷ
+                            @elseif ($order->status === 'returning')
+                                Đã hoàn hàng
+                            @else
+                                {{ ucfirst($order->status) }}
+                            @endif
+                        </span>
+                    </p>
+                    
                     <p><strong>Ngày đặt hàng:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
 
                 </div>
