@@ -57,5 +57,31 @@ class OrdersController extends Controller
     }
 
     // Xem chi tiết một đơn hàng
+    public function show($id)
+    {
+        $order = Order::with('user')->findOrFail($id); // Tìm đơn hàng + user liên quan
+        $items = OrderItem::where('order_id', $id)->get(); // Lấy danh sách sản phẩm
+        return view('admin.orders.show', compact('order', 'items'));
+    }
 
+    // Cập nhật trạng thái đơn hàng
+    public function updateStatus(Request $request, $id)
+    {
+        // Validate dữ liệu gửi lên
+        $request->validate([
+            'status' => 'required|string|max:50'
+        ]);
+
+        $order = Order::findOrFail($id); // Tìm đơn hàng
+        $order->status = $request->status; // Cập nhật trạng thái
+
+        // Nếu trạng thái là "completed" mà chưa có ngày giao hàng thì set delivered_at
+        if ($request->status === 'completed' && !$order->delivered_at) {
+            $order->delivered_at = now();
+        }
+
+        $order->save(); // Lưu thay đổi
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+    }
 }
