@@ -38,7 +38,7 @@
         </div>
 
         <div class="form-group">
-            <label for="usage_limit">Giới Hạn Sử Dụng</label>
+            <label for="usage_limit">số lượng</label>
             <input type="number" class="form-control" name="usage_limit" id="usage_limit" value="{{ old('usage_limit', $promotion->usage_limit) }}">
             @error('usage_limit')
             <small class="text-danger">{{ $message }}</small>
