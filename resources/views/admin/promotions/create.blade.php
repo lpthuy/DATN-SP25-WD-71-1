@@ -1,8 +1,11 @@
 @extends('adminlte::page')
 @section('title', 'Tạo Khuyến Mãi Mới')
 @section('content_header')
+    <h1 class="text-center font-weight-bold text-primary">Tạo Khuyến Mãi Mới</h1>
+@endsection
+@section('content')
 <div class="container">
-    <h1 class="mt-4">Tạo Khuyến Mãi Mới</h1>
+   
     <form action="{{ route('promotions.store') }}" method="POST">
         @csrf
         <div class="form-group">
@@ -34,7 +37,7 @@
         </div>
 
         <div class="form-group">
-            <label for="usage_limit">Giới Hạn Sử Dụng</label>
+            <label for="usage_limit">số lượng</label>
             <input type="number" class="form-control" name="usage_limit" id="usage_limit" placeholder="Nhập số lần sử dụng" value="{{ old('usage_limit') }}">
             @error('usage_limit')
                 <small class="text-danger">{{ $message }}</small>
