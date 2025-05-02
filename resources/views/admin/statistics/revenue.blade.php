@@ -229,7 +229,10 @@
                                             @foreach($productStats['top_seller'] as $product)
                                                 <tr>
                                                     <td>{{ $product->name }}</td>
-                                                    <td>{{ $product->total_sold }} SP</td>
+                                                    <td style="font-size: 16px; font-weight: bold; color: #4caf50; text-align: center; background-color: #e8f5e9; padding: 8px; border-radius: 5px;">
+                                                        {{ $product->total_sold }} SP
+                                                    </td>
+                                                    
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -291,7 +294,11 @@
                                             @foreach($productStats['least_seller'] as $product)
                                                 <tr>
                                                     <td>{{ $product->name }}</td>
-                                                    <td>{{ $product->total_sold }} SP</td>
+                                                    
+                                                    <td>
+                                                        <span class="total-sold">{{ number_format($product->total_sold) }} <i class="fa fa-cube" aria-hidden="true"></i> SP</span>
+                                                    </td>
+                                                    
                                                 </tr>
                                             @endforeach
                                         </tbody>
