@@ -217,13 +217,27 @@
                             @if($productStats['top_seller']->isEmpty())
                                 <p>Không có dữ liệu.</p>
                             @else
-                            <ol>
-                                @foreach($productStats['top_seller'] as $product)
-                                    <li>{{ $product->name }} (Đã bán: {{ $product->total_sold }} SP)</li>
-                                @endforeach
-                            </ol>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Đã bán</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($productStats['top_seller'] as $product)
+                                                <tr>
+                                                    <td>{{ $product->name }}</td>
+                                                    <td>{{ $product->total_sold }} SP</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             @endif
                         </div>
+                        
                         <div class="tab-pane fade" id="low-stock" role="tabpanel" aria-labelledby="low-stock-tab">
                             @if($productStats['low_stock']->isEmpty())
                                 <p><strong>Sắp hết hàng:</strong> Không có dữ liệu.</p>
@@ -265,13 +279,27 @@
                             @if($productStats['least_seller']->isEmpty())
                                 <p>Không có dữ liệu.</p>
                             @else
-                            <ol>
-                                @foreach($productStats['least_seller'] as $product)
-                                    <li>{{ $product->name }} – Đã bán: {{ $product->total_sold }}</li>
-                                @endforeach
-                            </ol>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Đã bán</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($productStats['least_seller'] as $product)
+                                                <tr>
+                                                    <td>{{ $product->name }}</td>
+                                                    <td>{{ $product->total_sold }} SP</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             @endif
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -283,19 +311,55 @@
                 <div class="card-header bg-info text-white fw-bold">4. Khách hàng</div>
                 <div class="card-body">
                     <p><strong>Khách hàng mới hôm nay:</strong> {{ $customerStats['new_today'] }}</p>
+
                     <p><strong>Top 3 khách hàng mua nhiều nhất:</strong></p>
-                    <ol>
-                        @foreach($customerStats['top_buyers'] as $buyer)
-                            <li>{{ $buyer->name }} - {{ number_format($buyer->total_spent) }}đ</li>
-                        @endforeach
-                    </ol>
-                    
-                    <p><strong>Top 3 khách hàng trung thành nhất:</strong></p>
-                    <ol>
-                        @foreach($customerStats['loyal_customers'] as $loyal)
-                            <li>{{ $loyal->name }} - {{ $loyal->orders_count }} đơn hàng</li>
-                        @endforeach
-                    </ol>
+                        @if($customerStats['top_buyers']->isEmpty())
+                            <p>Không có dữ liệu.</p>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Tên khách hàng</th>
+                                            <th>Doanh thu (VNĐ)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($customerStats['top_buyers'] as $buyer)
+                                            <tr>
+                                                <td>{{ $buyer->name }}</td>
+                                                <td>{{ number_format($buyer->total_spent) }} đ</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+
+                        <p><strong>Top 3 khách hàng trung thành nhất:</strong></p>
+                        @if($customerStats['loyal_customers']->isEmpty())
+                            <p>Không có dữ liệu.</p>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Tên khách hàng</th>
+                                            <th>Số đơn hàng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($customerStats['loyal_customers'] as $loyal)
+                                            <tr>
+                                                <td>{{ $loyal->name }}</td>
+                                                <td>{{ $loyal->orders_count }} đơn</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                        
                     
                 </div>
             </div>
