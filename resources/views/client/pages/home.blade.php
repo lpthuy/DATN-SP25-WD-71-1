@@ -173,7 +173,7 @@
                                                 Quà tặng hấp dẫn
                                             </h3>
                                             <p>
-                                                Chương trình khuyến mãi cực lớn và hấp dẫn hàng tháng
+                                                Hàng loạt voucher siêu hấp dẫn 
                                             </p>
                                         </div>
                                     </div>
@@ -1107,7 +1107,7 @@ alt="Lofi Style" />
                                     </div>
                                     <div class="time-post">
                                         <svg><!-- user icon SVG --></svg>
-                                        <span>{{ $post->author ?? 'Team Lofi' }}</span>
+                                        <span>{{ $post->author ?? '' }}</span>
                                     </div>
                                     <h3>
                                         <a href="{{ route('showpost', $post) }}" title="{{ $post->title }}">{{ $post->title }}</a>
