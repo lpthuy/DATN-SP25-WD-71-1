@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'RAINBOW',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -64,8 +64,8 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>RAINBOW</b>STORE',
+    'logo_img' => 'client/images/rainbow.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -310,9 +310,9 @@ return [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-           // Quản lý Danh mục
-      
-           [
+        // Quản lý Danh mục
+
+        [
             'text'    => 'Quản lý Danh mục',
             'icon'    => 'fas fa-list',
             'submenu' => [
@@ -328,8 +328,8 @@ return [
                 ],
             ],
         ],
-        
-     
+
+
         // Quản lý Sản phẩm
         [
             'text'    => 'Quản lý Sản phẩm',
@@ -347,26 +347,26 @@ return [
                 ],
             ],
         ],
-               // Quản lý Đơn hàng
-    
-               [
-                'text'    => 'Quản lý Đơn hàng',
-                'icon'    => 'fas fa-shopping-cart',
-                'submenu' => [
-                    [
-                        'text' => 'Danh sách đơn hàng',
-                        'url'  => 'admin/orders',
-                        'icon' => 'fas fa-list',
-                    ],
+        // Quản lý Đơn hàng
+
+        [
+            'text'    => 'Quản lý Đơn hàng',
+            'icon'    => 'fas fa-shopping-cart',
+            'submenu' => [
+                [
+                    'text' => 'Danh sách đơn hàng',
+                    'url'  => 'admin/orders',
+                    'icon' => 'fas fa-list',
                 ],
             ],
-    
+        ],
 
 
 
-       
+
+
         //quản lý khuyễn mãi
-       
+
         [
             'text'    => 'Quản lý Khuyến mãi',
             'icon'    => 'fas fa-tags',
@@ -423,7 +423,7 @@ return [
                 ],
             ],
         ],
-        
+
         // Quản lý Size & Color
 
         [

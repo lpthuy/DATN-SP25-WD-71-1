@@ -80,7 +80,7 @@
                     <div class="product-detail-left product-images col-12 col-md-12 col-lg-6 col-left">
                         <div class="product-image-block relative">
                             <!-- Ảnh lớn - Dạng slider -->
-                            <div class="swiper-container gallery-top">
+                            <div class="swiper-container gallery-top ">
                                 <div class="swiper-wrapper" id="lightgallery">
                                     @foreach($images as $index => $image)
                                         @php
@@ -119,8 +119,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="details-pro col-12 col-md-12 col-lg-6 col-center">
                         <div class="title-product">
@@ -352,16 +350,11 @@
 
 
                                     <div class="ba-text-fpt">
-                                        <p><b>RAINBOW STORE&nbsp;</b>- Thương hiệu thời trang của người trẻ hiện
-                                            đại! Ra đời vào năm 2024, Rainbow - store&nbsp;luôn nỗ lực với sứ mệnh tạo
-                                            nên xu hướng thời trang mang đến sự tin tưởng&nbsp;và năng lượng
-                                            tích cực cho khách hàng.&nbsp;<b>RAINBOW STORE&nbsp;</b>mang hơi thở
-                                            của thời trang&nbsp;<strong><em>HIỆN ĐẠI, TRẺ TRUNG, PHÓNG
-                                                    KHOÁNG</em></strong>&nbsp;với những mẫu thiết kế bắt nhịp xu
-                                            hướng thịnh hành và có tính ứng dụng cao trong mọi hoàn cảnh.</p>
-                                        <p>&nbsp;</p>
+                                        <p><strong>🚚 Miễn phí giao hàng toàn quốc cho đơn hàng từ 300.000đ!</strong></p>
+
                                         <p><em><strong>HÃY ĐẾN&nbsp;</strong><b>RAINBOW STORE</b><strong>&nbsp;ĐỂ
                                                     TRẢI NGHIỆM SỰ KHÁC BIỆT!</strong></em></p>
+                                       
                                     </div>
 
                                 </div>
@@ -1294,6 +1287,7 @@ function placeOrder(productId, productName, colorId, sizeId, quantity, price, pa
         gap: 10px;
         margin-top: 10px;
     }
+
 
     .payment-option {
         font-weight: bold;

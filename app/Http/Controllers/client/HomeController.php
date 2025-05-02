@@ -133,6 +133,11 @@ class HomeController extends Controller
 
         // Truyền biến category để tương thích với view
         $category = null;
+if ($request->filled('category_id')) {
+    $category = Category::find($request->category_id);
+}
+
+
 
         return view('client.pages.product-by-category', compact('products', 'promotions', 'categories', 'category'));
     }
@@ -328,6 +333,14 @@ class HomeController extends Controller
     public function chinhSachGiaoHang()
     {
         return view('client.pages.chinh-sach-giao-hang');
+    }
+    public function chinhSachDoiTraDoiTra()
+    {
+        return view('client.pages.chinh-sach-doi-tra');
+    }
+    public function ChinhSachBanHang()
+    {
+        return view('client.pages.chinh-sach-ban-hang');
     }
 
     public function login()

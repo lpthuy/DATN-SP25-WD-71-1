@@ -110,11 +110,13 @@ class RevenueStatisticsController extends Controller
         $revenueStats['chart_data'] = $dateLabels->merge($chartQuery)->toArray();
 
         // Thống kê sản phẩm
+       // Thống kê sản phẩm
         $productStats = [
             'top_seller' => Product::select('products.name', DB::raw('SUM(order_items.quantity) as total_sold'))
                 ->join('order_items', 'products.id', '=', 'order_items.product_id')
                 ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->whereIn('orders.status', $includedStatuses)
+                ->whereIn('orders.status', $selectedStatus === 'all' ? $includedStatuses : [$selectedStatus])
+                ->whereBetween('orders.created_at', [$startDate, $endDate])
                 ->groupBy('products.id', 'products.name')
                 ->orderByDesc('total_sold')
                 ->limit(10)
@@ -124,8 +126,18 @@ class RevenueStatisticsController extends Controller
 
             'least_seller' => Product::leftJoin('order_items', 'products.id', '=', 'order_items.product_id')
                 ->leftJoin('orders', 'order_items.order_id', '=', 'orders.id')
-                ->where(function ($q) use ($includedStatuses) {
-                    $q->whereNull('orders.status')->orWhereIn('orders.status', $includedStatuses);
+                ->where(function ($q) use ($selectedStatus, $includedStatuses, $startDate, $endDate) {
+                    $q->whereNull('orders.status');
+
+                    if ($selectedStatus === 'all') {
+                        $q->orWhereIn('orders.status', $includedStatuses);
+                    } else {
+                        $q->orWhere('orders.status', $selectedStatus);
+                    }
+                })
+                ->where(function ($q) use ($startDate, $endDate) {
+                    $q->whereBetween('orders.created_at', [$startDate, $endDate])
+                    ->orWhereNull('orders.created_at');
                 })
                 ->select('products.*', DB::raw('COALESCE(SUM(order_items.quantity), 0) as total_sold'))
                 ->groupBy('products.id', 'products.name')
@@ -134,30 +146,42 @@ class RevenueStatisticsController extends Controller
                 ->get(),
         ];
 
+
         // Thống kê khách hàng
         $customerStats = [
             'new_today' => User::whereDate('created_at', Carbon::today())->count(),
-
-            'top_buyers' => User::withCount(['orders as total_spent' => function ($q) use ($startDate, $endDate, $includedStatuses) {
-                $q->whereIn('status', $includedStatuses)
-                  ->whereBetween('created_at', [$startDate, $endDate])
-                  ->select(DB::raw("SUM((SELECT SUM(quantity * price) FROM order_items WHERE order_id = orders.id))"));
+        
+            'top_buyers' => User::withCount(['orders as total_spent' => function ($q) use ($startDate, $endDate, $selectedStatus, $includedStatuses) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+        
+                if ($selectedStatus === 'all') {
+                    $q->whereIn('status', $includedStatuses);
+                } else {
+                    $q->where('status', $selectedStatus);
+                }
+        
+                $q->select(DB::raw("SUM((SELECT SUM(quantity * price) FROM order_items WHERE order_id = orders.id))"));
             }])
             ->having('total_spent', '>', 0)
             ->orderByDesc('total_spent')
             ->limit(3)
             ->get(),
-
-            'loyal_customers' => User::withCount(['orders' => function ($q) use ($startDate, $endDate, $includedStatuses) {
-                $q->whereIn('status', $includedStatuses)
-                  ->whereBetween('created_at', [$startDate, $endDate]);
+        
+            'loyal_customers' => User::withCount(['orders' => function ($q) use ($startDate, $endDate, $selectedStatus, $includedStatuses) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+        
+                if ($selectedStatus === 'all') {
+                    $q->whereIn('status', $includedStatuses);
+                } else {
+                    $q->where('status', $selectedStatus);
+                }
             }])
             ->having('orders_count', '>', 0)
             ->orderByDesc('orders_count')
             ->limit(3)
             ->get(),
         ];
-
+        
         return view('admin.statistics.revenue', compact(
             'orderStats',
             'revenueStats',
