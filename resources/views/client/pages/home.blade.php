@@ -329,6 +329,166 @@
 </section>
 
 
+<section class="awe-section-6">
+    <div class="section_product_new module_product">
+        <div class="container">
+            <div class="heading-home">
+                <div class="site-animation">
+                    <h2><a class="nav-link caret-down" href="{{ route('products.all') }}" title="Sản phẩm">Sản phẩm</a></h2>
+                </div>
+            </div>
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="block-product">
+                    <div class="product-new-swiper swiper-container">
+                        <div class="swiper-wrapper">
+                            @foreach($products as $product)
+                            <div class="swiper-slide">
+                                <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}"
+                                    data-id="{{ $product->id }}">
+                                    <form action="{{ route('cart.add', $product->id) }}" method="post"
+                                        class="variants product-action wishItem" data-cart-form
+                                        data-id="product-actions-{{ $product->id }}" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="product-thumbnail">
+                                            <a class="image_thumb" href="{{ route('productDetail', $product->id) }}"
+                                                title="{{ $product->name }}">
+                                                <div class="product-image">
+                                                    @php
+                                                    $images = explode(',', $product->image); // Tách ảnh thành mảng
+                                                    $firstImage = isset($images[0]) ? trim($images[0]) : null; // Lấy ảnh đầu tiên
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img class="lazy img-responsive" width="300" height="300"
+                                                        src="{{ asset('storage/' . $firstImage) }}"
+                                                        alt="{{ $product->name }}" />
+                                                    @else
+                                                    <img class="lazy img-responsive" width="300" height="300"
+                                                        src="{{ asset('images/no-image.png') }}"
+                                                        alt="Không có ảnh" />
+                                                    @endif
+                                                </div>
+                                            </a>
+                                            <div class="action-cart">
+
+                                                <a title="Xem nhanh"
+                                                    href="{{ route('productDetail', $product->id) }}"
+                                                    class="quick-view btn-views">
+                                                    🔍
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="product-info">
+                                            <div class="lofi-product">
+                                                <div class="product-type"></div>
+                                            </div>
+                                            <h3 class="product-name">
+                                                <a href="{{ route('productDetail', $product->id) }}"
+                                                    title="{{ $product->name }}">
+                                                    {{ $product->name }}
+                                                </a>
+                                            </h3>
+                                            <div class="bottom-action">
+                                                <div class="price-box">
+                                                    @if($product->discount_price && $product->discount_price < $product->price)
+                                                        <span class="price text-success font-weight-bold">
+                                                            {{ number_format($product->discount_price, 0, ',', '.') }}₫
+                                                        </span>
+                                                        <span class="compare-price text-danger"
+                                                            style="text-decoration: line-through;">
+                                                            {{ number_format($product->price, 0, ',', '.') }}₫
+                                                        </span>
+                                                        @else
+                                                        @php
+                                                        $variant = $product->variants->first(); // Lấy một biến thể bất kỳ
+                                                        @endphp
+
+                                                        @if($variant)
+                                                        <div class="price-box">
+                                                            @if($variant->discount_price && $variant->discount_price < $variant->price)
+                                                                <span class="price text-success font-weight-bold">
+                                                                    {{ number_format($variant->discount_price, 0, ',', '.') }}₫
+                                                                </span>
+                                                                <span class="compare-price text-danger"
+                                                                    style="text-decoration: line-through;">
+                                                                    {{ number_format($variant->price, 0, ',', '.') }}₫
+                                                                </span>
+                                                                @else
+                                                                <span class="price font-weight-bold">
+                                                                    {{ number_format($variant->price, 0, ',', '.') }}₫
+                                                                </span>
+                                                                @endif
+                                                        </div>
+                                                        @endif
+
+                                                        @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<script>
+    var swiperwish = new Swiper('.product-new-swiper', {
+        slidesPerView: 4,
+        loop: false,
+        grabCursor: true,
+        spaceBetween: 30,
+        slidesPerColumn: 1,
+        slidesPerColumnFill: 'row',
+        roundLengths: true,
+        slideToClickedSlide: false,
+        navigation: {
+            nextEl: '.product-new-swiper .swiper-button-next',
+            prevEl: '.product-new-swiper .swiper-button-prev',
+        },
+        pagination: {
+            el: '.product-new-swiper .swiper-pagination',
+            clickable: true,
+        },
+        autoplay: false,
+        breakpoints: {
+            300: {
+                slidesPerView: 2,
+                spaceBetween: 10
+            },
+            500: {
+                slidesPerView: 2,
+                spaceBetween: 10
+            },
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 20
+            },
+            991: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            },
+            1200: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            }
+        }
+    });
+</script>
+
+
+
+
+
 <section class="awe-section-7">
     <div class="section_product_new module_product">
         <div class="container">
@@ -391,7 +551,7 @@
                         
                     </div>
                 </div>
-            </div>
+            </div>  
 
 
             <div class="swiper-pagination"></div>
@@ -526,6 +686,53 @@
             nextEl: '.home-slider .swiper-button-next',
             prevEl: '.home-slider .swiper-button-prev',
         },
+    });
+</script>
+<script>
+    var swiperwish = new Swiper('.product-new-swiper', {
+        slidesPerView: 4,
+        loop: false,
+        grabCursor: true,
+        spaceBetween: 30,
+        slidesPerColumn: 2,
+        slidesPerColumnFill: 'row',
+        roundLengths: true,
+        slideToClickedSlide: false,
+        navigation: {
+            nextEl: '.product-new-swiper .swiper-button-next',
+            prevEl: '.product-new-swiper .swiper-button-prev',
+        },
+        pagination: {
+            el: '.product-new-swiper .swiper-pagination',
+            clickable: true,
+        },
+        autoplay: false,
+        breakpoints: {
+            300: {
+                slidesPerView: 2,
+                spaceBetween: 10
+            },
+            500: {
+                slidesPerView: 2,
+                spaceBetween: 10
+            },
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 20
+            },
+            991: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            },
+            1200: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            }
+        }
     });
 </script>
 
@@ -783,6 +990,29 @@
         }
     });
 </script>
+<script>
+    var swiper = new Swiper('.product-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        pagination: {
+            el: '.product-swiper .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.product-swiper .swiper-button-next',
+            prevEl: '.product-swiper .swiper-button-prev',
+        },
+        breakpoints: {
+            768: {
+                slidesPerView: 1
+            },
+            1024: {
+                slidesPerView: 1
+            }
+        }
+    });
+</script>
+
 <style>
     .product-thumbnail img {
         display: block;
