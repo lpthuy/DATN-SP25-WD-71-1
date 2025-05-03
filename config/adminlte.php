@@ -328,6 +328,25 @@ return [
                 ],
             ],
         ],
+        
+        // Quản lý User
+
+        [
+            'text'    => 'Quản lý User',
+            'icon'    => 'fas fa-users',
+            'submenu' => [
+                [
+                    'text' => 'Danh sách User',
+                    'url'  => 'admin/user',
+                    'icon' => 'fas fa-user-friends',
+                ],
+                [
+                    'text' => 'Thêm User',
+                    'url'  => 'admin/user/create',
+                    'icon' => 'fas fa-user-plus',
+                ],
+            ],
+        ],
 
 
         // Quản lý Sản phẩm
