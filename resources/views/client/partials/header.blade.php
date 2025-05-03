@@ -64,7 +64,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-2 col-2 header-upper-menu-mobile">
                             <div class="header-action-toggle" id="site-menu-handle">
-                                <img width="64" height="64" src="{{ asset('client/images/rainbow') }}" alt="Lofi Style">
+                                <img width="64" height="64" src="{{ asset('client/images/menu4d9c.png') }}" alt="Rainbow">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-8 col-6 header-logo">
@@ -102,7 +102,7 @@
                         <div class="col-lg-8 header-mid">
                             <div class="header-menu-des">
                                 <div class="close-menu d-lg-none d-block">
-                                    <img width="25" height="25" src="{{ asset('client/images/close4d9c.png') }}" alt="Lofi Style">
+                                    <img width="25" height="25" src="{{ asset('client/images/menu4d9c.png') }}" alt="Rainbow-Store">
                                 </div>
                                 <div id="main-nav-menu">
                                     <ul class="menuList-main">
