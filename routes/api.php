@@ -64,8 +64,9 @@ Route::middleware(['auth:sanctum', 'shipper'])->group(function () {
     Route::put('/shipper/orders/{id}/status', [OrderController::class, 'updateStatus']);
     Route::put('/shipper/orders/{id}/paid', [OrderController::class, 'markAsPaid']);
     Route::get('/shipper/orders/{id}', [OrderController::class, 'show']);
-
 });
+
+Route::middleware(['auth:sanctum', 'shipper'])->get('/shipper/orders/code/{order_code}', [OrderController::class, 'getOrderByCode']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
