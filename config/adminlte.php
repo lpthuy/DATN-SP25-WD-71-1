@@ -328,7 +328,7 @@ return [
                 ],
             ],
         ],
-        
+
         // Quản lý User
 
         [
@@ -339,11 +339,6 @@ return [
                     'text' => 'Danh sách User',
                     'url'  => 'admin/user',
                     'icon' => 'fas fa-user-friends',
-                ],
-                [
-                    'text' => 'Thêm User',
-                    'url'  => 'admin/user/create',
-                    'icon' => 'fas fa-user-plus',
                 ],
             ],
         ],

@@ -47,6 +47,6 @@ class UserController extends Controller
         $user->is_active = !$user->is_active;
         $user->save();
         $status = $user->is_active ? 'kích hoạt' : 'ẩn';
-        return redirect()->route('admin.users.index')->with('success', "Tài khoản đã được $status");
+        return redirect()->route('user.index')->with('success', "Tài khoản đã được $status");
     }
 }

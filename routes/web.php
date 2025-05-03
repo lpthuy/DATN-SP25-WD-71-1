@@ -271,6 +271,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::resource('posts', PostController::class);
     Route::resource('user', UserController::class);
+    Route::patch('user/{id}/toggle-active', [UserController::class, 'toggleActive'])->name('user.toggleActive');
 
 
     //battat bai vietviet
