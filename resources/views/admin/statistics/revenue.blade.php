@@ -176,12 +176,12 @@
         <!-- Thống kê doanh thu - lợi nhuận -->
         <div class="col-md-6">
             <div class="card shadow h-100">
-                <div class="card-header bg-success text-white fw-bold">2. Doanh thu & Lợi nhuận</div>
+                <div class="card-header bg-success text-white fw-bold">2. Doanh thu</div>
                 <div class="card-body">
                     <p><strong>Doanh thu hôm nay:</strong> {{ number_format($revenueStats['today'], 0, ',', '.') }} VNĐ</p>
                     <p><strong>Doanh thu tổng (Theo lọc):</strong> {{ number_format($revenueStats['month'], 0, ',', '.') }} VNĐ</p>
                     {{-- <p><strong>Lợi nhuận:</strong> {{ number_format($revenueStats['profit'], 0, ',', '.') }} VNĐ</p> --}}
-                    <p><strong>Top ngày doanh thu cao nhất:</strong> {{ $revenueStats['top_day'] }}</p>
+                    {{-- <p><strong>Top ngày doanh thu cao nhất:</strong> {{ $revenueStats['top_day'] }}</p> --}}
                     <canvas id="revenueChart" height="200"></canvas>
                 </div>
             </div>
