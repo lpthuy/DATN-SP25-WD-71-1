@@ -35,8 +35,6 @@
                             </div>
                             <div class="layered-category">
                                 <ul class="menuList-links">
-                                    {{-- @section('title', $category->name ?? 'Tất cả sản phẩm') --}}
-
                                     @foreach ($categories as $category)
                                     <li>
                                         <label>
@@ -115,9 +113,9 @@
                         <!-- Lọc màu sắc -->
                         <div class="group-menu">
                             <div class="collection_title title_block">
-                                <h2 class="toggle-title">Màu sắc</h2> <!-- Thêm class cho phần tiêu đề -->
+                                <h2>Màu sắc</h2>
                             </div>
-                            <div class="layered-color" style="display: none;">
+                            <div class="layered-color">
                                 @php
                                 $colors = \App\Models\Color::all();
                                 @endphp
@@ -137,27 +135,6 @@
                                 </ul>
                             </div>
                         </div>
-                        
-                        <!-- Đặt script cuối cùng để xử lý sự kiện click -->
-                        <script>
-                            // Kiểm tra và áp dụng trạng thái từ localStorage khi trang tải lại
-                            if (localStorage.getItem('colorMenuState') === 'open') {
-                                document.querySelector('.layered-color').style.display = 'block';
-                            }
-                        
-                            // Xử lý sự kiện click vào tiêu đề "Màu sắc"
-                            document.querySelector('.toggle-title').addEventListener('click', function () {
-                                const colorList = this.closest('.group-menu').querySelector('.layered-color');
-                                const isOpen = colorList.style.display === 'block';
-                        
-                                // Cập nhật trạng thái mở/đóng vào localStorage
-                                localStorage.setItem('colorMenuState', isOpen ? 'closed' : 'open');
-                        
-                                // Chuyển đổi trạng thái hiển thị
-                                colorList.style.display = isOpen ? 'none' : 'block';
-                            });
-                        </script>
-                        
 
                         <!-- Lọc kích thước -->
                         <div class="group-menu">
@@ -311,26 +288,7 @@
     font-weight: 500;
     display: inline-block;
     margin-bottom: 6px;
-}/* Nút gập/mở */
-.toggle-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 16px;
 }
-
-.layered-color {
-    display: none; /* Ẩn mặc định */
-    margin-top: 10px;
-}
-
-/* Nút gập mở */
-.group-menu.open .layered-color {
-    display: block;
-}
-
 </style>
 
 @endsection

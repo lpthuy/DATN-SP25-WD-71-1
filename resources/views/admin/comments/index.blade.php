@@ -38,9 +38,14 @@
             <tr>
                 <td>{{ $comment->id }}</td>
                 <td>
-                    {{ $comment->user->name ?? $comment->name }}
+                    @if ($comment->user_id)
+                        <span class="badge badge-info">Đã đăng nhập</span> 
+                        {{ optional($comment->user)->name }}
+                    @else
+                        <span class="badge badge-secondary">Chưa đăng nhập</span> 
+                        {{ $comment->name ?? 'Khách' }}
+                    @endif
                 </td>
-                
                 <td>{{ $comment->user->email ?? $comment->email ?? 'Không có' }}</td>
                 <td>{{ $comment->content }}</td>
                 <td>

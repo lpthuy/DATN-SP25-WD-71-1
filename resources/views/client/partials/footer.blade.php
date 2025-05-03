@@ -119,15 +119,15 @@
                             </h4>
                             <div class="footer-menu toggle-mn">
 
-                                <a href="{{ route('home') }}" title="Trang chủ" rel="nofollow">Trang chủ</a>
+                                <a href="index.html" title="Trang chủ" rel="nofollow">Trang chủ</a>
 
-                                <a href="{{ route('about') }}" title="Giới thiệu" rel="nofollow">Giới thiệu</a>
+                                <a href="gioi-thieu.html" title="Giới thiệu" rel="nofollow">Giới thiệu</a>
 
-                                <a href="{{ route('products.all') }}" title="Sản phẩm" rel="nofollow">Sản phẩm</a>
+                                <a href="collections/all.html" title="Sản phẩm" rel="nofollow">Sản phẩm</a>
 
-                                <a href="{{ route('post') }}" title="Tin tức" rel="nofollow">Tin tức</a>
+                                <a href="tin-tuc.html" title="Tin tức" rel="nofollow">Tin tức</a>
 
-                                <a href="{{ route('contact') }}" title="Liên hệ" rel="nofollow">Liên hệ</a>
+                                <a href="lien-he.html" title="Liên hệ" rel="nofollow">Liên hệ</a>
 
                             </div>
                         </div>
@@ -144,16 +144,16 @@
                             </h4>
                             <div class="footer-menu toggle-mn">
 
-                                {{-- <a href="{{ route('order') }}" title="Đơn hàng" rel="nofollow">Đơn
-                                    hàng</a> --}}
+                                <a href="{{ route('checkOrder') }}" title="Đơn hàng" rel="nofollow">Đơn
+                                    hàng</a>
 
                                 <a href="{{ route('chinhSachGiaoHang') }}" title="Chính sách giao hàng"
                                     rel="nofollow">Chính sách giao hàng</a>
 
-                                <a href="{{ route('chinhSachDoiTraDoiTra') }}" title="Chính sách đổi trả"
+                                <a href="chinh-sach-doi-tra.html" title="Chính sách đổi trả"
                                     rel="nofollow">Chính sách đổi trả</a>
 
-                                <a href="{{ route('ChinhSachBanHang') }}" title="Chính sách bán hàng"
+                                <a href="chinh-sach-ban-hang.html" title="Chính sách bán hàng"
                                     rel="nofollow">Chính sách bán hàng</a>
 
                             </div>
@@ -214,25 +214,14 @@
                                 <span class="opacity1">
                                     Cung cấp bởi
 
-                                    <a href="{{ route('home') }}" class="logo" title="Logo">
-                                        <img src="{{ asset('client/images/rainbow.png') }}" alt="rainbow" class="logo9999-img">
-                                    </a>
-        
-        
-                                    <style>
-                                        .logo9999-img {
-                                            height: 20px;
-                                            width: auto;
-                                            max-width: 70%;
-                                            object-fit: contain;
-                                        }
-                                    </style>
+                                    <a href="https://www.sapo.vn/?utm_campaign=cpn:site_khach_hang-plm:footer&amp;utm_source=site_khach_hang&amp;utm_medium=referral&amp;utm_content=fm:text_link-km:-sz:&amp;utm_term=&amp;campaign=site_khach_hang"
+                                        rel="noopener" title="Sapo" target="_blank">Sapo</a>
 
                                 </span>
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-12">
                         <div class="payment">
                             <div class="item">
                                 <img class="img-responsive" width="60" height="30"
@@ -255,7 +244,7 @@
                                     alt="Lofi Style">
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
 

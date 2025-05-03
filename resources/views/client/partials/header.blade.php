@@ -26,7 +26,7 @@
                             @if(Auth::check())
                                 <div class="dropdown user-dropdown">
                                     <button class="avatar-btn" type="button">
-                                        <img src="{{ Auth::user()->avatar ?? asset('client/images/rainbow.png') }}"
+                                        <img src="{{ Auth::user()->avatar ?? asset('default-avatar.png') }}"
                                             class="user-avatar" alt="Avatar">
                                         <span>{{ Auth::user()->name }}</span>
                                     </button>
@@ -81,21 +81,7 @@
                                     width: auto;
                                     max-width: 70%;
                                     object-fit: contain;
-                                }/* Đảm bảo nền ban đầu là trong suốt */
-.dropdown-item {
-    color: black; /* Màu chữ mặc định */
-    background-color: transparent; /* Nền trong suốt */
-    transition: background-color 0.3s ease; /* Hiệu ứng mượt */
-}
-
-/* Khi hover vào item, chỉ đổi nền */
-.dropdown-item:hover {
-    background-color: #e50a1c !important; /* Nền đỏ nhạt khi hover */
-    color: black; /* Giữ màu chữ đen */
-}
-
-
-                                
+                                }
                             </style>
 
                         </div>
@@ -137,9 +123,9 @@
                                 </div>
                         
                                 <div class="flash-scroll">
-                                    {{-- <a href="javascript:;" data-href=".section_flash_sale" class="scroll-down">
-                                        <img width="12" src="{{ asset('client/images/menu_icon_34d9c.png') }}" alt="Lofi Style"> 
-                                    </a> --}}
+                                    <a href="javascript:;" data-href=".section_flash_sale" class="scroll-down">
+                                        <img width="12" src="{{ asset('client/images/menu_icon_34d9c.png') }}" alt="Lofi Style"> Flash sale
+                                    </a>
                                 </div>
                             </div>
                         </div>

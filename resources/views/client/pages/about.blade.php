@@ -29,7 +29,7 @@
                     <h1 class="title-page">Giới thiệu</h1>
                     <div class="content-page rte">
 
-                        <p><strong>🌈 RAINBOW STORE – Phong cách thời trang của thế hệ trẻ hiện đại!</strong></p>
+                        <p><strong>🌈 RAINBOW SHOP – Phong cách thời trang của thế hệ trẻ hiện đại!</strong></p>
 
                         <p>Được thành lập từ năm 2025, Rainbow Shop không chỉ là một cửa hàng thời trang – chúng mình là nơi lan tỏa cảm hứng sống tích cực, cá tính và thời thượng đến từng bạn trẻ Việt Nam. Với thông điệp <em><strong>“Sắc màu riêng, chất riêng”</strong></em>, Rainbow Shop luôn nỗ lực mỗi ngày để mang đến những bộ sưu tập mới mẻ, hiện đại và gần gũi, giúp bạn tự tin thể hiện bản thân ở bất cứ đâu.</p>
 
