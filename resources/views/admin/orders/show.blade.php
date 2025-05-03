@@ -229,28 +229,7 @@
 
 {{-- Thông tin đơn --}}
 <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
-<p><strong>Trạng thái:</strong> 
-    <span id="order-status-{{ $order->id }}">
-        @if ($order->status === 'confirming')
-            Đang xác nhận
-        @elseif ($order->status === 'processing')
-            Đang xử lý
-        @elseif ($order->status === 'shipping')
-            Đang giao hàng
-        @elseif ($order->status === 'completed')
-            Đã giao hàng
-        @elseif ($order->status === 'received')
-            Đã nhận hàng
-        @elseif ($order->status === 'cancelled')
-            Đã huỷ
-        @elseif ($order->status === 'returning')
-            Đã hoàn hàng
-        @else
-            {{ ucfirst($order->status) }}
-        @endif
-    </span>
-</p>
-
+<p><strong>Trạng thái:</strong> {{ $order->status }}</p>
 
 <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST" class="mb-4">
     @csrf

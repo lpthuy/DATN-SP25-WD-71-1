@@ -118,8 +118,7 @@ Route::post('/checkout/update-qty', [CheckoutController::class, 'updateQty'])->n
 
 Route::get('/kiem-tra-don-hang', [HomeController::class, 'checkOrder'])->name('checkOrder');
 Route::get('/chinh-sach-giao-hang', [HomeController::class, 'chinhSachGiaoHang'])->name('chinhSachGiaoHang');
-Route::get('/chinh-sach-doi-tra', [HomeController::class, 'chinhSachDoiTraDoiTra'])->name('chinhSachDoiTraDoiTra');
-Route::get('/chinh-sach-ban-hang', [HomeController::class, 'ChinhSachBanHang'])->name('ChinhSachBanHang');
+
 Route::get('/dang-nhap', [HomeController::class, 'login'])->name('login');
 Route::post('/dang-nhap', [HomeController::class, 'doLogin'])->name('doLogin');
 

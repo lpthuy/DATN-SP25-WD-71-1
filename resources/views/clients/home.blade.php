@@ -125,6 +125,21 @@
 
 	<script src="dist/js/stats.minbadf.js?v=96f2ff2"></script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<script>
 		$(document).ready(function ($) {
 			awe_lazyloadImage();
@@ -278,7 +293,7 @@
 
 	</header>
 	<div class="header-menu">
-		{{-- <div class="container">
+		<div class="container">
 			<div class="row">
 				<div class="col-lg-9 col-12 col-menu">
 					<div class="menu-bar d-lg-none d-block">
@@ -417,7 +432,7 @@
 					</div>
 				</div>
 			</div>
-		</div> --}}
+		</div>
 	</div>
 	<div class="bodywrap">
 		<h1 class="d-none">Template Alena - </h1>
