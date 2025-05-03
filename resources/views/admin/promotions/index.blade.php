@@ -38,7 +38,7 @@
                                     <th>Mã Khuyến Mãi</th>
                                     <th>Loại Giảm Giá</th>
                                     <th>Giá Trị Giảm</th>
-                                    <th>Giới Hạn Sử Dụng</th>
+                                    <th>Số Lượng</th>
                                     <th>Số Tiền Tối Thiểu</th>
                                     <th>Ngày Bắt Đầu</th>
                                     <th>Ngày Kết Thúc</th>

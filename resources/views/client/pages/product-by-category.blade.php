@@ -28,34 +28,36 @@
                 <div class="sidebar">
                     <!-- Form lọc -->
                     <form method="GET" action="{{ route('products.all') }}" id="filter-form">
-                      <!-- Lọc danh mục -->
-<div class="group-menu">
-    <div class="collection_title title_block">
-        <h2>Danh mục sản phẩm</h2>
-    </div>
-    <div class="layered-category">
-        <ul class="menuList-links">
-            @foreach ($categories as $category)
-            <li>
-                <label>
-                    <input type="radio" name="category_id" value="{{ $category->id }}"
-                        {{ request('category_id') == $category->id ? 'checked' : '' }}
-                        onchange="this.form.submit()">
-                    <strong>{{ $category->name }}</strong>
-                </label>
-            </li>
-            @endforeach
-            <li>
-                <label>
-                    <input type="radio" name="category_id" value=""
-                        {{ !request('category_id') ? 'checked' : '' }}
-                        onchange="this.form.submit()">
-                    <strong>Tất cả danh mục</strong>
-                </label>
-            </li>
-        </ul>
-    </div>
-</div>
+                        <!-- Lọc danh mục -->
+                        <div class="group-menu">
+                            <div class="collection_title title_block">
+                                <h2>Danh mục sản phẩm</h2>
+                            </div>
+                            <div class="layered-category">
+                                <ul class="menuList-links">
+                                    {{-- @section('title', $category->name ?? 'Tất cả sản phẩm') --}}
+
+                                    @foreach ($categories as $category)
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="category_id" value="{{ $category->id }}"
+                                                {{ request('category_id') == $category->id ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>{{ $category->name }}</strong>
+                                        </label>
+                                    </li>
+                                    @endforeach
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="category_id" value=""
+                                                {{ !request('category_id') ? 'checked' : '' }}
+                                                onchange="this.form.submit()">
+                                            <strong>Tất cả danh mục</strong>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
                         <!-- Lọc khoảng giá -->
                         <div class="group-menu">
@@ -107,17 +109,17 @@
                                 </ul>
                             </div>
                         </div>
-                        
-                        
+
+
 
                         <!-- Lọc màu sắc -->
                         <div class="group-menu">
                             <div class="collection_title title_block">
-                                <h2>Màu sắc</h2>
+                                <h2 class="toggle-title">Màu sắc</h2> <!-- Thêm class cho phần tiêu đề -->
                             </div>
-                            <div class="layered-color">
+                            <div class="layered-color" style="display: none;">
                                 @php
-                                    $colors = \App\Models\Color::all();
+                                $colors = \App\Models\Color::all();
                                 @endphp
                                 <ul class="menuList-links">
                                     @foreach ($colors as $color)
@@ -127,7 +129,8 @@
                                                 {{ in_array($color->id, request('colors', [])) ? 'checked' : '' }}
                                                 onchange="this.form.submit()">
                                             <strong>{{ $color->color_name }}</strong>
-                                            <span style="background: {{ $color->color_code }}; width: 20px; height: 20px; display: inline-block; border: 1px solid #ccc; margin-left: 5px;"></span>
+                                            <span
+                                                style="background: {{ $color->color_code }}; width: 20px; height: 20px; display: inline-block; border: 1px solid #ccc; margin-left: 5px;"></span>
                                         </label>
                                     </li>
                                     @endforeach
@@ -135,6 +138,27 @@
                             </div>
                         </div>
                         
+                        <!-- Đặt script cuối cùng để xử lý sự kiện click -->
+                        <script>
+                            // Kiểm tra và áp dụng trạng thái từ localStorage khi trang tải lại
+                            if (localStorage.getItem('colorMenuState') === 'open') {
+                                document.querySelector('.layered-color').style.display = 'block';
+                            }
+                        
+                            // Xử lý sự kiện click vào tiêu đề "Màu sắc"
+                            document.querySelector('.toggle-title').addEventListener('click', function () {
+                                const colorList = this.closest('.group-menu').querySelector('.layered-color');
+                                const isOpen = colorList.style.display === 'block';
+                        
+                                // Cập nhật trạng thái mở/đóng vào localStorage
+                                localStorage.setItem('colorMenuState', isOpen ? 'closed' : 'open');
+                        
+                                // Chuyển đổi trạng thái hiển thị
+                                colorList.style.display = isOpen ? 'none' : 'block';
+                            });
+                        </script>
+                        
+
                         <!-- Lọc kích thước -->
                         <div class="group-menu">
                             <div class="collection_title title_block">
@@ -158,14 +182,15 @@
                                 </ul>
                             </div>
                         </div>
-                        
-                        
+
+
 
 
 
                         <!-- Nút reset -->
                         <div class="group-menu">
-                            <a href="{{ route('products.all') }}" class="btn btn-secondary" style="font-weight: bold;">Xóa bộ lọc</a>
+                            <a href="{{ route('products.all') }}" class="btn btn-secondary"
+                                style="font-weight: bold;">Xóa bộ lọc</a>
 
                         </div>
                     </form>
@@ -179,48 +204,62 @@
                             @if ($products->count() > 0)
                             @foreach ($products as $product)
                             <div class="col-6 col-md-4">
-                                <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}" data-id="{{ $product->id }}">
-                                    <form action="{{ route('cart.add', $product->id) }}" method="post" class="variants product-action wishItem" data-cart-form enctype="multipart/form-data">
+                                <div class="item_product_main" data-url="{{ route('productDetail', $product->id) }}"
+                                    data-id="{{ $product->id }}">
+                                    <form action="{{ route('cart.add', $product->id) }}" method="post"
+                                        class="variants product-action wishItem" data-cart-form
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="product-thumbnail">
-                                            <a class="image_thumb" href="{{ route('productDetail', $product->id) }}" title="{{ $product->name }}">
+                                            <a class="image_thumb" href="{{ route('productDetail', $product->id) }}"
+                                                title="{{ $product->name }}">
                                                 <div class="product-image">
                                                     @php
                                                     $images = explode(',', $product->image);
                                                     $firstImage = isset($images[0]) ? trim($images[0]) : null;
                                                     @endphp
                                                     @if($firstImage)
-                                                    <img class="lazy img-responsive" width="300" height="300" src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}" />
+                                                    <img class="lazy img-responsive" width="300" height="300"
+                                                        src="{{ asset('storage/' . $firstImage) }}"
+                                                        alt="{{ $product->name }}" />
                                                     @else
-                                                    <img class="lazy img-responsive" width="300" height="300" src="{{ asset('images/no-image.png') }}" alt="Không có ảnh" />
+                                                    <img class="lazy img-responsive" width="300" height="300"
+                                                        src="{{ asset('images/no-image.png') }}" alt="Không có ảnh" />
                                                     @endif
                                                 </div>
                                             </a>
                                             <div class="action-cart">
-                                                
-                                                <a title="Xem nhanh" href="{{ route('productDetail', $product->id) }}" class="quick-view btn-views">🔍</a>
+
+                                                <a title="Xem nhanh" href="{{ route('productDetail', $product->id) }}"
+                                                    class="quick-view btn-views">🔍</a>
                                             </div>
                                         </div>
                                         <div class="product-info">
                                             <h3 class="product-name">
-                                                <a href="{{ route('productDetail', $product->id) }}" title="{{ $product->name }}">{{ $product->name }}</a>
+                                                <a href="{{ route('productDetail', $product->id) }}"
+                                                    title="{{ $product->name }}">{{ $product->name }}</a>
                                             </h3>
                                             <div class="bottom-action">
                                                 <div class="price-box">
                                                     @php
                                                     $variant = $product->variants->first();
-                                                    $displayPrice = $variant ? ($variant->discount_price ?? $variant->price) : ($product->discount_price ?? $product->price);
+                                                    $displayPrice = $variant ? ($variant->discount_price ??
+                                                    $variant->price) : ($product->discount_price ?? $product->price);
                                                     $originalPrice = $variant ? $variant->price : $product->price;
                                                     @endphp
                                                     <span class="price text-success font-weight-bold">
                                                         {{ number_format($displayPrice, 0, ',', '.') }}₫
                                                     </span>
-                                                    @if($variant && $variant->discount_price && $variant->discount_price < $variant->price)
-                                                        <span class="compare-price text-danger" style="text-decoration: line-through;">
+                                                    @if($variant && $variant->discount_price && $variant->discount_price
+                                                    < $variant->price)
+                                                        <span class="compare-price text-danger"
+                                                            style="text-decoration: line-through;">
                                                             {{ number_format($originalPrice, 0, ',', '.') }}₫
                                                         </span>
-                                                        @elseif($product->discount_price && $product->discount_price < $product->price)
-                                                            <span class="compare-price text-danger" style="text-decoration: line-through;">
+                                                        @elseif($product->discount_price && $product->discount_price <
+                                                            $product->price)
+                                                            <span class="compare-price text-danger"
+                                                                style="text-decoration: line-through;">
                                                                 {{ number_format($originalPrice, 0, ',', '.') }}₫
                                                             </span>
                                                             @endif
@@ -251,26 +290,47 @@
     <span class="fter"></span>
 </div>
 <style>
-    .layered-color label {
-        display: flex;
-        align-items: center;
-        font-weight: 500;
-        margin-bottom: 8px;
-    }
-    
-    .layered-color label span {
-        display: inline-block;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        margin-left: 8px;
-        border: 1px solid #ccc;
-    }.layered-size label {
+.layered-color label {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.layered-color label span {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin-left: 8px;
+    border: 1px solid #ccc;
+}
+
+.layered-size label {
     text-transform: uppercase;
     font-weight: 500;
     display: inline-block;
     margin-bottom: 6px;
+}/* Nút gập/mở */
+.toggle-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
 }
-    </style>
-    
+
+.layered-color {
+    display: none; /* Ẩn mặc định */
+    margin-top: 10px;
+}
+
+/* Nút gập mở */
+.group-menu.open .layered-color {
+    display: block;
+}
+
+</style>
+
 @endsection

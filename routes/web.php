@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\WishlistController;
 
 Auth::routes();
@@ -118,7 +119,8 @@ Route::post('/checkout/update-qty', [CheckoutController::class, 'updateQty'])->n
 
 Route::get('/kiem-tra-don-hang', [HomeController::class, 'checkOrder'])->name('checkOrder');
 Route::get('/chinh-sach-giao-hang', [HomeController::class, 'chinhSachGiaoHang'])->name('chinhSachGiaoHang');
-
+Route::get('/chinh-sach-doi-tra', [HomeController::class, 'chinhSachDoiTraDoiTra'])->name('chinhSachDoiTraDoiTra');
+Route::get('/chinh-sach-ban-hang', [HomeController::class, 'ChinhSachBanHang'])->name('ChinhSachBanHang');
 Route::get('/dang-nhap', [HomeController::class, 'login'])->name('login');
 Route::post('/dang-nhap', [HomeController::class, 'doLogin'])->name('doLogin');
 
@@ -268,6 +270,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     //quản lý banner
 
     Route::resource('posts', PostController::class);
+    Route::resource('user', UserController::class);
+    Route::patch('user/{id}/toggle-active', [UserController::class, 'toggleActive'])->name('user.toggleActive');
 
 
     //battat bai vietviet

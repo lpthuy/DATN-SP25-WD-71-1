@@ -12,7 +12,28 @@
                 <div class="col-md-6">
                     <h2 class="section-title">Chi tiết đơn hàng #{{ $order->order_code }}</h2>
                     <p><strong>Phương thức thanh toán:</strong> {{ strtoupper($order->payment_method) }}</p>
-                    <p><strong>Trạng thái:</strong> <span id="order-status">{{ ucfirst($order->status) }}</span></p>
+                    <p><strong>Trạng thái:</strong> 
+                        <span id="order-status-{{ $order->id }}">
+                            @if ($order->status === 'confirming')
+                                Đang xác nhận
+                            @elseif ($order->status === 'processing')
+                                Đang xử lý
+                            @elseif ($order->status === 'shipping')
+                                Đang giao hàng
+                            @elseif ($order->status === 'completed')
+                                Đã giao hàng
+                            @elseif ($order->status === 'received')
+                                Đã nhận hàng
+                            @elseif ($order->status === 'cancelled')
+                                Đã huỷ
+                            @elseif ($order->status === 'returning')
+                                Đã hoàn hàng
+                            @else
+                                {{ ucfirst($order->status) }}
+                            @endif
+                        </span>
+                    </p>
+                    
                     <p><strong>Ngày đặt hàng:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
 
                 </div>
@@ -34,6 +55,7 @@
                         <th class="text-center">Giá</th>
                         <th class="text-center">Số lượng</th>
                         <th class="text-center">Tổng</th>
+                        <th class="text-center">Đánh Giá</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,6 +68,12 @@
                             <td>{{ number_format($item->price, 0, ',', '.') }}₫</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }}₫</td>
+                            <td>
+                                <a href="{{ route('productDetail', $item->product->id) }}">
+                                    Đánh giá
+                                </a>
+                            </td>
+                            
                         </tr>
                         @php $total += $item->price * $item->quantity; @endphp
                     @endforeach
