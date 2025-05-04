@@ -44,7 +44,7 @@ class HomeController extends Controller
             ->where('end_date', '>=', now()) // Ngày kết thúc >= ngày hiện tại
             ->get();
         $products = Product::all(); // Lấy tất cả sản phẩm
-        $products = Product::where('is_active', true)->latest()->take(10)->get();
+        $products = Product::where('is_active', true)->latest()->take(8)->get();
         $banners = Banner::where('status', 1)->orderBy('position', 'asc')->get(); // Lấy banner theo thứ tự position
         $featuredComments = Comment::where('rating', 5)
             ->where('is_visible', true)
