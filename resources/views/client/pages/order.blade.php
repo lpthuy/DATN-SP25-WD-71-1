@@ -119,25 +119,29 @@
                                                 </a>
                                             </td>
                                             <td class="badge order-status-badge" id="order-status-{{ $order->id }}">
-                                                @if ($order->status === 'confirming')
-                                                Đang xác nhận
-                                                @elseif ($order->status === 'processing')
-                                                Đang xử lý
-                                                @elseif ($order->status === 'shipping')
-                                                Đang giao hàng
-                                                @elseif ($order->status === 'completed')
-                                                Đã giao hàng
-                                                @elseif ($order->status === 'received')
-                                                {{-- 👈 Thêm dòng này để dịch trạng thái received --}}
-                                                Đã nhận hàng
-                                                @elseif ($order->status === 'cancelled')
-                                                Đã huỷ
-                                                @elseif ($order->status === 'returning')
-                                                Đã hoàn hàng
+                                                @if (strtolower($order->payment_method) === 'vnpay' && $order->is_paid == 0)
+                                                    Thanh toán thất bại
                                                 @else
-                                                {{ ucfirst($order->status) }}
+                                                    @if ($order->status === 'confirming')
+                                                        Đang xác nhận
+                                                    @elseif ($order->status === 'processing')
+                                                        Đang xử lý
+                                                    @elseif ($order->status === 'shipping')
+                                                        Đang giao hàng
+                                                    @elseif ($order->status === 'completed')
+                                                        Đã giao hàng
+                                                    @elseif ($order->status === 'received')
+                                                        Đã nhận hàng
+                                                    @elseif ($order->status === 'cancelled')
+                                                        Đã huỷ
+                                                    @elseif ($order->status === 'returning')
+                                                        Đã hoàn hàng
+                                                    @else
+                                                        {{ ucfirst($order->status) }}
+                                                    @endif
                                                 @endif
                                             </td>
+                                            
                                             <td id="order-action-{{ $order->id }}">
                                                 @php
                                                 $status = strtolower($order->status);
