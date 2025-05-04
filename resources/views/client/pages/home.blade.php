@@ -489,15 +489,10 @@
 
 
 
-<section class="awe-section-7">
+{{-- <section class="awe-section-7">
     <div class="section_product_new module_product">
         <div class="container">
-            <div class="heading-home">
-                <div class="site-animation">
-                    <h2><a class="nav-link caret-down" href="{{ route('products.all') }}" title="Sản phẩm">Sản phẩm</a></h2>
-                </div>
-            </div>
-
+            
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="block-product">
@@ -552,14 +547,11 @@
                     </div>
                 </div>
             </div>  
-
-
-            <div class="swiper-pagination"></div>
         </div>
     </div>
     </div>
     </div>
-</section>
+</section> --}}
 
 <section class="awe-section-8">
     <section class="section_feedback">
