@@ -24,33 +24,33 @@
                     <div class="col-md-6 col-12">
                         <div class="account-header">
                             @if(Auth::check())
-                                <div class="dropdown user-dropdown">
-                                    <button class="avatar-btn" type="button">
-                                        <img src="{{ Auth::user()->avatar ?? asset('client/images/rainbow.png') }}"
-                                            class="user-avatar" alt="Avatar">
-                                        <span>{{ Auth::user()->name }}</span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('profile') }}">Trang cá nhân</a></li>
-                                        @if(Auth::user()->role === 'admin')
-                                            <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Quay lại trang
-                                                    Admin</a></li>
-                                        @else
-                                            <li><a class="dropdown-item" href="{{ route('order.index') }}">Đơn hàng của tôi</a>
-                                            </li>
-                                        @endif
-                                        <li>
-                                            <form id="logout-form" method="POST" action="{{ route('logout') }}">
-                                                @csrf
-                                                <button type="submit" class="dropdown-item">Đăng xuất</button>
-                                            </form>
+                            <div class="dropdown user-dropdown">
+                                <button class="avatar-btn" type="button">
+                                    <img src="{{ Auth::user()->avatar ?? asset('client/images/rainbow.png') }}"
+                                        class="user-avatar" alt="Avatar">
+                                    <span>{{ Auth::user()->name }}</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('profile') }}">Trang cá nhân</a></li>
+                                    @if(Auth::user()->role === 'admin')
+                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Quay lại trang
+                                            Admin</a></li>
+                                    @else
+                                    <li><a class="dropdown-item" href="{{ route('order.index') }}">Đơn hàng của tôi</a>
+                                    </li>
+                                    @endif
+                                    <li>
+                                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">Đăng xuất</button>
+                                        </form>
 
-                                        </li>
-                                    </ul>
-                                </div>
+                                    </li>
+                                </ul>
+                            </div>
                             @else
-                                <a class="btnx" href="{{ route('login') }}" title="Đăng nhập">Đăng nhập</a>
-                                <a href="{{ route('register') }}" title="Đăng ký">Đăng ký</a>
+                            <a class="btnx" href="{{ route('login') }}" title="Đăng nhập">Đăng nhập</a>
+                            <a href="{{ route('register') }}" title="Đăng ký">Đăng ký</a>
                             @endif
                         </div>
                     </div>
@@ -81,21 +81,25 @@
                                     width: auto;
                                     max-width: 70%;
                                     object-fit: contain;
-                                }/* Đảm bảo nền ban đầu là trong suốt */
-.dropdown-item {
-    color: black; /* Màu chữ mặc định */
-    background-color: transparent; /* Nền trong suốt */
-    transition: background-color 0.3s ease; /* Hiệu ứng mượt */
-}
+                                }
 
-/* Khi hover vào item, chỉ đổi nền */
-.dropdown-item:hover {
-    background-color: #e50a1c !important; /* Nền đỏ nhạt khi hover */
-    color: black; /* Giữ màu chữ đen */
-}
+                                /* Đảm bảo nền ban đầu là trong suốt */
+                                .dropdown-item {
+                                    color: black;
+                                    /* Màu chữ mặc định */
+                                    background-color: transparent;
+                                    /* Nền trong suốt */
+                                    transition: background-color 0.3s ease;
+                                    /* Hiệu ứng mượt */
+                                }
 
-
-                                
+                                /* Khi hover vào item, chỉ đổi nền */
+                                .dropdown-item:hover {
+                                    background-color: #e50a1c !important;
+                                    /* Nền đỏ nhạt khi hover */
+                                    color: black;
+                                    /* Giữ màu chữ đen */
+                                }
                             </style>
 
                         </div>
@@ -109,41 +113,42 @@
                                         <li class="nav-item {{ Route::currentRouteName() == 'home' ? 'active' : '' }}">
                                             <a class="nav-link" href="{{ route('home') }}" title="Trang chủ">Trang chủ</a>
                                         </li>
-                                        <li class="nav-item {{ Route::currentRouteName() == 'about' ? 'active' : '' }}">
-                                            <a class="nav-link" href="{{ route('about') }}" title="Giới thiệu">Giới thiệu</a>
-                                        </li>
                                         <li class="nav-item has-submenu
                                             {{ in_array(Route::currentRouteName(), ['products.all', 'productbycategory']) ? 'active' : '' }}">
                                             <a class="nav-link caret-down" href="{{ route('products.all') }}" title="Sản phẩm">Sản phẩm</a>
                                             <i class="fa ic-caret-down"></i>
                                             <ul class="menuList-submain level-1">
                                                 @foreach ($categories as $category)
-                                                    <li>
-                                                        <a class="{{ request()->routeIs('productbycategory') && request()->route('id') == $category->id ? 'active' : '' }}"
-                                                           href="{{ route('productbycategory', ['id' => $category->id]) }}">
-                                                            {{ $category->name }}
-                                                        </a>
-                                                    </li>
+                                                <li>
+                                                    <a class="{{ request()->routeIs('productbycategory') && request()->route('id') == $category->id ? 'active' : '' }}"
+                                                        href="{{ route('productbycategory', ['id' => $category->id]) }}">
+                                                        {{ $category->name }}
+                                                    </a>
+                                                </li>
                                                 @endforeach
                                             </ul>
                                         </li>
+
                                         <li class="nav-item {{ Route::currentRouteName() == 'post' ? 'active' : '' }}">
                                             <a class="nav-link" href="{{ route('post') }}" title="Tin tức">Tin tức</a>
+                                        </li>
+                                        <li class="nav-item {{ Route::currentRouteName() == 'about' ? 'active' : '' }}">
+                                            <a class="nav-link" href="{{ route('about') }}" title="Giới thiệu">Giới thiệu</a>
                                         </li>
                                         <li class="nav-item {{ Route::currentRouteName() == 'contact' ? 'active' : '' }}">
                                             <a class="nav-link" href="{{ route('contact') }}" title="Liên hệ">Liên hệ</a>
                                         </li>
                                     </ul>
                                 </div>
-                        
+
                                 <div class="flash-scroll">
                                     {{-- <a href="javascript:;" data-href=".section_flash_sale" class="scroll-down">
-                                        <img width="12" src="{{ asset('client/images/menu_icon_34d9c.png') }}" alt="Lofi Style"> 
+                                        <img width="12" src="{{ asset('client/images/menu_icon_34d9c.png') }}" alt="Lofi Style">
                                     </a> --}}
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-2 col-md-2 col-4 header-right">
                             <div class="header-wrap-icon">
 
@@ -176,7 +181,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="wrap-cart header-action block-cart">
                                     <a href="{{ route('cart.show') }}" class="header-action-toggle header-cart"
@@ -237,7 +242,7 @@
 
     // Cập nhật ngay khi thêm vào giỏ hàng
     document.querySelectorAll('.btn-cart').forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', function() {
             setTimeout(updateCartCount, 1000);
         });
     });
@@ -248,12 +253,12 @@
     // ✅ Tự động kiểm tra mỗi 5 giây nếu có sản phẩm bị ẩn
     setInterval(() => {
         fetch("{{ route('cart.recheck') }}", {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json',
-            },
-        })
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                },
+            })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {

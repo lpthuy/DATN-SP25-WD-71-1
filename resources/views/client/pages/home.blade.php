@@ -173,7 +173,7 @@
                                                 Quà tặng hấp dẫn
                                             </h3>
                                             <p>
-                                                Hàng loạt voucher siêu hấp dẫn 
+                                                Hàng loạt voucher siêu hấp dẫn
                                             </p>
                                         </div>
                                     </div>
@@ -951,11 +951,9 @@ alt="Lofi Style" />
         <div class="container">
             <div class="heading-home">
                 <div class="site-animation">
-                    <h2><a href="san-pham-moi.html" title="Sản phẩm mới">Sản phẩm mới</a></h2>
+                    <h2><a>Sản phẩm mới</a></h2>
                 </div>
             </div>
-
-
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="block-product">
