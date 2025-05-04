@@ -1,4 +1,4 @@
-const BASE_URL = 'https://1445-2405-4802-47a-d9f0-6de5-55b4-f945-d8ed.ngrok-free.app';
+const BASE_URL = 'https://5bf9-2405-4802-1cd7-4b0-81c5-5ea0-1c0b-704b.ngrok-free.app';
 
 export default {
   BASE_URL,
