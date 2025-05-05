@@ -136,9 +136,6 @@ class HomeController extends Controller
 if ($request->filled('category_id')) {
     $category = Category::find($request->category_id);
 }
-
-
-
         return view('client.pages.product-by-category', compact('products', 'promotions', 'categories', 'category'));
     }
 

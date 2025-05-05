@@ -69,14 +69,6 @@
 		type="text/css" media="all" />
 
 
-
-
-
-
-
-
-
-
 	<link href="../bizweb.dktcdn.net/100/455/315/themes/894917/assets/quickviews_popup_cart.scssf799.css?1724746453440"
 		rel="stylesheet" type="text/css" media="all" />
 	<script>
@@ -420,7 +412,7 @@
 		</div> --}}
 	</div>
 	<div class="bodywrap">
-		<h1 class="d-none">Template Alena - </h1>
+		<h1 class="d-none">Rainbow-Store</h1>
 
 
 

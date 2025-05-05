@@ -9,8 +9,7 @@
 <h1 class="d-none"> RAINBOW - STORE Thương hiệu thời trang của người trẻ hiện đại! Ra đời vào năm
     2016, RAINBOW - STORE luôn nỗ lực với sứ mệnh tạo nên xu hướng thời trang mang đến sự tin tin và năng lượng
     tích cực cho khách hàng.</h1>
-{{--
-<<<<<<< HEAD --}}
+
 <section class="awe-section-1">
     <div class="section_slider">
         <div class="home-slider swiper-container">
@@ -33,11 +32,27 @@
         <section class="awe-section-1">
             <div class="section_slider">
                 <div class="home-slider swiper-container"> --}}
+
+
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
+
                 </div>
                 @endforeach
             </div>
+
+
+            <style>
+                .section_slider, .swiper-container, .swiper-wrapper {
+        margin: 0 auto;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+            </style>
+        </section>
+        
 
             <section class="awe-section-2">
                 <section class="section_service">
@@ -69,6 +84,7 @@
                                             </p>
                                         </div>
                                     </div>
+
 
                                     <div class="swiper-slide item">
                                         <div class="icon">
@@ -287,6 +303,7 @@
                     </div>
                 </section>
             </section>
+
 
             {{-- <section class="awe-section-5">
         <link rel="preload" as="script" href="{{ asset('client/js/count-down4d9c.js') }}" />
@@ -901,50 +918,16 @@
                             </div>
                             <div class="swiper-pagination"></div>
                         </div>
+                        <div class="swiper-pagination"></div>
                     </div>
+
 
                 </div>
             </section>
-</section> --}}
+</section> 
 
-{{-- <section class="awe-section-6">
-        <div class="section_banner_featured feature_banner">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-12">
-                        <div class="banner_left">
-                            <a href="san-pham-moi.html" title="Lofi Style" class="image_hover">
-                                <img width="770" height="471" class="lazy img-responsive"
-                                    src="{{ asset('client/images/anh1.png') }}"
-data-src="//bizweb.dktcdn.net/100/456/491/themes/864044/assets/feature_banner_1.png?1708522613834"
-alt="Lofi Style" />
-</a>
-</div>
-</div>
-<div class="col-lg-4 col-12">
-    <div class="row">
-        <div class="banner_right mb-30 col-lg-12 col-md-6 col-12">
-            <a href="san-pham-noi-bat.html" title="Lofi Style" class="image_hover">
-                <img width="370" height="220" class="lazy img-responsive"
-                    src="{{ asset('client/images/anh2.png') }}"
-                    data-src="//bizweb.dktcdn.net/100/456/491/themes/864044/assets/feature_banner_2.png?1708522613834"
-                    alt="Lofi Style" />
-            </a>
-        </div>
-        <div class="banner_right col-lg-12 col-md-6 col-12">
-            <a href="flash-sale.html" title="Lofi Style" class="image_hover">
-                <img width="370" height="220" class="lazy img-responsive"
-                    src="{{ asset('client/images/anh3.png') }}"
-                    data-src="//bizweb.dktcdn.net/100/456/491/themes/864044/assets/feature_banner_3.png?1708522613834"
-                    alt="Lofi Style" />
-            </a>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-</div>
-</section> --}}
+
+
 
 <section class="awe-section-7">
     <div class="section_product_new module_product">
@@ -954,6 +937,7 @@ alt="Lofi Style" />
                     <h2><a>Sản phẩm mới</a></h2>
                 </div>
             </div>
+
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="block-product">
@@ -1007,15 +991,12 @@ alt="Lofi Style" />
 
                     </div>
                 </div>
-            </div>
-
-
-            <div class="swiper-pagination"></div>
+            </div>  
         </div>
     </div>
     </div>
     </div>
-</section>
+</section> --}}
 
 <section class="awe-section-8">
     <section class="section_feedback">
@@ -1126,148 +1107,6 @@ alt="Lofi Style" />
 
 </section>
 
-{{-- <section class="awe-section-10">
-        <section class="section_instagram">
-            <div class="container">
-                <div class="heading-home">
-                    <div class="site-animation">
-                        <h2><a href="https://www.instagram.com/" title="Theo dõi instagram">Theo dõi
-                                instagram</a></h2>
-                    </div>
-                </div>
-                <div class="block-content">
-                    <div class="instagram-swiper swiper-container">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="instagram-item">
-                                    <a href="#" class="clearfix" title="Lofi Style">
-                                        <img width="170" height="170" class="lazy img-responsive"
-                                            src="{{ asset('client/images/ig1.png') }}"
-data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-<div class="icon">
-    <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-        alt="Lofi Style">
-</div>
-</a>
-</div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-
-<div class="swiper-slide">
-    <div class="instagram-item">
-        <a href="#" class="clearfix" title="Lofi Style">
-            <img width="170" height="170" class="lazy img-responsive"
-                src="{{ asset('client/images/ig1.png') }}"
-                data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
-            <div class="icon">
-                <img width="35" height="35" src="{{ asset('client/images/ig-con.png') }}"
-                    alt="Lofi Style">
-            </div>
-        </a>
-    </div>
-</div>
-</div>
-<div class="swiper-pagination"></div>
-</div>
-<script>
-    var swiper = new Swiper('.instagram-swiper', {
-        slidesPerView: 6,
-        spaceBetween: 20,
-        slidesPerColumn: 1,
-        slidesPerColumnFill: 'row',
-        slidesPerGroup: 1,
-        navigation: false,
-        pagination: {
-            el: '.instagram-swiper .swiper-pagination',
-            clickable: true,
-        },
-        breakpoints: {
-            300: {
-                slidesPerView: 2,
-                spaceBetween: 10
-            },
-            500: {
-                slidesPerView: 2,
-                spaceBetween: 10
-            },
-            640: {
-                slidesPerView: 3,
-                spaceBetween: 10
-            },
-            768: {
-                slidesPerView: 4,
-                spaceBetween: 20
-            },
-            1024: {
-                slidesPerView: 5,
-                spaceBetween: 20
-            },
-            1200: {
-                slidesPerView: 6,
-                spaceBetween: 20
-            }
-        }
-    });
-</script>
-</div>
-</div>
-</section>
-</section> --}}
 @endsection
 
 @section('js')
@@ -1284,6 +1123,53 @@ data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
             nextEl: '.home-slider .swiper-button-next',
             prevEl: '.home-slider .swiper-button-prev',
         },
+    });
+</script>
+<script>
+    var swiperwish = new Swiper('.product-new-swiper', {
+        slidesPerView: 4,
+        loop: false,
+        grabCursor: true,
+        spaceBetween: 30,
+        slidesPerColumn: 2,
+        slidesPerColumnFill: 'row',
+        roundLengths: true,
+        slideToClickedSlide: false,
+        navigation: {
+            nextEl: '.product-new-swiper .swiper-button-next',
+            prevEl: '.product-new-swiper .swiper-button-prev',
+        },
+        pagination: {
+            el: '.product-new-swiper .swiper-pagination',
+            clickable: true,
+        },
+        autoplay: false,
+        breakpoints: {
+            300: {
+                slidesPerView: 2,
+                spaceBetween: 10
+            },
+            500: {
+                slidesPerView: 2,
+                spaceBetween: 10
+            },
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 20
+            },
+            991: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            },
+            1200: {
+                slidesPerView: 4,
+                spaceBetween: 30
+            }
+        }
     });
 </script>
 
@@ -1541,6 +1427,29 @@ data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
         }
     });
 </script>
+<script>
+    var swiper = new Swiper('.product-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        pagination: {
+            el: '.product-swiper .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.product-swiper .swiper-button-next',
+            prevEl: '.product-swiper .swiper-button-prev',
+        },
+        breakpoints: {
+            768: {
+                slidesPerView: 1
+            },
+            1024: {
+                slidesPerView: 1
+            }
+        }
+    });
+</script>
+
 <style>
     .product-thumbnail img {
         display: block;
@@ -1557,71 +1466,5 @@ data-src="{{ asset('client/images/ig1.png') }}" alt="Lofi Style">
     }
 </style>
 
-{{--
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.addEventListener("click", function (event) {
-                // Kiểm tra nếu click vào phần tử hoặc icon bên trong nút giỏ hàng
-                const targetButton = event.target.closest(".add-to-cart");
-
-                if (!targetButton) {
-                    console.warn("⚠ Click không phải vào nút giỏ hàng.");
-                    return;
-                }
-
-                event.preventDefault(); // Ngăn trang reload nếu có
-
-                const productId = targetButton.getAttribute("data-product-id");
-
-                if (!productId) {
-                    console.error("❌ Lỗi: `data-product-id` không tồn tại hoặc bị null.");
-                    return;
-                }
-
-                console.log("✅ Đã nhấn vào nút giỏ hàng:", targetButton);
-                console.log("📌 Product ID:", productId);
-
-                // Kiểm tra xem thẻ CSRF token có tồn tại không
-                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfTokenElement) {
-                    console.error("❌ Lỗi: CSRF token không tìm thấy!");
-                    alert("❌ Lỗi bảo mật! Không thể thêm vào giỏ hàng.");
-                    return;
-                }
-
-                const csrfToken = csrfTokenElement.getAttribute("content");
-
-                // Gửi request thêm vào giỏ hàng
-                fetch("/add-to-cart", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({ product_id: productId })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("❌ Lỗi từ server: " + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("📌 Server response:", data);
-                        alert("✅ Sản phẩm đã được thêm vào giỏ hàng!");
-
-                        // Cập nhật số lượng giỏ hàng trên giao diện nếu có phần tử .cart-count
-                        const cartCountElement = document.querySelector(".cart-count");
-                        if (cartCountElement && data.totalItems !== undefined) {
-                            cartCountElement.textContent = data.totalItems;
-                        }
-                    })
-                    .catch(error => {
-                        console.error("❌ Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
-                        alert("❌ Đã xảy ra lỗi, vui lòng thử lại!");
-                    });
-            });
-        });
-    </script> --}}
 
 @endsection
