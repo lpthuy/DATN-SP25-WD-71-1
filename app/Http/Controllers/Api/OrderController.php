@@ -208,6 +208,29 @@ public function show($id)
 
 
 
+public function getOrderByCode($order_code)
+{
+    $user = auth()->user();
+
+    if ($user->role !== 'shipper') {
+        return response()->json(['message' => 'Không có quyền truy cập'], 403);
+    }
+
+    $order = Order::where('order_code', $order_code)->first();
+
+    if (!$order) {
+        return response()->json(['status' => 'error', 'message' => 'Không tìm thấy đơn hàng'], 404);
+    }
+
+    if ($order->status !== 'shipping') {
+        return response()->json(['status' => 'error', 'message' => 'Đơn hàng không ở trạng thái đang giao'], 400);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'order' => $order
+    ]);
+}
 
 
 

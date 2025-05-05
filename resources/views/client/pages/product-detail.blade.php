@@ -229,10 +229,10 @@
 
                                     <div class="payment-options">
                                         <label class="payment-option">
-                                            <input type="radio" name="payment_method" value="cod" checked> Thanh toán khi nhận hàng (COD)
+                                            Thanh toán khi nhận hàng (COD)
                                         </label>
                                         <label class="payment-option">
-                                            <input type="radio" name="payment_method" value="bank_transfer"> Chuyển khoản ngân hàng
+                                             Chuyển khoản ngân hàng
                                         </label>
                                     </div>
 

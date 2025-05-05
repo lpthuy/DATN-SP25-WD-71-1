@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\WishlistController;
 
 Auth::routes();
@@ -269,6 +270,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     //quản lý banner
 
     Route::resource('posts', PostController::class);
+    Route::resource('user', UserController::class);
+    Route::patch('user/{id}/toggle-active', [UserController::class, 'toggleActive'])->name('user.toggleActive');
 
 
     //battat bai vietviet
